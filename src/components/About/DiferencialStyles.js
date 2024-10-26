@@ -5,28 +5,20 @@ export const Container = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding: 20px;
-  height: 100vh;
-  width: 100%;
+  padding-bottom: 50px;
+  min-height: 120vh;
   background-image: url(${(props) => props.background});
-  background-size: cover;
-  background-position: center;
+  background-position: center; /* Centraliza a imagem */
+  background-size: cover; /* Faz a imagem cobrir todo o espaço do container */
+  background-repeat: no-repeat; /* Evita que a imagem se repita */
   position: relative;
 `;
 
 export const TextContainer = styled.div`
-  width: 50%;
-  padding-left: 380px;
+  width: 40%;
+  padding-left: 250px;
   color: var(--black);
   z-index: 2;
-`;
-
-export const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
 `;
 
 export const Text = styled.div`

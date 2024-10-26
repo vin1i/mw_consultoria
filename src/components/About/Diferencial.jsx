@@ -6,7 +6,6 @@ import logo from "../../assets/MarisaWebberLogo2.png";
 const Diferencial = () => {
   return (
     <Container background={imagem}>
-      <Overlay />
       <TextContainer>
         <Text>
           <p>

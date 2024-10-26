@@ -50,11 +50,14 @@ export default createGlobalStyle`
         --black: #333333;
         --grey: #E6E6E6;
         --red: #9C192B;
+        --dark-red: #6B0D1A;
+        --light-green: #32D951;
     }
 
     body {
         background-color: var(--white);
         color: var(--black);
+        overflow-x: hidden;
         font-size: 1.2rem;
         font-weight: 400;
         font-family: 'Lato', 'Myriad Pro Condensed', sans-serif;

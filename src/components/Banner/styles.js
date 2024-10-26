@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import BannerHome from "../../assets/BannerHome.png";
 
-// Container para o banner
 export const Container = styled.div`
   padding: 25px 150px;
   position: relative;
@@ -15,26 +14,26 @@ export const Container = styled.div`
   align-items: center;
 `;
 
-// Componente para o texto
 export const Text = styled.div`
-  font-size: 40px;
+  font-size: 30px;
   background-color: rgba(156, 25, 43, 0.75);
   color: var(--white);
-  padding: 60px 300px 50px 40px;
+  padding: 30px 20px;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   right: 0;
-  width: 1100px; /* Defina a largura do texto */
+  width: 70%;
+  max-width: 55%;
   display: flex;
   flex-direction: column;
-  align-items: left;
+  align-items: flex-start;
 `;
 
-// Componente para a linha branca que separa os textos
 export const Divider = styled.div`
   width: 80%;
   height: 2px;
   background-color: var(--white);
   margin: 5px 0;
 `;
+

@@ -1,9 +1,7 @@
 import React from 'react';
-import LogoImg from '../../assets/MarisaWebberLogo2.png';
+import LogoImg from '../../assets/MarisaWebberLogo.png';
 import { Container, Logo, Menu, MenuContainer, SocialLinks } from './styles';
-import InstagramIcon from '../../assets/InstagramIco.png';
-import FacebookIcon from '../../assets/FaceIco.png';
-import WhatsAppIcon from '../../assets/WhatsIco.png';
+import { FaFacebookSquare, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 
 const Header = () => {
   const handleClick = () => {
@@ -38,13 +36,13 @@ const Header = () => {
       </MenuContainer>
       <SocialLinks>
         <a href="https://www.instagram.com/example" target="_blank" rel="noopener noreferrer">
-          <img src={InstagramIcon} alt="Instagram" />
+          <FaInstagram size={25} />
         </a>
         <a href="https://www.facebook.com/example" target="_blank" rel="noopener noreferrer">
-          <img src={FacebookIcon} alt="Facebook" />
+          <FaFacebookSquare size={25} />
         </a>
-        <a href="https://www.whatsapp.com/example" target="_blank" rel="noopener noreferrer">
-          <img src={WhatsAppIcon} alt="WhatsApp" />
+        <a href="https://api.whatsapp.com/send?phone=5511973738808" target="_blank" rel="noopener noreferrer">
+          <FaWhatsapp size={25} />
         </a>
       </SocialLinks>
     </Container>
