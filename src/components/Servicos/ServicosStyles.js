@@ -1,4 +1,3 @@
-// src/components/Servicos/ServicosStyles.js
 import styled from "styled-components";
 
 export const ServicosContainer = styled.div`
@@ -12,42 +11,47 @@ export const ServicosContainer = styled.div`
   &::after {
     content: "";
     position: absolute;
-    bottom: -20px; /* Espaço antes do footer */
+    bottom: 0;
     left: 0;
     width: 100%;
-    height: 3px; /* Espessura da linha */
-    background-color: var(--red); /* Cor da linha */
+    height: 3px;
+    background-color: var(--red);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    padding: 20px;
   }
 `;
 
 export const ServicoCard = styled.div`
   display: flex;
   align-items: center;
-  padding: 20px 50px 20px 20px;
+  padding: 20px;
 `;
 
 export const Image = styled.img`
   width: 150px;
   height: auto;
-  margin-right: 50px;
+  margin-right: 20px;
 `;
 
 export const Text = styled.div`
   h3 {
-    font-size: 1.6rem; /* Aumente a fonte do título */
+    font-size: 1.6rem;
     margin-bottom: 10px;
-    color: var(--black); /* Cor do título preta */
+    color: var(--black);
   }
 
   p {
-    font-size: 1.2rem; /* Aumente a fonte do parágrafo */
-    color: var(--black); /* Cor do parágrafo preta */
+    font-size: 1.2rem;
+    color: var(--black);
   }
 `;
 
 export const TituloServicos = styled.h1`
-  font-size: 1.8rem; /* Tamanho do título */
-  color: var(--red); /* Cor do título */
+  font-size: 1.8rem;
+  color: var(--red);
   text-align: start;
   background-color: var(--grey);
   padding: 10px;
@@ -58,11 +62,11 @@ export const TituloServicos = styled.h1`
   &::after {
     content: "";
     position: absolute;
-    bottom: 1px; /* Distância da linha para o título */
-    left: 100px; /* Mesma distância usada no padding-left */
-    width: 10%; /* Comprimento da linha */
-    height: 2px; /* Espessura da linha */
-    background-color: var(--black); /* Cor da linha */
+    bottom: 1px;
+    left: 100px;
+    width: 10%;
+    height: 2px;
+    background-color: var(--black);
   }
 `;
 
@@ -85,6 +89,7 @@ export const WhatsAppButton = styled.a`
   width: 200px;
 
   &:hover {
-    background-color: darkred; /* Cor de fundo ao passar o mouse */
+    background-color: darkred;
   }
 `;
+
