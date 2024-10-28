@@ -7,17 +7,7 @@ export const ServicosContainer = styled.div`
   padding: 50px 100px;
   background-color: var(--grey);
   position: relative;
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: var(--red);
-  }
-
+  
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     padding: 20px;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Container = styled.div`
   background-color: #ffffff;
   width: 100%;
-  height: 400px;
+  min-height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -107,6 +107,12 @@ export const WhatsAppButton = styled.a`
   &:hover {
     background-color: var(--grey);
   }
+`;
+
+export const RedLine = styled.div`
+  background-color: var(--red); /* Defina a cor da linha */
+  height: 3px; /* Altura da linha */
+  width: 100%; /* Largura total */
 `;
 
 export const FooterBar = styled.div`

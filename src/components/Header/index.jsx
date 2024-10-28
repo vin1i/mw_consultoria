@@ -2,33 +2,39 @@ import React from 'react';
 import LogoImg from '../../assets/MarisaWebberLogo.png';
 import { Container, Logo, Menu, MenuContainer, SocialLinks } from './styles';
 import { FaFacebookSquare, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
-  const handleClick = () => {
-    console.log('Menu clicado!');
+  const navigate = useNavigate();
+
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
     <Container>
       <Logo>
-        <img src={LogoImg} alt="Logo" />
+        <Link to='/'><img src={LogoImg} alt="Logo" /></Link>
       </Logo>
       <MenuContainer>
         <Menu>
           <ul>
-            <li onClick={handleClick}>
+            <li onClick={() => scrollToSection('inicio')}>
               <span>INÍCIO</span>
             </li>
-            <li onClick={handleClick}>
+            <li onClick={() => scrollToSection('sobre-nos')}>
               <span>SOBRE NÓS</span>
             </li>
-            <li onClick={handleClick}>
+            <li onClick={() => scrollToSection('servicos')}>
               <span>SERVIÇOS</span>
             </li>
-            <li onClick={handleClick}>
+            <li onClick={() => navigate('/imoveis')}>
               <span>IMÓVEIS</span>
             </li>
-            <li onClick={handleClick}>
+            <li onClick={() => scrollToSection('contato')}>
               <span>CONTATO</span>
             </li>
           </ul>

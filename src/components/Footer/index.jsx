@@ -7,13 +7,15 @@ import {
   WhatsAppButton,
   FooterBar,
   WhatsAppButtonRedondo,
+  RedLine,
 } from "./styles";
 import { FaFacebookSquare, FaInstagram, FaWhatsapp } from "react-icons/fa";
 
-const Footer = () => {
+const Footer = ({ id }) => {
   return (
     <>
-      <Container>
+      <RedLine />
+      <Container id={id}>
         <div
           style={{
             display: "flex",
@@ -68,7 +70,7 @@ const Footer = () => {
             >
               <a href="/">QUEM SOMOS</a>
               <a href="/">SERVIÇOS</a>
-              <a href="/">IMÓVEIS</a>
+              <a href="/imoveis">IMÓVEIS</a>{" "}
               <a href="/">CONTATOS</a>
             </div>
           </ContactInfo>

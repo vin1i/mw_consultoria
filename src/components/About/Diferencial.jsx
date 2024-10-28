@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, TextContainer, Text, Overlay, Logo } from "./DiferencialStyles";
+import { Container, TextContainer, Text, Logo } from "./DiferencialStyles";
 import imagem from "../../assets/Faixa.png";
 import logo from "../../assets/MarisaWebberLogo2.png";
 
