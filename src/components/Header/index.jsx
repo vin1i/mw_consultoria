@@ -8,10 +8,15 @@ const Header = () => {
   const navigate = useNavigate();
 
   const scrollToSection = (sectionId) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
+    if (window.location.pathname !== "/") {
+      navigate("/");
     }
+    setTimeout(() => {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 50);
   };
 
   return (

@@ -5,7 +5,7 @@ import Home from "../pages/Home";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Error from "../pages/Error";
-import Imobi from "../pages/Imobi";
+import ImobiList from "../pages/ImobiList";
 
 const RouterApp = () => {
   return (
@@ -13,7 +13,7 @@ const RouterApp = () => {
       <Header />
         <Routes>
             <Route path="/" element={<Home />}/>
-            <Route path="/imovel" element={<Imobi />}/>
+            <Route path="/imoveis" element={<ImobiList />}/>
             <Route path="*" element={<Error />}/>
         </Routes>
         <Footer />

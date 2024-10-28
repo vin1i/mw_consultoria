@@ -42,41 +42,29 @@ const fakeData = [
 ];
 
 const Home = () => {
-  let Cards = [];
-  const totalCardsToShow = 4; // Defina quantos cards você quer mostrar
-  
-  for (let i = 0; i < totalCardsToShow; i++) {
-    Cards.push(
-      <Card
-        key={fakeData[i].id} // Use o ID do item como chave
-        thumb={fakeData[i].thumb}
-        tipo={fakeData[i].tipo}
-        endereco={fakeData[i].endereco}
-        valor={fakeData[i].valor}
-        slug={fakeData[i].slug}
-      />
-    );
-  }
   return (
     <Fragment>
-      <Banner />
+      <section id="inicio">
+        <Banner />
+      </section>
+      
       <Header>
         <h2>Encontre o imóvel dos seus sonhos!</h2>
-      <ImoveisSection>
-        <h2>Nossos Imóveis</h2>
-        <Wrapper>
-          {fakeData.map((item) => (
-            <Card
-              key={item.id}
-              thumb={item.thumb}
-              tipo={item.tipo}
-              endereco={item.endereco}
-              valor={item.valor}
-              slug={item.slug}
-            />
-          ))}
-        </Wrapper>
-      </ImoveisSection>
+        <ImoveisSection>
+          <h2>Nossos Imóveis</h2>
+          <Wrapper>
+            {fakeData.map((item) => (
+              <Card
+                key={item.id}
+                thumb={item.thumb}
+                tipo={item.tipo}
+                endereco={item.endereco}
+                valor={item.valor}
+                slug={item.slug}
+              />
+            ))}
+          </Wrapper>
+        </ImoveisSection>
       </Header>
       
       <section id="sobre-nos">
@@ -87,6 +75,8 @@ const Home = () => {
         <Servicos />
       </section>
       
+      <section id="contato">
+      </section>
     </Fragment>
   );
 };

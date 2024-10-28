@@ -3,7 +3,7 @@ import { CardContainer, CardImage, CardInfo, DetailsButton } from "./styles"; //
 import { FaArrowRight, FaMapMarkerAlt } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
-const Card = ({ thumb, tipo, endereco, valor, slug }) => {
+const Card = ({ id, thumb, tipo, endereco, valor, slug }) => {
   const navigate = useNavigate();
 
   return (
@@ -18,7 +18,7 @@ const Card = ({ thumb, tipo, endereco, valor, slug }) => {
         <p>
           <strong>{valor}</strong>
         </p>
-        <DetailsButton onClick={() => navigate(`/imovel`, { replace: true })}>
+        <DetailsButton onClick={() => navigate(`/imoveis/${id}`, { replace: true })}>
           Detalhes <FaArrowRight />
         </DetailsButton>
       </CardInfo>
