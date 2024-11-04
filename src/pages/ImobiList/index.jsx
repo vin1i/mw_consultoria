@@ -41,6 +41,7 @@ const ImobiList = () => {
         {currentProperties.map((property) => (
           <Card
             key={property.id}
+            id={property.id}
             thumb={property.thumb}
             tipo={property.tipo}
             endereco={property.endereco}

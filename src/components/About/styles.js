@@ -2,38 +2,38 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   display: flex;
-  flex-direction: row; /* Mantém a direção em linha */
-  justify-content: flex-start; /* Distribui o espaço entre os elementos */
-  align-items: center; /* Alinha verticalmente no centro */
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
   width: 100vw;
   gap: 50px;
 
   @media (max-width: 768px) {
-    flex-direction: column; /* Em telas menores, muda para coluna */
-    align-items: center; /* Centraliza os itens */
+    flex-direction: column;
+    align-items: center;
   }
 `;
 
 export const Image = styled.img`
-  width: 100%; /* Define a imagem com largura total */
-  max-width: 650px; /* Limita a largura máxima da imagem */
-  height: auto; /* Mantém a proporção da imagem */
+  width: 100%;
+  max-width: 650px;
+  height: auto;
   object-fit: cover;
 
   @media (max-width: 768px) {
-    max-width: 100%; /* Imagem ocupa toda a largura em telas pequenas */
-    margin-bottom: 20px; /* Espaço abaixo da imagem */
+    max-width: 100%;
+    margin-bottom: 20px;
   }
 `;
 
 export const Text = styled.div`
-  width: 570px; /* Ajusta a largura do texto para 40% */
-  padding: 30px 0 0 50px; /* Padding do texto */
-  font-size: 1.6rem; /* Tamanho da fonte */
+  width: 570px;
+  padding: 30px 0 0 50px;
+  font-size: 1.6rem;
 
   h1 {
     position: relative;
-    margin-bottom: 60px; /* Espaço abaixo do título */
+    margin-bottom: 60px;
   }
 
   h1::after {
@@ -47,29 +47,29 @@ export const Text = styled.div`
   }
 
   h3 {
-    font-size: 30px; /* Tamanho do subtítulo */
-    margin-top: 10px; /* Margem acima do subtítulo */
-    margin-bottom: 25px; /* Margem abaixo do subtítulo */
+    font-size: 30px;
+    margin-top: 10px;
+    margin-bottom: 25px;
   }
 
   p {
-    font-size: 26px; /* Tamanho do parágrafo */
-    margin-bottom: 20px; /* Margem abaixo do parágrafo */
+    font-size: 26px;
+    margin-bottom: 20px;
   }
 
   @media (max-width: 768px) {
-    width: 100%; /* Preenche toda a largura em telas pequenas */
-    padding: 0; /* Remove padding em telas pequenas */
-    text-align: center; /* Centraliza o texto */
+    width: 100%;
+    padding: 0;
+    text-align: center;
   }
 `;
 
 export const Arrow = styled.img`
-  width: 220px; /* Tamanho fixo da seta */
+  width: 220px;
   margin-left: 20px;
-  align-self: flex-start; /* Alinha a seta na parte inferior do container */
+  align-self: flex-start;
 
   @media (max-width: 768px) {
-    display: none; /* Esconde a seta em telas menores */
+    display: none;
   }
 `;

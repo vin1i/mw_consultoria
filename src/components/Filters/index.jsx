@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { FiltersContainer, Label, Select } from "./styles";
 
 const Filters = ({ onFilterChange }) => {
-  // Estados para cada filtro
   const [tipo, setTipo] = useState("");
   const [quartos, setQuartos] = useState("");
   const [banheiros, setBanheiros] = useState("");
   const [vagas, setVagas] = useState("");
 
-  // Função para atualizar os filtros
   const handleFilterChange = () => {
     onFilterChange({ tipo, quartos, banheiros, vagas });
   };

@@ -7,12 +7,8 @@ import Footer from "../components/Footer";
 import Error from "../pages/Error";
 import ImobiList from "../pages/ImobiList";
 import Admin from "../pages/Admin";
-import ImobiDetails from "../components/ImovelDetail";
 
-const isAuthenticated = () => {
-  const token = localStorage.getItem("token");
-  return token && token.length > 0;
-};
+const isAuthenticated = () => localStorage.getItem("token") === "c91d8f3e-7a9f-4b33-a3f5-9b4d5e7f2c29";
 
 const RouterApp = () => {
   return (
@@ -21,16 +17,13 @@ const RouterApp = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/imoveis" element={<ImobiList />} />
-
-        <Route path="/imoveis/:id" element={<ImobiDetails />} />
-
+        
         <Route
           path="/admin"
           element={isAuthenticated() ? <Admin /> : <Navigate to="/erro" />}
         />
-
-        <Route path="/erro" element={<Error />} />
-        <Route path="*" element={<Navigate to="/erro" />} />
+        
+        <Route path="*" element={<Error />} />
       </Routes>
       <Footer />
     </Router>

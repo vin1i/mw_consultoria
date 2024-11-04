@@ -1,10 +1,12 @@
 import React from "react";
-import { CardContainer, CardImage, CardInfo, DetailsButton } from "./styles"; // Certifique-se de que o DetailsButton está importado corretamente
+import { CardContainer, CardImage, CardInfo, DetailsButton } from "./styles";
 import { FaArrowRight, FaMapMarkerAlt } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
-const Card = ({ id, thumb, tipo, endereco, valor, slug }) => {
+const Card = ({ id, thumb, tipo, endereco, valor }) => {
   const navigate = useNavigate();
+
+  console.log("ID no Card:", id);
 
   return (
     <CardContainer>
@@ -15,9 +17,7 @@ const Card = ({ id, thumb, tipo, endereco, valor, slug }) => {
           <FaMapMarkerAlt style={{ marginRight: "8px" }} />
           <p>{endereco}</p>
         </div>
-        <p>
-          <strong>{valor}</strong>
-        </p>
+        <p><strong>{valor}</strong></p>
         <DetailsButton onClick={() => navigate(`/imoveis/${id}`, { replace: true })}>
           Detalhes <FaArrowRight />
         </DetailsButton>

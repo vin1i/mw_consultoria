@@ -35,24 +35,22 @@ export const DetailsButton = styled.a`
   display: flex;
   align-items: center;
   margin-top: 10px;
-  padding: 10px 15px; /* Adiciona padding para um botão mais confortável */
-  background-color: var(--red); /* Cor de fundo do botão */
-  color: white; /* Cor do texto */
-  text-decoration: none; /* Remove o sublinhado */
-  border-radius: 5px; /* Bordas arredondadas */
-  transition: background-color 0.3s, transform 0.2s; /* Transições suaves para fundo e transformações */
-  z-index: 2; /* Garante que o botão esteja acima de outros elementos */
+  padding: 10px 15px;
+  background-color: var(--red);
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.2s;
+  z-index: 2;
   cursor: pointer;
   outline: none;
-
-  /* Adiciona sombra para dar mais destaque ao botão */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 
   &:hover {
-    transform: scale(1.05); /* Aumenta o tamanho do botão */
+    transform: scale(1.05);
   }
 
   svg {
-    margin-left: 5px; /* Espaçamento entre o texto e o ícone */
+    margin-left: 5px;
   }
 `;

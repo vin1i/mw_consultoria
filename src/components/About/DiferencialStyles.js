@@ -8,9 +8,9 @@ export const Container = styled.div`
   padding-bottom: 50px;
   min-height: 120vh;
   background-image: url(${(props) => props.background});
-  background-position: center; /* Centraliza a imagem */
-  background-size: cover; /* Faz a imagem cobrir todo o espaço do container */
-  background-repeat: no-repeat; /* Evita que a imagem se repita */
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   position: relative;
 `;
 
