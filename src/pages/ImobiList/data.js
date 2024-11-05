@@ -20,7 +20,7 @@ Aproveite a conveniência de viver em um bairro que oferece tudo o que você pre
     metrosQuadrados: 114,
     endereco: "Av Portugal, 401, Cidade Monções",
     valor: 1990000,
-    thumb: Foto1, // Use a referência da imagem importada
+    thumb: Foto1,
     slug: "edificio-sunny-garden",
     imagens: [Foto1, Foto2, MarisaWebberFoto],
   },
@@ -64,9 +64,9 @@ Aproveite a conveniência de viver em um bairro que oferece tudo o que você pre
     metrosQuadrados: 120,
     endereco: "Rua JKL, 123",
     valor: 500000,
-    thumb: Foto1, // Use a referência da imagem importada
+    thumb: Foto1,
     slug: "apartamento-luxuoso",
-    imagens: [Foto1, Foto2, MarisaWebberFoto], // Adicione as imagens adicionais aqui
+    imagens: [Foto1, Foto2, MarisaWebberFoto],
   },
   {
     id: 5,
@@ -81,7 +81,7 @@ Aproveite a conveniência de viver em um bairro que oferece tudo o que você pre
     valor: 800000,
     thumb: Foto2,
     slug: "casa-moderna",
-    imagens: [MarisaWebberFoto, Foto1, Foto2], // Adicione as imagens adicionais aqui
+    imagens: [MarisaWebberFoto, Foto1, Foto2],
   },
   {
     id: 6,
@@ -96,6 +96,6 @@ Aproveite a conveniência de viver em um bairro que oferece tudo o que você pre
     valor: 400000,
     thumb: MarisaWebberFoto,
     slug: "edificio-residencial",
-    imagens: [Foto1, MarisaWebberFoto, Foto2], // Adicione as imagens adicionais aqui
+    imagens: [Foto1, MarisaWebberFoto, Foto2]
   },
 ];
