@@ -22,7 +22,6 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 
-import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -42,6 +41,7 @@ const ImobiDetails = () => {
       <ContentContainer>
         <Title>{property.tipo}</Title>
         <Address>{property.endereco}</Address>
+        
         <Features>
           <p>
             <FaRulerCombined /> {property.metrosQuadrados} m²
@@ -59,11 +59,18 @@ const ImobiDetails = () => {
             <FaDoorClosed /> {property.suites} suítes
           </p>
         </Features>
+        
         <Price>R$ {property.valor.toLocaleString("pt-BR")}</Price>
+        
         <Description style={{ whiteSpace: "pre-wrap" }}>{property.descricao}</Description>
-        <WhatsAppButton href="https://api.whatsapp.com/send?phone=5511999999999&text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20os%20servi%C3%A7os%20da%20MW%20Consultoria.">
+        
+        <WhatsAppButton
+          href={`https://api.whatsapp.com/send?phone=5511999999999&text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20im%C3%B3vel%20${property.tipo}%20em%20${property.endereco}.`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Fale conosco!
-          <FaWhatsapp style={{ color: "white", fontSize: "25px" }} />
+          <FaWhatsapp style={{ color: "white", fontSize: "25px", marginLeft: "10px" }} />
         </WhatsAppButton>
       </ContentContainer>
     </Wrapper>

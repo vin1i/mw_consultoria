@@ -3,109 +3,87 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 1000px;
-  margin: 40px auto;
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border-radius: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 export const ImageContainer = styled.div`
   width: 100%;
-  max-height: 450px;
-  border-radius: 10px;
   overflow: hidden;
-  object-fit: cover;
-  image-rendering: crisp-edges;
-`;
-
-
-export const ContentContainer = styled.div`
-  padding: 20px 100px;
-  padding-bottom: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  text-align: left;
+  border-radius: 8px;
+  margin-bottom: 20px;
 `;
 
 export const Image = styled.img`
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  will-change: transform;
-  z-index: 1;
-  backface-visibility: hidden;
+  height: auto;
+  display: block;
+`;
+
+export const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 `;
 
 export const Title = styled.h1`
-  font-size: 32px;
-  font-weight: bold;
-  color: var(--black);
-  margin: 10px 0;
+  font-size: 24px;
+  color: #333;
 `;
 
 export const Address = styled.p`
   font-size: 18px;
-  color: #666;
-  margin-bottom: 10px;
+  color: #777;
 `;
 
 export const Features = styled.div`
   display: flex;
-  justify-content: left;
-  align-items: center;
-  font-size: 16px;
-  color: var(--black);
-  gap: 50px;
+  gap: 15px;
+  flex-wrap: wrap;
+  color: #555;
 
   p {
     display: flex;
     align-items: center;
-    gap: 8px;
-  }
-
-  .feature-icon {
-    font-size: 18px;
-    color: #888;
+    font-size: 16px;
+    gap: 5px;
   }
 `;
 
 export const Price = styled.p`
-  font-size: 45px;
+  font-size: 22px;
   font-weight: bold;
-  color: var(--black);
+  color: #28a745;
 `;
 
 export const Description = styled.p`
   font-size: 16px;
-  white-space: pre-wrap;
-  line-height: 1.6;
-  color: var(--black);
-  margin: 0;
-  padding: 0;
+  color: #555;
 `;
 
 export const WhatsAppButton = styled.a`
-  background-color: var(--red);
-  color: #fff;
-  padding: 12px 24px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  background-color: #25d366;
+  color: white;
   text-decoration: none;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  height: 50px;
-  width: 220px;
-  margin: 20px 0;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  width: fit-content;
 
   &:hover {
-    background-color: var(--dark-red);
+    background-color: #20b558;
+  }
+
+  svg {
+    margin-left: 10px;
   }
 `;

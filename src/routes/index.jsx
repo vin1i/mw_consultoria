@@ -1,18 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Home from "../pages/Home";
+import ImobiList from "../pages/ImobiList";
+import ImobiDetails from "../components/ImovelDetail";
+import PropertyPage from "../pages/Admin/PropertyPage"; // Página de administração de imóveis
+import Error from "../pages/Error"; // Página de erro
+import PrivateRoute from "../components/PrivateRoute"; // Importando o PrivateRoute
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Error from "../pages/Error";
-import ImobiList from "../pages/ImobiList";
-import Admin from "../pages/Admin";
-import ImobiDetails from "../components/ImovelDetail";
-
-const isAuthenticated = () => {
-  const token = localStorage.getItem("token");
-  return token && token.length > 0;
-};
 
 const RouterApp = () => {
   return (
@@ -21,13 +21,9 @@ const RouterApp = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/imoveis" element={<ImobiList />} />
-
         <Route path="/imoveis/:id" element={<ImobiDetails />} />
 
-        <Route
-          path="/admin"
-          element={isAuthenticated() ? <Admin /> : <Navigate to="/erro" />}
-        />
+        <Route path="/admin/imoveis" element={<PropertyPage />} />
 
         <Route path="/erro" element={<Error />} />
         <Route path="*" element={<Navigate to="/erro" />} />
