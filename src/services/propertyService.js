@@ -1,49 +1,46 @@
 // Importações do Firebase e Firestore
 import { db } from '../services/firebase/firebaseConfig';
 import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-// Importações do Firebase Storage (temporariamente comentadas)
-// import { storage } from '../services/firebase/firebaseConfig';
-// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { uploadImagesToCloudinary } from '../services/CloudinaryService'; // Importa a função de upload
 
 // Criação da referência à coleção 'properties' no Firestore
 const propertyCollection = collection(db, 'properties');
 
-// Função para fazer upload de múltiplas imagens
-// const uploadImages = async (files) => {
-//   const uploadPromises = files.map(async (file) => {
-//     const fileRef = ref(storage, `images/${file.name}`);
-//     await uploadBytes(fileRef, file);
-//     return await getDownloadURL(fileRef); // Retorna a URL da imagem
-//   });
-
-//   return await Promise.all(uploadPromises); // Retorna um array de URLs
-// };
-
 // Função para adicionar um novo imóvel com imagens e vídeos
-// Função para simular o upload de múltiplas imagens
-const uploadImages = async (files) => {
-  if (!files || files.length === 0) {
-    return []; // Retorna um array vazio se não houver arquivos
-  }
-  
-  return files.map(() => "https://via.placeholder.com/200");
-};
-
-// Função para adicionar um novo imóvel com imagens e vídeos
-export const addProperty = async (propertyData, imageFiles, videoUrls) => {
+export const addProperty = async (propertyData) => {
   try {
-    const imageUrls = await uploadImages(imageFiles);
+    console.log("Dados do imóvel:", propertyData);
 
+    const imagePublicIds = propertyData.imagens ? await uploadImagesToCloudinary(propertyData.imagens) : [];
+
+    // Cria os dados do imóvel a serem salvos no Firestore
     const newPropertyData = {
-      ...propertyData,
-      imagens: imageUrls,
-      videos: videoUrls, // Pode ser uma lista de URLs do YouTube ou IDs
+      ds_descricao: propertyData.descricao || '',
+      ds_localizacao: propertyData.endereco || '',
+      nm_titulo: propertyData.titulo || '',
+      nr_banheiros: propertyData.banheiros || 0,
+      nr_quartos: propertyData.quartos || 0,
+      nr_suites: propertyData.suites || 0,
+      nr_tamanho: propertyData.metrosQuadrados || 0,
+      nr_vagas_garagem: propertyData.vagas || 0,
+      st_disponibilidade: propertyData.disponibilidade || 'Disponível',
+      tp_imovel: propertyData.tipo || 'Apartamento',
+      videos: propertyData.videos || [],
+      vl_condominio: propertyData.condominio || 0,
+      vl_preco: propertyData.valor || 0,
+      dt_criacao: new Date(),
+      fotos: imagePublicIds.length ? imagePublicIds : [] // Prevenção contra array vazio
     };
 
-    return await addDoc(propertyCollection, newPropertyData);
+    console.log("Dados do imóvel formatados para Firestore:", newPropertyData);
+    
+    const docRef = await addDoc(propertyCollection, newPropertyData);
+
+    console.log("Imóvel adicionado com sucesso! ID:", docRef.id);
+    return docRef.id; // Retorna o ID do documento adicionado
   } catch (error) {
-    console.error("Erro ao adicionar imóvel:", error);
-    throw error;
+    console.error("Erro ao salvar o imóvel:", error.message);
+    throw new Error("Erro ao adicionar imóvel: " + error.message);
   }
 };
 
@@ -53,20 +50,19 @@ export const getImoveis = async () => {
     const querySnapshot = await getDocs(propertyCollection);
     return querySnapshot.docs.map((doc) => ({
       id: doc.id,
-      thumb: "", // Se precisar adicionar uma URL de imagem fixa ou personalizada
-      tipo: doc.data().tp_imovel,
-      endereco: doc.data().ds_localizacao,
-      valor: doc.data().vl_preco,
-      quartos: doc.data().nr_quartos,
-      banheiros: doc.data().nr_banheiros,
-      vagas: doc.data().nr_vagas_garagem,
-      suites: doc.data().nr_suites,
-      metrosQuadrados: doc.data().nr_tamanho,
-      descricao: doc.data().ds_descricao,
-      disponibilidade: doc.data().st_disponibilidade,
-      titulo: doc.data().nm_titulo,
-      imagens: doc.data().imagens || [], // Array de URLs simuladas ou reais
-      videos: doc.data().videos || [],   // Array de URLs de vídeos
+      tipo: doc.data().tipo || 'Indefinido',
+      endereco: doc.data().endereco || 'Não informado',
+      valor: doc.data().valor || 0,
+      quartos: doc.data().quartos || 0,
+      banheiros: doc.data().banheiros || 0,
+      vagas: doc.data().vagas || 0,
+      suites: doc.data().suites || 0,
+      metrosQuadrados: doc.data().metrosQuadrados || 0,
+      descricao: doc.data().descricao || 'Não informada',
+      disponibilidade: doc.data().disponibilidade || 'Não informado',
+      titulo: doc.data().titulo || 'Sem título',
+      imagens: doc.data().imagens || [],
+      videos: doc.data().videos || [],
     }));
   } catch (error) {
     console.error("Erro ao buscar imóveis:", error);
@@ -74,7 +70,7 @@ export const getImoveis = async () => {
   }
 };
 
-// Funções para atualizar e deletar imóveis permanecem inalteradas
+// Função para atualizar imóvel
 export const updateImovel = async (id, updatedData) => {
   try {
     const propertyRef = doc(db, 'properties', id);
@@ -86,6 +82,7 @@ export const updateImovel = async (id, updatedData) => {
   }
 };
 
+// Função para deletar imóvel
 export const deleteImovel = async (id) => {
   try {
     const propertyRef = doc(db, 'properties', id);

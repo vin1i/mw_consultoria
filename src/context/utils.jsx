@@ -1,12 +1,25 @@
 export function setLocalStorage(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+        console.error("Erro ao salvar no localStorage", error);
+    }
 }
 
 export function getLocalStorage(key) {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : null;
+    try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    } catch (error) {
+        console.error("Erro ao ler do localStorage", error);
+        return null;
+    }
 }
 
 export function removeLocalStorage(key) {
-    localStorage.removeItem(key);
+    try {
+        localStorage.removeItem(key);
+    } catch (error) {
+        console.error("Erro ao remover do localStorage", error);
+    }
 }

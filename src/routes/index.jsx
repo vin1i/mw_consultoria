@@ -10,7 +10,6 @@ import ImobiList from "../pages/ImobiList";
 import ImobiDetails from "../components/ImovelDetail";
 import PropertyPage from "../pages/Admin/PropertyPage"; // Página de administração de imóveis
 import Error from "../pages/Error"; // Página de erro
-import PrivateRoute from "../components/PrivateRoute"; // Importando o PrivateRoute
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 

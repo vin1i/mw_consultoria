@@ -1,62 +1,48 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Banner from "../../components/Banner";
 import About from "../../components/About";
 import Servicos from "../../components/Servicos/Servicos";
 import Card from "../../components/Card";
-import { Wrapper, Header, ImoveisSection } from "./styles";
-
-// Dados fictícios para a listagem de imóveis
-const fakeData = [
-  {
-    id: 1,
-    thumb: "https://via.placeholder.com/150",
-    tipo: "Apartamento",
-    endereco: "Rua A, 123 - Bairro",
-    valor: "R$ 500.000",
-    slug: "apartamento-rua-a"
-  },
-  {
-    id: 2,
-    thumb: "https://via.placeholder.com/150",
-    tipo: "Casa",
-    endereco: "Rua B, 456 - Bairro",
-    valor: "R$ 750.000",
-    slug: "casa-rua-b"
-  },
-  {
-    id: 3,
-    thumb: "https://via.placeholder.com/150",
-    tipo: "Cobertura",
-    endereco: "Avenida C, 789 - Bairro",
-    valor: "R$ 1.200.000",
-    slug: "cobertura-avenida-c"
-  },
-  {
-    id: 4,
-    thumb: "https://via.placeholder.com/150",
-    tipo: "Casa",
-    endereco: "Rua D, 987 - Bairro",
-    valor: "R$ 900.000",
-    slug: "casa-rua-d"
-  }
-];
+import { Wrapper, ImoveisSection, SectionTitle, Header } from "./styles";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../services/firebase/firebaseConfig";
 
 const Home = () => {
+  const [imoveis, setImoveis] = useState([]);
+
+  const fetchImoveis = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "imoveis"));
+      const imoveisData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setImoveis(imoveisData); // Atualiza o estado com os dados de imóveis
+    } catch (error) {
+      console.error("Erro ao buscar imóveis:", error);
+    }
+  };
+
+  // Busca os imóveis quando o componente é montado
+  useEffect(() => {
+    fetchImoveis();
+  }, []);
+
   return (
     <Fragment>
       <section id="inicio">
         <Banner />
       </section>
-      
+
       <Header>
         <h2>Encontre o imóvel dos seus sonhos!</h2>
         <ImoveisSection>
-          <h2>Nossos Imóveis</h2>
+          <SectionTitle>Nossos Imóveis</SectionTitle>
           <Wrapper>
-            {fakeData.map((item) => (
+            {imoveis.map((item) => (
               <Card
                 key={item.id}
-                thumb={item.thumb}
+                thumb={item.thumb} // Certifique-se de que 'thumb' está no Firestore
                 tipo={item.tipo}
                 endereco={item.endereco}
                 valor={item.valor}
@@ -66,17 +52,16 @@ const Home = () => {
           </Wrapper>
         </ImoveisSection>
       </Header>
-      
+
       <section id="sobre-nos">
         <About />
       </section>
-      
+
       <section id="servicos">
         <Servicos />
       </section>
-      
-      <section id="contato">
-      </section>
+
+      <section id="contato"></section>
     </Fragment>
   );
 };

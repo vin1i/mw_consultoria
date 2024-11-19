@@ -18,6 +18,10 @@
 .env.test.local
 .env.production.local
 
+# Ignorar arquivo .env com variáveis sensíveis (ex: Cloudinary)
+.env
+
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

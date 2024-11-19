@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Card from "../../components/Card";
 import Pagination from "../../components/Pagination";
 import Filters from "../../components/Filters";
 import { Wrapper, Sidebar, ListingsSection } from "./styles";
 import { getImoveis } from '../../services/propertyService';
+import CloudinaryImage from '../../components/CloudinaryImage';
 
 const ImobiList = () => {
   const [imoveis, setImoveis] = useState([]);
@@ -33,22 +34,26 @@ const ImobiList = () => {
     fetchImoveis();
   }, []);
 
-  // Aplica filtros aos imóveis
-  const filteredProperties = imoveis.filter((property) => {
-    if (filters.tipo && property.tipo !== filters.tipo) return false;
-    if (filters.quartos && property.quartos !== Number(filters.quartos)) return false;
-    if (filters.banheiros && property.banheiros !== Number(filters.banheiros)) return false;
-    if (filters.vagas && property.vagas !== Number(filters.vagas)) return false;
-    return true;
-  });
+  const filteredProperties = useMemo(() => {
+    return imoveis.filter((property) => {
+      if (filters.tipo && property.tipo !== filters.tipo) return false;
+      if (filters.quartos && property.quartos !== Number(filters.quartos)) return false;
+      if (filters.banheiros && property.banheiros !== Number(filters.banheiros)) return false;
+      if (filters.vagas && property.vagas !== Number(filters.vagas)) return false;
+      return true;
+    });
+  }, [imoveis, filters]);
 
   const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentProperties = filteredProperties.slice(startIndex, startIndex + itemsPerPage);
 
   const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
-    setCurrentPage(1);
+    // Só atualiza os filtros se realmente houver uma mudança
+    if (JSON.stringify(newFilters) !== JSON.stringify(filters)) {
+      setFilters(newFilters);
+      setCurrentPage(1);
+    }
   };
 
   return (
@@ -65,11 +70,11 @@ const ImobiList = () => {
               <Card
                 key={property.id}
                 id={property.id}
-                thumb={property.thumb}
                 tipo={property.tipo}
                 endereco={property.endereco}
                 valor={property.valor}
                 slug={property.slug}
+                thumb={<CloudinaryImage publicId={property.cloudinaryPublicId} width={300} height={200} />}
               />
             ))}
             <Pagination

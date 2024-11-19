@@ -14,14 +14,14 @@ function PropertyList() {
 
   const handleDelete = async (id) => {
     await deleteProperty(id);
-    setProperties(properties.filter(property => property.id !== id));
+    setProperties(properties.filter((property) => property.id !== id));
   };
 
   return (
     <div>
       {properties.map((property) => (
         <div key={property.id}>
-          <h3>{property.title}</h3>
+          <h3>{property.nm_titulo}</h3>
           <button onClick={() => handleDelete(property.id)}>Deletar</button>
         </div>
       ))}

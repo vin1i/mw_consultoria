@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { addProperty, updateImovel } from "../../services/propertyService";
+// import { uploadImagesToCloudinary } from "../../services/CloudinaryService";
 import styled from "styled-components";
 
 const FormContainer = styled.form`
@@ -93,81 +94,116 @@ function PropertyForm({ existingProperty, onSave }) {
   const [dsDescricao, setDsDescricao] = useState(""); // ds_descricao
   const [vlPreco, setVlPreco] = useState(""); // vl_preco
   const [dsLocalizacao, setDsLocalizacao] = useState(""); // ds_localizacao
-  const [tpImovel, setTpImovel] = useState("venda"); // tp_imovel
+  // const [tpImovel, setTpImovel] = useState("venda"); // tp_imovel
   const [nrTamanho, setNrTamanho] = useState(""); // nr_tamanho
-  const [nrQuartos, setNrQuartos] = useState(""); // nr_quartos
-  const [nrBanheiros, setNrBanheiros] = useState(""); // nr_banheiros
-  const [nrVagasGaragem, setNrVagasGaragem] = useState(""); // nr_vagas_garagem
-  const [nrSuites, setNrSuites] = useState(""); // nr_suites
-  const [stDisponibilidade, setStDisponibilidade] = useState(true); // st_disponibilidade
-  const [videos, setVideos] = useState([]); // videos
-  const [fotos, setFotos] = useState([]); // fotos
+  // const [nrQuartos, setNrQuartos] = useState(""); // nr_quartos
+  // const [nrBanheiros, setNrBanheiros] = useState(""); // nr_banheiros
+  // const [nrVagasGaragem, setNrVagasGaragem] = useState(""); // nr_vagas_garagem
+  // const [nrSuites, setNrSuites] = useState(""); // nr_suites
+  // const [stDisponibilidade, setStDisponibilidade] = useState(true); // st_disponibilidade
+  //const [vlCondominio, setVlCondominio] = useState(""); // vl_condominio
+  // const [videos, setVideos] = useState([]); // videos
+  // const [fotos, setFotos] = useState([]); // fotos
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+/*  useEffect(() => {
     if (existingProperty) {
-      setNmTitulo(existingProperty.nm_titulo);
-      setDsDescricao(existingProperty.ds_descricao);
-      setVlPreco(existingProperty.vl_preco);
-      setDsLocalizacao(existingProperty.ds_localizacao);
-      setTpImovel(existingProperty.tp_imovel);
-      setNrTamanho(existingProperty.nr_tamanho);
-      setNrQuartos(existingProperty.nr_quartos);
-      setNrBanheiros(existingProperty.nr_banheiros);
-      setNrVagasGaragem(existingProperty.nr_vagas_garagem);
-      setNrSuites(existingProperty.nr_suites);
-      setStDisponibilidade(existingProperty.st_disponibilidade);
+      setNmTitulo(existingProperty.nm_titulo || "");
+      setDsDescricao(existingProperty.ds_descricao || "");
+      setVlPreco(existingProperty.vl_preco || "");
+      setDsLocalizacao(existingProperty.ds_localizacao || "");
+      setTpImovel(existingProperty.tp_imovel || "venda");
+      setNrTamanho(existingProperty.nr_tamanho || "");
+      setNrQuartos(existingProperty.nr_quartos || "");
+      setNrBanheiros(existingProperty.nr_banheiros || "");
+      setNrVagasGaragem(existingProperty.nr_vagas_garagem || "");
+      setNrSuites(existingProperty.nr_suites || "");
+      setStDisponibilidade(
+        existingProperty.st_disponibilidade !== undefined
+          ? existingProperty.st_disponibilidade
+          : true
+      );
+      setVlCondominio(existingProperty.vl_condominio || "");
       setVideos(existingProperty.videos || []);
       setFotos(existingProperty.fotos || []);
     }
-  }, [existingProperty]);
+  }, [existingProperty]); 
 
-  const handleVideoChange = (e) => {
-    const newVideo = e.target.value;
-
-    // Expressão regular para validar URL do YouTube
-    const youtubeRegex =
-      /^(https?\:\/\/)?(www\.youtube\.com|youtube\.com)\/(?:[^\/\n\s]+\/\S+|\S+\/\S+|\S+)(?:[?&](?:[a-z0-9-]+=[^&]+&)*v=([a-zA-Z0-9_-]+))$/;
-
-    // Verifica se a URL do vídeo é do YouTube
-    if (newVideo && youtubeRegex.test(newVideo) && !videos.includes(newVideo)) {
-      setVideos([...videos, newVideo]); // Adiciona a nova URL ao array de vídeos
-    } else if (newVideo && !youtubeRegex.test(newVideo)) {
-      setError("Por favor, insira uma URL válida do YouTube.");
-    }
+  const handleVideoUrlChange = (index, event) => {
+    const newVideos = [...videos];
+    newVideos[index] = event.target.value;
+    setVideos(newVideos);
   };
 
-  const handleFotosChange = (e) => {
-    const newFotos = Array.from(e.target.files).map((file) =>
-      URL.createObjectURL(file)
-    ); // Adicionando fotos com base na URL do arquivo
-    setFotos([...fotos, ...newFotos]);
+  const handleAddVideoUrl = () => {
+    setVideos([...videos, ""]); // Adiciona uma nova entrada de URL vazia
   };
+
+  const handleFotosChange = async (e) => {
+  const files = e.target.files;
+  
+  // Converte o objeto 'files' em um array simples de arquivos
+  const fileArray = Array.from(files);  
+  setFotos(fileArray);
+
+  try {
+    // Agora, ao enviar as fotos para o Cloudinary, deve retornar uma lista de URLs simples
+    const publicIds = await uploadImagesToCloudinary(fileArray); // Recebe um array de URLs
+    console.log("Imagens enviadas para o Cloudinary:", publicIds);
+    
+    // Atualize o estado 'fotos' com as URLs simples de cada imagem
+    setFotos(publicIds);
+  } catch (error) {
+    console.error("Erro ao enviar as imagens:", error);
+  }
+};*/
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
 
-    const finalVideos = videos || [];
-
-    const propertyData = {
-      nm_titulo: nmTitulo,
-      ds_descricao: dsDescricao,
-      vl_preco: parseFloat(vlPreco),
-      ds_localizacao: dsLocalizacao,
-      tp_imovel: tpImovel,
-      nr_tamanho: parseFloat(nrTamanho),
-      nr_quartos: parseInt(nrQuartos),
-      nr_banheiros: parseInt(nrBanheiros),
-      nr_vagas_garagem: parseInt(nrVagasGaragem),
-      nr_suites: parseInt(nrSuites),
-      st_disponibilidade: stDisponibilidade,
-      videos: finalVideos, // Garante que sempre seja um array
-      fotos: fotos, // Mantemos as fotos como URLs locais (depois de serem carregadas para o storage)
-      dt_criacao: new Date(), // dt_criacao será o timestamp atual
-    };
+    if (
+      !nmTitulo ||
+      !dsDescricao ||
+      !vlPreco ||
+      !dsLocalizacao ||
+      !nrTamanho
+      //!nrQuartos ||
+      //!nrBanheiros ||
+      //!nrVagasGaragem
+    ) {
+      setError("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
 
     try {
+      const propertyData = {
+        nm_titulo: nmTitulo,
+        ds_descricao: dsDescricao,
+        vl_preco: parseFloat(vlPreco),
+        ds_localizacao: dsLocalizacao,
+        //tp_imovel: tpImovel,
+        nr_tamanho: parseFloat(nrTamanho),
+        //nr_quartos: parseInt(nrQuartos),
+       // nr_banheiros: parseInt(nrBanheiros),
+        //nr_vagas_garagem: parseInt(nrVagasGaragem),
+        //nr_suites: parseInt(nrSuites),
+       // st_disponibilidade: stDisponibilidade,
+        //vl_condominio: parseFloat(vlCondominio || 0),
+        //videos,
+        dt_criacao: new Date()  // Se deseja registrar a data de criação
+      };
+
+      console.log("Dados do imóvel:", propertyData);
+
+      // Upload das fotos ao Cloudinary
+      // const fotoUrls = [];
+      // for (const foto of fotos) {
+      //   const url = await uploadImagesToCloudinary(foto); // Fun o que faz o upload ao Cloudinary e retorna o URL
+      //   fotoUrls.push(url);
+      // }
+      // propertyData.fotos = fotoUrls;
+
       if (existingProperty) {
         await updateImovel(existingProperty.id, propertyData);
         alert("Imóvel atualizado com sucesso!");
@@ -193,6 +229,7 @@ function PropertyForm({ existingProperty, onSave }) {
             value={nmTitulo}
             onChange={(e) => setNmTitulo(e.target.value)}
             placeholder="Título do imóvel"
+            required
           />
 
           <Label>Localização:</Label>
@@ -211,6 +248,7 @@ function PropertyForm({ existingProperty, onSave }) {
             required
           />
 
+          {/*
           <Label>Quartos:</Label>
           <Input
             type="number"
@@ -218,7 +256,9 @@ function PropertyForm({ existingProperty, onSave }) {
             onChange={(e) => setNrQuartos(e.target.value)}
             required
           />
+          */}
 
+          {/*
           <Label>Banheiros:</Label>
           <Input
             type="number"
@@ -226,7 +266,9 @@ function PropertyForm({ existingProperty, onSave }) {
             onChange={(e) => setNrBanheiros(e.target.value)}
             required
           />
+          */}
 
+          {/*
           <Label>Vagas de Garagem:</Label>
           <Input
             type="number"
@@ -234,9 +276,11 @@ function PropertyForm({ existingProperty, onSave }) {
             onChange={(e) => setNrVagasGaragem(e.target.value)}
             required
           />
+          */}
         </FormColumn>
 
         <FormColumn>
+          {/*
           <Label>Suítes:</Label>
           <Input
             type="number"
@@ -244,6 +288,7 @@ function PropertyForm({ existingProperty, onSave }) {
             onChange={(e) => setNrSuites(e.target.value)}
             required
           />
+          */}
 
           <Label>Preço:</Label>
           <Input
@@ -253,14 +298,27 @@ function PropertyForm({ existingProperty, onSave }) {
             required
           />
 
+{/*
+          <Label>Condomínio:</Label>
+          <Input
+            type="number"
+            value={vlCondominio}
+            onChange={(e) => setVlCondominio(e.target.value)}
+            placeholder="Preço do condomínio"
+          />
+          */}
+
+{/*
           <Label>Categoria:</Label>
           <Select
             value={tpImovel}
             onChange={(e) => setTpImovel(e.target.value)}
+            required
           >
             <option value="venda">Venda</option>
             <option value="aluguel">Aluguel</option>
           </Select>
+          */}
 
           <Label>Descrição:</Label>
           <Textarea
@@ -268,17 +326,21 @@ function PropertyForm({ existingProperty, onSave }) {
             onChange={(e) => setDsDescricao(e.target.value)}
             rows="5"
             placeholder="Descrição do imóvel"
+            required
           />
 
+{/*
           <Label>Disponibilidade:</Label>
           <Input
             type="checkbox"
             checked={stDisponibilidade}
             onChange={() => setStDisponibilidade(!stDisponibilidade)}
           />
+          */}
         </FormColumn>
       </FormRow>
 
+{/*
       <Label>Fotos:</Label>
       <FileInput
         type="file"
@@ -286,23 +348,22 @@ function PropertyForm({ existingProperty, onSave }) {
         multiple
         onChange={handleFotosChange}
       />
+      
 
-      <Label>Vídeos (URLs do YouTube):</Label>
-      <Input
-        type="text"
-        placeholder="Cole a URL do vídeo"
-        onChange={handleVideoChange}
-      />
-      <ul>
-        {existingProperty && videos.length > 0 && (
-          <li>
-            <strong>Vídeos cadastrados:</strong>
-          </li>
-        )}
-        {videos.map((video, index) => (
-          <li key={index}>{video}</li> // Exibe as URLs adicionadas
-        ))}
-      </ul>
+      <Label>URLs de Vídeos</Label>
+      {videos.map((url, index) => (
+        <Input
+          key={index}
+          type="text"
+          value={url}
+          placeholder="Insira a URL do vídeo do YouTube"
+          onChange={(event) => handleVideoUrlChange(index, event)}
+        />
+      ))}
+      <Button type="button" onClick={handleAddVideoUrl}>
+        Adicionar outra URL
+      </Button>
+      */}
 
       <Button type="submit">
         {existingProperty ? "Salvar alterações" : "Cadastrar Imóvel"}

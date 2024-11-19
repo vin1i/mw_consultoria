@@ -27,3 +27,9 @@ export const ImoveisSection = styled.section`
     margin-bottom: 16px;
   }
 `;
+
+export const SectionTitle = styled.h2`
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+`;
