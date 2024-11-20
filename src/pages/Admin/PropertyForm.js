@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { addProperty, updateImovel } from "../../services/propertyService";
-// import { uploadImagesToCloudinary } from "../../services/CloudinaryService";
+import { uploadImagesToCloudinary } from "../../services/CloudinaryService";
 import styled from "styled-components";
 
 const FormContainer = styled.form`
@@ -89,131 +89,103 @@ const ErrorMessage = styled.p`
   color: red;
 `;
 
-function PropertyForm({ existingProperty, onSave }) {
-  const [nmTitulo, setNmTitulo] = useState(""); // nm_titulo
-  const [dsDescricao, setDsDescricao] = useState(""); // ds_descricao
-  const [vlPreco, setVlPreco] = useState(""); // vl_preco
-  const [dsLocalizacao, setDsLocalizacao] = useState(""); // ds_localizacao
-  // const [tpImovel, setTpImovel] = useState("venda"); // tp_imovel
-  const [nrTamanho, setNrTamanho] = useState(""); // nr_tamanho
-  // const [nrQuartos, setNrQuartos] = useState(""); // nr_quartos
-  // const [nrBanheiros, setNrBanheiros] = useState(""); // nr_banheiros
-  // const [nrVagasGaragem, setNrVagasGaragem] = useState(""); // nr_vagas_garagem
-  // const [nrSuites, setNrSuites] = useState(""); // nr_suites
-  // const [stDisponibilidade, setStDisponibilidade] = useState(true); // st_disponibilidade
-  //const [vlCondominio, setVlCondominio] = useState(""); // vl_condominio
-  // const [videos, setVideos] = useState([]); // videos
-  // const [fotos, setFotos] = useState([]); // fotos
+const PropertyForm = ({ existingProperty }) => {
+  const [formData, setFormData] = useState({
+    nmTitulo: "",
+    dsDescricao: "",
+    vlPreco: "",
+    dsLocalizacao: "",
+    tpImovel: "venda",
+    nrTamanho: "",
+    nrQuartos: "",
+    nrBanheiros: "",
+    nrVagasGaragem: "",
+    nrSuites: "",
+    stDisponibilidade: true,
+    vlCondominio: "",
+    videos: [""],
+    fotos: [],
+  });
   const [error, setError] = useState(null);
 
-/*  useEffect(() => {
-    if (existingProperty) {
-      setNmTitulo(existingProperty.nm_titulo || "");
-      setDsDescricao(existingProperty.ds_descricao || "");
-      setVlPreco(existingProperty.vl_preco || "");
-      setDsLocalizacao(existingProperty.ds_localizacao || "");
-      setTpImovel(existingProperty.tp_imovel || "venda");
-      setNrTamanho(existingProperty.nr_tamanho || "");
-      setNrQuartos(existingProperty.nr_quartos || "");
-      setNrBanheiros(existingProperty.nr_banheiros || "");
-      setNrVagasGaragem(existingProperty.nr_vagas_garagem || "");
-      setNrSuites(existingProperty.nr_suites || "");
-      setStDisponibilidade(
-        existingProperty.st_disponibilidade !== undefined
-          ? existingProperty.st_disponibilidade
-          : true
-      );
-      setVlCondominio(existingProperty.vl_condominio || "");
-      setVideos(existingProperty.videos || []);
-      setFotos(existingProperty.fotos || []);
-    }
-  }, [existingProperty]); 
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleFotosChange = (e) => {
+    const files = Array.from(e.target.files);
+    handleChange("fotos", files);
+  };
 
   const handleVideoUrlChange = (index, event) => {
-    const newVideos = [...videos];
-    newVideos[index] = event.target.value;
-    setVideos(newVideos);
+    const updatedVideos = [...formData.videos];
+    updatedVideos[index] = event.target.value;
+    handleChange("videos", updatedVideos);
   };
 
   const handleAddVideoUrl = () => {
-    setVideos([...videos, ""]); // Adiciona uma nova entrada de URL vazia
+    handleChange("videos", [...formData.videos, ""]);
   };
-
-  const handleFotosChange = async (e) => {
-  const files = e.target.files;
-  
-  // Converte o objeto 'files' em um array simples de arquivos
-  const fileArray = Array.from(files);  
-  setFotos(fileArray);
-
-  try {
-    // Agora, ao enviar as fotos para o Cloudinary, deve retornar uma lista de URLs simples
-    const publicIds = await uploadImagesToCloudinary(fileArray); // Recebe um array de URLs
-    console.log("Imagens enviadas para o Cloudinary:", publicIds);
-    
-    // Atualize o estado 'fotos' com as URLs simples de cada imagem
-    setFotos(publicIds);
-  } catch (error) {
-    console.error("Erro ao enviar as imagens:", error);
-  }
-};*/
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-
-    if (
-      !nmTitulo ||
-      !dsDescricao ||
-      !vlPreco ||
-      !dsLocalizacao ||
-      !nrTamanho
-      //!nrQuartos ||
-      //!nrBanheiros ||
-      //!nrVagasGaragem
-    ) {
-      setError("Por favor, preencha todos os campos obrigatórios.");
-      return;
-    }
-
+  
     try {
-      const propertyData = {
-        nm_titulo: nmTitulo,
-        ds_descricao: dsDescricao,
-        vl_preco: parseFloat(vlPreco),
-        ds_localizacao: dsLocalizacao,
-        //tp_imovel: tpImovel,
-        nr_tamanho: parseFloat(nrTamanho),
-        //nr_quartos: parseInt(nrQuartos),
-       // nr_banheiros: parseInt(nrBanheiros),
-        //nr_vagas_garagem: parseInt(nrVagasGaragem),
-        //nr_suites: parseInt(nrSuites),
-       // st_disponibilidade: stDisponibilidade,
-        //vl_condominio: parseFloat(vlCondominio || 0),
-        //videos,
-        dt_criacao: new Date()  // Se deseja registrar a data de criação
+      console.log("Enviando dados do formulário:", formData);
+  
+      // Upload de imagens
+      const fotoUrls = await uploadImagesToCloudinary(formData.fotos);
+  
+      // Mapear os campos para o formato esperado
+      const payload = {
+        descricao: formData.dsDescricao,
+        endereco: formData.dsLocalizacao,
+        titulo: formData.nmTitulo,
+        banheiros: parseInt(formData.nrBanheiros, 10),
+        quartos: parseInt(formData.nrQuartos, 10),
+        suites: parseInt(formData.nrSuites, 10),
+        metrosQuadrados: parseFloat(formData.nrTamanho),
+        vagas: parseInt(formData.nrVagasGaragem, 10),
+        disponibilidade: formData.stDisponibilidade ? "Disponível" : "Indisponível",
+        tipo: formData.tpImovel,
+        condominio: parseFloat(formData.vlCondominio || 0),
+        valor: parseFloat(formData.vlPreco),
+        videos: formData.videos.filter((url) => url.trim() !== ""),
+        imagens: fotoUrls,
       };
-
-      console.log("Dados do imóvel:", propertyData);
-
-      // Upload das fotos ao Cloudinary
-      // const fotoUrls = [];
-      // for (const foto of fotos) {
-      //   const url = await uploadImagesToCloudinary(foto); // Fun o que faz o upload ao Cloudinary e retorna o URL
-      //   fotoUrls.push(url);
-      // }
-      // propertyData.fotos = fotoUrls;
-
+  
+      console.log("Payload enviado para o serviço:", payload);
+  
+      // Chamada ao serviço
       if (existingProperty) {
-        await updateImovel(existingProperty.id, propertyData);
-        alert("Imóvel atualizado com sucesso!");
+        await updateImovel(existingProperty.id, payload);
       } else {
-        await addProperty(propertyData);
-        alert("Imóvel cadastrado com sucesso!");
+        await addProperty(payload);
       }
-      onSave();
+  
+      alert("Imóvel salvo com sucesso!");
+      setFormData({
+        nmTitulo: "",
+        dsDescricao: "",
+        vlPreco: "",
+        dsLocalizacao: "",
+        tpImovel: "venda",
+        nrTamanho: "",
+        nrQuartos: "",
+        nrBanheiros: "",
+        nrVagasGaragem: "",
+        nrSuites: "",
+        stDisponibilidade: true,
+        vlCondominio: "",
+        videos: [""],
+        fotos: [],
+      });
     } catch (error) {
-      setError("Erro ao salvar o imóvel: " + error.message);
+      console.error("Erro ao salvar imóvel:", error);
+      setError("Erro ao salvar imóvel. Tente novamente.");
     }
   };
 
@@ -226,121 +198,105 @@ function PropertyForm({ existingProperty, onSave }) {
           <Label>Título:</Label>
           <Input
             type="text"
-            value={nmTitulo}
-            onChange={(e) => setNmTitulo(e.target.value)}
-            placeholder="Título do imóvel"
+            value={formData.nmTitulo}
+            onChange={(e) => handleChange("nmTitulo", e.target.value)}
             required
           />
 
           <Label>Localização:</Label>
           <Input
             type="text"
-            value={dsLocalizacao}
-            onChange={(e) => setDsLocalizacao(e.target.value)}
+            value={formData.dsLocalizacao}
+            onChange={(e) => handleChange("dsLocalizacao", e.target.value)}
             required
           />
 
           <Label>Tamanho (m²):</Label>
           <Input
             type="number"
-            value={nrTamanho}
-            onChange={(e) => setNrTamanho(e.target.value)}
+            value={formData.nrTamanho}
+            onChange={(e) => handleChange("nrTamanho", e.target.value)}
             required
           />
 
-          {/*
           <Label>Quartos:</Label>
           <Input
             type="number"
-            value={nrQuartos}
-            onChange={(e) => setNrQuartos(e.target.value)}
+            value={formData.nrQuartos}
+            onChange={(e) => handleChange("nrQuartos", e.target.value)}
             required
           />
-          */}
 
-          {/*
           <Label>Banheiros:</Label>
           <Input
             type="number"
-            value={nrBanheiros}
-            onChange={(e) => setNrBanheiros(e.target.value)}
+            value={formData.nrBanheiros}
+            onChange={(e) => handleChange("nrBanheiros", e.target.value)}
             required
           />
-          */}
 
-          {/*
           <Label>Vagas de Garagem:</Label>
           <Input
             type="number"
-            value={nrVagasGaragem}
-            onChange={(e) => setNrVagasGaragem(e.target.value)}
+            value={formData.nrVagasGaragem}
+            onChange={(e) => handleChange("nrVagasGaragem", e.target.value)}
             required
           />
-          */}
         </FormColumn>
 
         <FormColumn>
-          {/*
           <Label>Suítes:</Label>
           <Input
             type="number"
-            value={nrSuites}
-            onChange={(e) => setNrSuites(e.target.value)}
+            value={formData.nrSuites}
+            onChange={(e) => handleChange("nrSuites", e.target.value)}
             required
           />
-          */}
 
           <Label>Preço:</Label>
           <Input
             type="number"
-            value={vlPreco}
-            onChange={(e) => setVlPreco(e.target.value)}
+            value={formData.vlPreco}
+            onChange={(e) => handleChange("vlPreco", e.target.value)}
             required
           />
 
-{/*
           <Label>Condomínio:</Label>
           <Input
             type="number"
-            value={vlCondominio}
-            onChange={(e) => setVlCondominio(e.target.value)}
+            value={formData.vlCondominio}
+            onChange={(e) => handleChange("vlCondominio", e.target.value)}
             placeholder="Preço do condomínio"
           />
-          */}
 
-{/*
           <Label>Categoria:</Label>
           <Select
-            value={tpImovel}
-            onChange={(e) => setTpImovel(e.target.value)}
+            value={formData.tpImovel}
+            onChange={(e) => handleChange("tpImovel", e.target.value)}
             required
           >
             <option value="venda">Venda</option>
             <option value="aluguel">Aluguel</option>
           </Select>
-          */}
 
           <Label>Descrição:</Label>
           <Textarea
-            value={dsDescricao}
-            onChange={(e) => setDsDescricao(e.target.value)}
+            value={formData.dsDescricao}
+            onChange={(e) => handleChange("dsDescricao", e.target.value)}
             rows="5"
             placeholder="Descrição do imóvel"
             required
           />
 
-{/*
           <Label>Disponibilidade:</Label>
           <Input
             type="checkbox"
-            checked={stDisponibilidade}
-            onChange={() => setStDisponibilidade(!stDisponibilidade)}
+            checked={formData.stDisponibilidade}
+            onChange={(e) => handleChange("stDisponibilidade", e.target.value)}
           />
-          */}
         </FormColumn>
       </FormRow>
 
-{/*
       <Label>Fotos:</Label>
       <FileInput
         type="file"
@@ -351,7 +307,7 @@ function PropertyForm({ existingProperty, onSave }) {
       
 
       <Label>URLs de Vídeos</Label>
-      {videos.map((url, index) => (
+      {formData.videos.map((url, index) => (
         <Input
           key={index}
           type="text"
@@ -363,7 +319,6 @@ function PropertyForm({ existingProperty, onSave }) {
       <Button type="button" onClick={handleAddVideoUrl}>
         Adicionar outra URL
       </Button>
-      */}
 
       <Button type="submit">
         {existingProperty ? "Salvar alterações" : "Cadastrar Imóvel"}
