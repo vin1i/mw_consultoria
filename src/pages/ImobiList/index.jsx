@@ -3,7 +3,7 @@ import Card from "../../components/Card";
 import Pagination from "../../components/Pagination";
 import Filters from "../../components/Filters";
 import { Wrapper, Sidebar, ListingsSection } from "./styles";
-import { getImoveis } from '../../services/propertyService';
+import { getImoveis } from '../Admin/services/propertyService';
 import CloudinaryImage from '../../components/CloudinaryImage';
 
 const ImobiList = () => {

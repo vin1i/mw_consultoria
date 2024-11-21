@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { getProperties, deleteProperty } from '../../../services/propertyService';
+import { getImoveis, deleteImovel } from '../services/propertyService';
 
-function PropertyList() {
+function PropertyList({ onEdit, onDelete }) {
   const [properties, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchProperties() {
       try {
-        const data = await getProperties();
+        const data = await getImoveis();
         setProperties(data);
       } catch (error) {
         console.error("Erro ao carregar propriedades:", error);
@@ -19,18 +19,9 @@ function PropertyList() {
     fetchProperties();
   }, []);
 
-  const handleDelete = async (id) => {
-    try {
-      const response = await deleteProperty(id);
-      if (response.status === 200) { // Ou qualquer outro código de sucesso esperado
-        setProperties(properties.filter((property) => property.id !== id));
-        alert("Propriedade deletada com sucesso.");
-      } else {
-        alert("Erro ao tentar deletar a propriedade.");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Erro ao deletar a propriedade.");
+  const confirmDelete = (id) => {
+    if (window.confirm("Tem certeza de que deseja excluir este imóvel?")) {
+      onDelete(id);
     }
   };
 
@@ -38,13 +29,66 @@ function PropertyList() {
     <div>
       {isLoading ? (
         <p>Carregando propriedades...</p>
-      ) : (
+      ) : properties.length > 0 ? (
         properties.map((property) => (
-          <div key={property.id}>
-            <h3>{property.nm_titulo}</h3>
-            <button onClick={() => handleDelete(property.id)}>Deletar</button>
+          <div
+            key={property.id}
+            style={{ border: '1px solid #ccc', padding: '10px', margin: '10px' }}
+          >
+            <h3>{property.titulo}</h3>
+            <p><strong>Endereço:</strong> {property.endereco}</p>
+            <p><strong>Valor:</strong> R$ {property.valor.toLocaleString()}</p>
+            <p><strong>Quartos:</strong> {property.quartos}</p>
+            <p><strong>Banheiros:</strong> {property.banheiros}</p>
+            <p><strong>Suítes:</strong> {property.suites}</p>
+            <p><strong>Vagas na garagem:</strong> {property.vagas}</p>
+            <p><strong>Condomínio:</strong> R$ {property.condominio.toLocaleString()}</p>
+            <p><strong>Disponibilidade:</strong> {property.disponibilidade}</p>
+            <p><strong>Metragem:</strong> {property.metrosQuadrados} m²</p>
+            <p><strong>Tipo:</strong> {property.tipo}</p>
+            <p><strong>Descrição:</strong> {property.descricao}</p>
+            <p><strong>Data de criação:</strong> {new Date(property.dt_criacao).toLocaleString()}</p>
+
+            {/* Exibição de imagens do Cloudinary */}
+            <div>
+              <strong>Imagens:</strong>
+              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                {property.imagens?.map((img, index) => (
+                  <img
+                    key={index}
+                    src={`https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/${img}`}
+                    alt={`Imagem ${index + 1}`}
+                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Exibição de vídeos do YouTube */}
+            <div>
+              <strong>Vídeos:</strong>
+              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                {property.videos?.map((video, index) => (
+                  <iframe
+                    key={index}
+                    width="200"
+                    height="150"
+                    src={`https://www.youtube.com/embed/${video}`}
+                    title={`Vídeo ${index + 1}`}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                ))}
+              </div>
+            </div>
+
+            <button onClick={() => onEdit(property)}>Editar</button>
+            <button onClick={() => confirmDelete(property.id)}>Deletar</button>
           </div>
         ))
+      ) : (
+        <p>Nenhuma propriedade encontrada.</p>
       )}
     </div>
   );

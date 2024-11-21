@@ -1,58 +1,82 @@
 import React, { useState, useEffect } from "react";
-import PropertyForm from "../Admin/PropertyForm";
-import { getImoveis } from "../../services/propertyService";
+import PropertyList from "../Admin/components/PropertyList";
+import PropertyForm from "../Admin/components/PropertyForm";
+import { getImoveis, addProperty, updateImovel, deleteImovel } from '../Admin/services/propertyService';
+
 import VideoPlayer from "../../components/VideoPlayer";
 
 function PropertyPage() {
-  const [properties, setProperties] = useState([]);
-
-  const refreshProperties = async () => {
-    const data = await getImoveis();
-    setProperties(data);
-  };
+  const [imoveis, setImoveis] = useState([]);
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    refreshProperties();
+    fetchProperties();
   }, []);
+
+  const fetchProperties = async () => {
+    try {
+      const data = await getImoveis();
+      setImoveis(data);
+    } catch (error) {
+      console.error('Erro ao buscar imóveis:', error);
+    }
+  };
+
+  const handleAdd = async (newProperty) => {
+    try {
+      await addProperty(newProperty);
+      fetchProperties(); // Atualizar lista
+      setShowForm(false);
+    } catch (error) {
+      console.error('Erro ao adicionar imóvel:', error);
+    }
+  };
+
+  const handleEdit = async (updatedProperty) => {
+    try {
+      await updateImovel(selectedProperty.id, updatedProperty);
+      fetchProperties(); // Atualizar lista
+      setSelectedProperty(null);
+      setShowForm(false);
+    } catch (error) {
+      console.error('Erro ao editar imóvel:', error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteImovel(id);
+      fetchProperties(); // Atualizar lista
+    } catch (error) {
+      console.error('Erro ao excluir imóvel:', error);
+    }
+  };
 
   return (
     <div>
-      {/* Formulário para adicionar propriedades */}
-      <PropertyForm onSave={refreshProperties} />
-
-      {/* Lista de propriedades */}
-      <div>
-        {properties.length > 0 ? (
-          properties.map((property) => (
-            <div key={property.id}>
-              <h3>{property.nm_titulo}</h3>
-              <p>Descrição: {property.ds_descricao || 'Descrição não disponível'}</p>
-              <p>
-                Valor: R${" "}
-                {property.vl_preco
-                  ? property.vl_preco.toLocaleString("pt-BR")
-                  : "Preço não disponível"}
-              </p>
-              <p>Endereço: {property.ds_localizacao || 'Localização não disponível'}</p>
-
-              {/* Renderiza vídeos associados ao imóvel */}
-              {property.videos && property.videos.length > 0 ? (
-                <div>
-                  {property.videos.map((videoUrl, index) => (
-                    <VideoPlayer key={index} videoUrl={videoUrl} />
-                  ))}
-                </div>
-              ) : (
-                <p>Sem vídeos disponíveis</p>
-              )}
-            </div>
-          ))
-        ) : (
-          <p>Carregando propriedades...</p>
-        )}
-      </div>
+      <h1>Gerenciamento de Imóveis</h1>
+      <button onClick={() => setShowForm(true)}>Adicionar Imóvel</button>
+      {showForm && (
+        <PropertyForm
+          property={selectedProperty}
+          onSave={selectedProperty ? handleEdit : handleAdd}
+          onCancel={() => {
+            setShowForm(false);
+            setSelectedProperty(null);
+          }}
+        />
+      )}
+      <PropertyList
+        properties={imoveis}
+        onEdit={(property) => {
+          setSelectedProperty(property);
+          setShowForm(true);
+        }}
+        onDelete={handleDelete}
+      />
     </div>
   );
-}
+};
 
 export default PropertyPage;

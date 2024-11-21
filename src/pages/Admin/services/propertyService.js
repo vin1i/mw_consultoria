@@ -1,7 +1,7 @@
 // Importações do Firebase e Firestore
-import { db } from '../services/firebase/firebaseConfig';
+import { db } from '../../../services/firebase/firebaseConfig';
 import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-import { uploadImagesToCloudinary } from '../services/CloudinaryService'; // Importa a função de upload
+import { uploadImagesToCloudinary } from '../../../services/CloudinaryService'; // Importa a função de upload
 
 // Criação da referência à coleção 'properties' no Firestore
 const propertyCollection = collection(db, 'properties');
@@ -45,19 +45,21 @@ export const getImoveis = async () => {
 
       return {
         id: doc.id,
-        tipo: data.tp_imovel || 'Indefinido',
-        endereco: data.ds_localizacao || 'Não informado',
-        valor: data.vl_preco || 0,
-        quartos: data.nr_quartos || 0,
-        banheiros: data.nr_banheiros || 0,
-        vagas: data.nr_vagas_garagem || 0,
-        suites: data.nr_suites || 0,
-        metrosQuadrados: data.nr_tamanho || 0,
-        descricao: data.ds_descricao || 'Não informada',
-        disponibilidade: data.st_disponibilidade || 'Não informado',
-        titulo: data.nm_titulo || 'Sem título',
-        imagens: data.fotos || [],
-        videos: data.videos || []
+        tipo: data.tipo || 'Indefinido',
+        endereco: data.endereco || 'Não informado',
+        valor: data.valor || 0,
+        quartos: data.quartos || 0,
+        banheiros: data.banheiros || 0,
+        vagas: data.vagas || 0,
+        suites: data.suites || 0,
+        metrosQuadrados: data.metrosQuadrados || 0,
+        descricao: data.descricao || 'Não informada',
+        disponibilidade: data.disponibilidade || 'Não informado',
+        titulo: data.titulo || 'Sem título',
+        imagens: data.fotos || [], // Pode combinar imagens e fotos se necessário
+        videos: data.videos || [],
+        condominio: data.condominio || 0,
+        dt_criacao: data.dt_criacao || ''
       };
     });
 

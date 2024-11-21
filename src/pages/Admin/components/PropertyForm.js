@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { addProperty, updateImovel } from "../../services/propertyService";
-import { uploadImagesToCloudinary } from "../../services/CloudinaryService";
+import { addProperty, updateImovel } from "../services/propertyService";
+import { uploadImagesToCloudinary } from "../../../services/CloudinaryService";
 import styled from "styled-components";
 
 const FormContainer = styled.form`
