@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {
   Container,
   Description,
@@ -9,56 +10,78 @@ import {
   Card,
 } from "./styles";
 
-const Imobi = () => {
+const Imobi = ({ imovel }) => {
+  if (!imovel) {
+    return <p>Carregando informações do imóvel...</p>;
+  }
+
+  const {
+    titulo,
+    localizacao,
+    preco,
+    metrosQuadrados,
+    quartos,
+    banheiros,
+    suites,
+    vagas,
+    descricao,
+    imagens,
+  } = imovel;
+
+  const imageUrl =
+    imagens && imagens.length > 0
+      ? imagens[0]
+      : "https://via.placeholder.com/600x400?text=Sem+Imagem";
+
   return (
     <Container>
       <Card>
         <Thumb>
-          <img
-            src={require("../../assets/Foto1.png")}
-            alt="Edif cio Sunny Garden"
-          />
+          <img src={imageUrl} alt={titulo || "Imagem do imóvel"} />
         </Thumb>
         <Description>
-          <Location>Cidade Monções</Location>
-          <Price>R$ 1.990.000</Price>
+          <Location>{localizacao || "Localização não disponível"}</Location>
+          <Price>
+            {preco
+              ? preco.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })
+              : "Preço não disponível"}
+          </Price>
           <Details>
-            <div>114 m²</div>
-            <div>2 quartos</div>
-            <div>2 banheiros</div>
-            <div>1 suíte</div>
-            <div>1 vaga</div>
+            <div>{metrosQuadrados ? `${metrosQuadrados} m²` : "N/A"}</div>
+            <div>{quartos ? `${quartos} quartos` : "N/A"}</div>
+            <div>{banheiros ? `${banheiros} banheiros` : "N/A"}</div>
+            <div>{suites ? `${suites} suíte(s)` : "N/A"}</div>
+            <div>{vagas ? `${vagas} vaga(s)` : "N/A"}</div>
           </Details>
-          <p>
-            Descubra o conforto e a elegância desta cobertura de 114 m² no
-            coração do Brooklin. Com uma sala ampla equipada com lareira e
-            varanda, este espaço é perfeito para momentos de descontração e
-            convívio. A sala de jantar oferece um ambiente ideal para refeições
-            em família.
-          </p>
-          <p>
-            A cozinha, bem planejada, e a área de serviço proporcionam
-            praticidade no dia a dia. A cobertura dispõe de dois dormitórios,
-            sendo uma suíte espaçosa, além de um banheiro social. Inclui uma
-            vaga de garagem.
-          </p>
-          <p>
-            O condomínio oferece uma série de comodidades para toda a família,
-            incluindo playground para as crianças, salão de festas para
-            celebrações especiais e salão de jogos para entretenimento.
-          </p>
-          <p>
-            Localizado em uma região privilegiada, o imóvel está próximo a
-            importantes vias de acesso como a Av. Jornalista Roberto Marinho e a
-            Av. Santo Amaro, além de uma ampla variedade de comércios, padarias,
-            supermercados, bancos, igreja e colégios. Aproveite a conveniência
-            de viver em um bairro que oferece tudo o que você precisa ao seu
-            alcance. Não perca esta oportunidade única!
-          </p>
+          {descricao ? (
+            descricao.split("\n").map((paragrafo, index) => (
+              <p key={index}>{paragrafo}</p>
+            ))
+          ) : (
+            <p>Descrição não disponível.</p>
+          )}
         </Description>
       </Card>
     </Container>
   );
+};
+
+Imobi.propTypes = {
+  imovel: PropTypes.shape({
+    titulo: PropTypes.string,
+    localizacao: PropTypes.string,
+    preco: PropTypes.number,
+    metrosQuadrados: PropTypes.number,
+    quartos: PropTypes.number,
+    banheiros: PropTypes.number,
+    suites: PropTypes.number,
+    vagas: PropTypes.number,
+    descricao: PropTypes.string,
+    imagens: PropTypes.arrayOf(PropTypes.string),
+  }),
 };
 
 export default Imobi;
