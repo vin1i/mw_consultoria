@@ -1,6 +1,6 @@
 // Importações do Firebase e Firestore
 import { db } from '../../../services/firebase/firebaseConfig';
-import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, getDoc } from 'firebase/firestore';
 import { uploadImagesToCloudinary } from '../../../services/CloudinaryService'; // Importa a função de upload
 
 // Criação da referência à coleção 'properties' no Firestore

@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { properties } from "../../pages/ImobiList/data";
 import {
   Wrapper,
   ContentContainer,
@@ -19,28 +18,49 @@ import {
   FaRulerCombined,
   FaWhatsapp,
 } from "react-icons/fa";
-import Carousel from "../Carousel";  // Importando o carrossel
-
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import Carousel from "../Carousel";
+import { getImovelById } from "../../services/firebase/firestoreService"; // Certifique-se de ajustar o caminho
 
 const ImobiDetails = () => {
   const { id } = useParams();
-  const property = properties.find((property) => property.id === parseInt(id));
+  const [property, setProperty] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const propertyData = await getImovelById(id); // Use o serviço Firestore
+        if (propertyData) {
+          setProperty(propertyData);
+        } else {
+          console.error("Imóvel não encontrado.");
+        }
+      } catch (error) {
+        console.error("Erro ao buscar imóvel:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperty();
+  }, [id]);
+
+  if (loading) {
+    return <p>Carregando detalhes do imóvel...</p>;
+  }
 
   if (!property) {
     return <p>Imóvel não encontrado.</p>;
   }
 
-  // Preparar as imagens para o carrossel, incluindo a imagem principal (thumb) e as imagens adicionais
   const images = [
-    { src: property.thumb, alt: property.tipo }, // Imagem principal (thumb)
-    ...property.imagens.map((img) => ({ src: img, alt: property.tipo })) // Imagens adicionais
+    { src: property.thumb, alt: property.tipo },
+    ...(property.imagens || []).map((img) => ({ src: img, alt: property.tipo })),
   ];
 
   return (
     <Wrapper>
-      <Carousel images={images} />  {/* Adicionando o carrossel aqui */}
+      <Carousel images={images} />
 
       <ContentContainer>
         <Title>{property.tipo}</Title>

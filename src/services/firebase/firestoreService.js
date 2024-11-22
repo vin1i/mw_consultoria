@@ -6,6 +6,7 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  getDoc,
 } from "firebase/firestore";
 
 const propertyCollection = collection(db, "imoveis");
@@ -52,6 +53,22 @@ export const getImoveis = async () => {
     }));
   } catch (error) {
     console.error("Erro ao buscar imóveis:", error);
+    throw error;
+  }
+};
+
+export const getImovelById = async (id) => {
+  try {
+    const docRef = doc(db, "imoveis", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() };
+    } else {
+      console.error("Imóvel não encontrado.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Erro ao buscar imóvel:", error);
     throw error;
   }
 };
