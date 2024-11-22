@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 const Carousel = ({ images }) => {
   if (!images || images.length === 0) {
-    return <p>Nenhuma imagem disponível</p>;
+    return <FallbackMessage>Nenhuma imagem disponível</FallbackMessage>;
   }
 
   const settings = {
@@ -22,14 +22,18 @@ const Carousel = ({ images }) => {
     prevArrow: <CustomArrow direction="prev" />,
     autoplay: true,
     autoplaySpeed: 3000,
-    lazyLoad: "ondemand",
+    lazyLoad: "progressive", // Alterado para carregamento progressivo
   };
 
   return (
     <Slider {...settings}>
       {images.map((image, index) => (
         <SlideContainer key={index}>
-          <img src={image.src} alt={image.alt} />
+          <img
+            src={image.src}
+            alt={image.alt}
+            onError={(e) => (e.target.src = "https://via.placeholder.com/800x400?text=Imagem+Indisponível")}
+          />
           {image.caption && <p>{image.caption}</p>}
         </SlideContainer>
       ))}
@@ -50,15 +54,20 @@ Carousel.propTypes = {
 
 // Customização das setas
 const CustomArrow = ({ direction, onClick }) => (
-  <ArrowButton direction={direction} onClick={onClick}>
+  <ArrowButton
+    direction={direction}
+    onClick={onClick}
+    aria-label={direction === "next" ? "Próxima imagem" : "Imagem anterior"}
+  >
     {direction === "next" ? <FaArrowRight /> : <FaArrowLeft />}
   </ArrowButton>
 );
 
+// Estilos personalizados
 const ArrowButton = styled.button`
   position: absolute;
   top: 50%;
-  ${props => (props.direction === "next" ? "right: 10px;" : "left: 10px;")}
+  ${(props) => (props.direction === "next" ? "right: 10px;" : "left: 10px;")}
   transform: translateY(-50%);
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
@@ -100,6 +109,13 @@ const SlideContainer = styled.div`
       font-size: 1rem;
     }
   }
+`;
+
+const FallbackMessage = styled.p`
+  font-size: 1.2rem;
+  color: var(--black);
+  text-align: center;
+  padding: 20px;
 `;
 
 export default Carousel;
