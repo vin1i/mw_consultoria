@@ -4,11 +4,15 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 20px;
   background: #f8f9fa;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
 `;
 
 export const ImageContainer = styled.div`
@@ -52,13 +56,25 @@ export const Features = styled.div`
     font-size: 16px;
     gap: 5px;
   }
+
+  @media (max-width: 768px) {
+    gap: 10px;
+    p {
+      font-size: 14px;
+    }
+  }
 `;
 
 export const Price = styled.p`
   font-size: 22px;
   font-weight: bold;
   color: var(--red);
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
+
 
 export const Description = styled.p`
   font-size: 16px;
