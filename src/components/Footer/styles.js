@@ -7,6 +7,13 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px; /* Espaço entre os elementos */
+  }
 `;
 
 export const SocialMedia = styled.div`
@@ -17,6 +24,10 @@ export const SocialMedia = styled.div`
   span {
     color: var(--black);
     font-size: 1.4rem;
+
+    @media (max-width: 768px) {
+      text-align: center;
+    }
   }
 
   .social-icons {
@@ -30,19 +41,23 @@ export const SocialMedia = styled.div`
       transition: all 0.3s ease-in-out;
 
       a {
-        color: var(--red); /* Cor padrão do ícone */
+        color: var(--red);
         transition: color 0.3s ease-in-out;
 
         &:hover {
-          color: var(--dark-red); /* Cor ao passar o mouse */
+          color: var(--dark-red);
         }
 
         svg {
-          /* Certifique-se de que a cor não esteja sendo definida aqui */
-          width: 30px;  /* Defina o tamanho */
-          height: 30px; /* Defina o tamanho */
+          width: 30px;
+          height: 30px;
         }
       }
+    }
+
+    @media (max-width: 768px) {
+      justify-content: center; /* Centraliza os ícones */
+      gap: 20px;
     }
   }
 `;
@@ -55,6 +70,10 @@ export const ContactInfo = styled.div`
   span {
     color: var(--red);
     font-size: 2.6rem;
+
+    @media (max-width: 768px) {
+      text-align: center;
+    }
   }
 
   a {
@@ -62,8 +81,13 @@ export const ContactInfo = styled.div`
     text-decoration: none;
     font-size: 1.3rem;
     margin-top: 5px;
+
     &:hover {
       color: var(--red);
+    }
+
+    @media (max-width: 768px) {
+      text-align: center;
     }
   }
 `;
@@ -76,6 +100,11 @@ export const PhoneInfo = styled.div`
   span {
     color: var(--black);
     font-size: 2.6rem;
+
+    @media (max-width: 768px) {
+      text-align: center;
+      font-size: 2rem;
+    }
   }
 
   a {
@@ -83,13 +112,17 @@ export const PhoneInfo = styled.div`
     font-size: 1.45rem;
     text-decoration: none;
     margin-bottom: 10px;
+
+    @media (max-width: 768px) {
+      text-align: center;
+    }
   }
 `;
 
 export const WhatsAppButton = styled.a`
   background-color: var(--white);
   color: var(--black);
-  padding: 5px 24px;
+  padding: 10px 24px;
   font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
@@ -97,22 +130,26 @@ export const WhatsAppButton = styled.a`
   align-items: center;
   justify-content: center;
   gap: 10px;
-  margin: 20px auto;
   text-decoration: none;
   border: 2px solid var(--black);
   transition: background-color 0.3s ease;
-  height: 60px;
-  width: 230px;
+  border-radius: 8px;
 
   &:hover {
     background-color: var(--grey);
   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    font-size: 1rem;
+    padding: 8px;
+  }
 `;
 
 export const RedLine = styled.div`
-  background-color: var(--red); /* Defina a cor da linha */
-  height: 3px; /* Altura da linha */
-  width: 100%; /* Largura total */
+  background-color: var(--red);
+  height: 3px;
+  width: 100%;
 `;
 
 export const FooterBar = styled.div`
@@ -122,26 +159,37 @@ export const FooterBar = styled.div`
   text-align: center;
   padding: 10px 0;
   width: 100%;
-  position: relative;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 8px 0;
+  }
 `;
 
 export const WhatsAppButtonRedondo = styled.a`
-  position: fixed; /* Fixa o botão na tela */
-  bottom: 20px; /* Distância do fundo da tela */
-  right: 20px; /* Distância da direita da tela */
-  background-color: var(--light-green); /* Cor de fundo do botão */
-  color: var(--white); /* Cor do ícone */
-  border-radius: 50%; /* Botão redondo */
-  width: 90px; /* Largura do botão */
-  height: 90px; /* Altura do botão */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--light-green);
+  color: var(--white);
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Sombra do botão */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease;
-  z-index: 1000; /* Aumenta o valor do z-index para ficar acima da FooterBar */
+  z-index: 1000;
 
   &:hover {
-    background-color: #16AC32; /* Cor ao passar o mouse */
+    background-color: #16ac32;
+  }
+
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+    bottom: 15px;
+    right: 15px;
   }
 `;
