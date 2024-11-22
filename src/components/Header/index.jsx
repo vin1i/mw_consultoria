@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import LogoImg from '../../assets/MarisaWebberLogo.png';
 import { Container, Logo, Menu, MenuContainer, SocialLinks, HamburgerButton, MobileMenu } from './styles';
-import { FaFacebookSquare, FaInstagram, FaWhatsapp, FaBars, FaTimes } from 'react-icons/fa';
+import { FaFacebookSquare, FaInstagram, FaWhatsapp, FaBars, FaTimes, FaLinkedin } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
@@ -63,6 +63,9 @@ const Header = () => {
         </a>
         <a href="https://api.whatsapp.com/send?phone=5511973738808" target="_blank" rel="noopener noreferrer">
           <FaWhatsapp size={25} />
+        </a>
+        <a href="https://www.linkedin.com/in/example" target="_blank" rel="noopener noreferrer">
+          <FaLinkedin size={25} />
         </a>
       </SocialLinks>
     </Container>
