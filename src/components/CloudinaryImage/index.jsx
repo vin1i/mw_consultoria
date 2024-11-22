@@ -9,28 +9,28 @@ const CloudinaryImage = ({
   publicId,
   width = 500,
   height = 500,
-  alt = "Imagem",
+  alt = "Imagem não disponível",
 }) => {
   const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 
   if (!cloudName) {
-    console.error("Cloudinary Cloud Name não configurado.");
+    console.error("Erro: Cloudinary Cloud Name não configurado. Verifique as variáveis de ambiente.");
     return (
       <p style={{ color: "red" }}>
-        Erro: Configuração do Cloudinary ausente.
+        Erro: Configuração do Cloudinary ausente. Entre em contato com o suporte.
       </p>
     );
   }
 
   if (!publicId) {
-    console.warn("Public ID não fornecido.");
+    console.warn("Public ID não fornecido para o componente CloudinaryImage.");
     return (
       <img
         src="https://via.placeholder.com/500"
         alt="Imagem não disponível"
         width={width}
         height={height}
-        style={{ objectFit: "cover" }}
+        style={{ objectFit: "cover", borderRadius: "8px" }}
       />
     );
   }
@@ -43,13 +43,24 @@ const CloudinaryImage = ({
     .quality("auto")
     .resize(auto().gravity(autoGravity()).width(width).height(height));
 
-  return <AdvancedImage cldImg={img} alt={alt} />;
+  return (
+    <AdvancedImage
+      cldImg={img}
+      alt={alt}
+      style={{
+        width: width === "100%" ? "100%" : `${width}px`,
+        height: height === "auto" ? "auto" : `${height}px`,
+        objectFit: "cover",
+        borderRadius: "8px",
+      }}
+    />
+  );
 };
 
 CloudinaryImage.propTypes = {
   publicId: PropTypes.string.isRequired,
-  width: PropTypes.number,
-  height: PropTypes.number,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   alt: PropTypes.string,
 };
 
