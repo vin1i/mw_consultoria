@@ -9,7 +9,7 @@ import {
   WhatsAppButtonRedondo,
   RedLine,
 } from "./styles";
-import { FaFacebookSquare, FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { FaFacebookSquare, FaInstagram, FaWhatsapp, FaLinkedin } from "react-icons/fa";
 
 const Footer = ({ id }) => {
   return (
@@ -56,6 +56,15 @@ const Footer = ({ id }) => {
                   <FaWhatsapp />
                 </a>
               </div>
+              <div className="social-icon">
+                <a
+                  href="https://www.linkedin.com/in/marisawebber"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaLinkedin />
+                </a>
+              </div>
             </div>
           </SocialMedia>
           <ContactInfo>
@@ -70,7 +79,7 @@ const Footer = ({ id }) => {
             >
               <a href="/">QUEM SOMOS</a>
               <a href="/">SERVIÇOS</a>
-              <a href="/imoveis">IMÓVEIS</a>{" "}
+              <a href="/imoveis">IMÓVEIS</a>
               <a href="/">CONTATOS</a>
             </div>
           </ContactInfo>
