@@ -8,9 +8,14 @@ export const Container = styled.div`
   width: 100vw;
   gap: 50px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
     align-items: center;
+    gap: 30px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 20px;
   }
 `;
 
@@ -19,6 +24,10 @@ export const Image = styled.img`
   max-width: 650px;
   height: auto;
   object-fit: cover;
+
+  @media (max-width: 1024px) {
+    max-width: 80%;
+  }
 
   @media (max-width: 768px) {
     max-width: 100%;
@@ -33,7 +42,8 @@ export const Text = styled.div`
 
   h1 {
     position: relative;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
   }
 
   h1::after {
@@ -47,20 +57,37 @@ export const Text = styled.div`
   }
 
   h3 {
-    font-size: 30px;
+    font-size: 2rem;
     margin-top: 10px;
     margin-bottom: 25px;
   }
 
   p {
-    font-size: 26px;
+    font-size: 1.6rem;
     margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 0 20px;
+    text-align: center;
+    width: 100%;
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    h3 {
+      font-size: 1.8rem;
+    }
+
+    p {
+      font-size: 1.4rem;
+    }
   }
 
   @media (max-width: 768px) {
-    width: 100%;
     padding: 0;
-    text-align: center;
   }
 `;
 
@@ -69,7 +96,7 @@ export const Arrow = styled.img`
   margin-left: 20px;
   align-self: flex-start;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     display: none;
   }
 `;
