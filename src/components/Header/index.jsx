@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LogoImg from '../../assets/MarisaWebberLogo.png';
-import { Container, Logo, Menu, MenuContainer, SocialLinks } from './styles';
-import { FaFacebookSquare, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { Container, Logo, Menu, MenuContainer, SocialLinks, HamburgerButton, MobileMenu } from './styles';
+import { FaFacebookSquare, FaInstagram, FaWhatsapp, FaBars, FaTimes } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   const scrollToSection = (sectionId) => {
     if (window.location.pathname !== "/") {
@@ -17,6 +22,7 @@ const Header = () => {
         section.scrollIntoView({ behavior: 'smooth' });
       }
     }, 50);
+    setIsMenuOpen(false);
   };
 
   return (
@@ -24,7 +30,10 @@ const Header = () => {
       <Logo>
         <Link to='/'><img src={LogoImg} alt="Logo" /></Link>
       </Logo>
-      <MenuContainer>
+      <HamburgerButton onClick={toggleMenu}>
+        {isMenuOpen ? <FaTimes size={25} /> : <FaBars size={25} />}
+      </HamburgerButton>
+      <MenuContainer isOpen={isMenuOpen}>
         <Menu>
           <ul>
             <li onClick={() => scrollToSection('inicio')}>
