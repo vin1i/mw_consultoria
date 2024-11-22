@@ -22,9 +22,12 @@ const ImobiList = () => {
 
   // Função para validar a imagem
   const getImageURL = (images) => {
-    if (images && images.length > 0) {
-      return `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/${images[0]}`;
+    if (images && images.length > 0 && images[0]) {
+      const url = `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/${images[0]}`;
+      console.log("URL gerada para a imagem:", url); // Verificar a URL gerada
+      return url;
     }
+    console.warn("Sem imagens válidas. Usando placeholder.");
     return "https://via.placeholder.com/300x200?text=Sem+Imagem";
   };
 
@@ -33,8 +36,8 @@ const ImobiList = () => {
     const fetchImoveis = async () => {
       try {
         setLoading(true);
-        setError("");
         const fetchedImoveis = await getImoveis();
+        console.log("Imóveis retornados da API:", fetchedImoveis);
         setImoveis(fetchedImoveis);
       } catch (error) {
         console.error("Erro ao buscar imóveis:", error);
@@ -43,7 +46,7 @@ const ImobiList = () => {
         setLoading(false);
       }
     };
-
+  
     fetchImoveis();
   }, []);
 
@@ -51,9 +54,12 @@ const ImobiList = () => {
   const filteredProperties = useMemo(() => {
     return imoveis.filter((property) => {
       if (filters.tipo && property.tipo !== filters.tipo) return false;
-      if (filters.quartos && property.quartos !== Number(filters.quartos)) return false;
-      if (filters.banheiros && property.banheiros !== Number(filters.banheiros)) return false;
-      if (filters.vagas && property.vagas !== Number(filters.vagas)) return false;
+      if (filters.quartos && property.quartos !== Number(filters.quartos))
+        return false;
+      if (filters.banheiros && property.banheiros !== Number(filters.banheiros))
+        return false;
+      if (filters.vagas && property.vagas !== Number(filters.vagas))
+        return false;
       return true;
     });
   }, [imoveis, filters]);
@@ -88,7 +94,6 @@ const ImobiList = () => {
           </Sidebar>
           <ListingsSection>
             {currentProperties.map((property) => {
-              const firstImage = getImageURL(property.imagens);
 
               return (
                 <Card
@@ -100,10 +105,8 @@ const ImobiList = () => {
                     style: "currency",
                     currency: "BRL",
                   })}
-                  titulo={property.titulo}
-                  descricao={property.descricao}
-                  metrosQuadrados={property.metrosQuadrados}
-                  thumb={firstImage}
+                  thumb={getImageURL(property.imagens)}
+                  imagens={property.imagens} // Passe todas as imagens
                 />
               );
             })}

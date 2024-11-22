@@ -1,6 +1,6 @@
 // Importações do Firebase e Firestore
 import { db } from '../../../services/firebase/firebaseConfig';
-import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { uploadImagesToCloudinary } from '../../../services/CloudinaryService'; // Importa a função de upload
 
 // Criação da referência à coleção 'properties' no Firestore
@@ -56,7 +56,7 @@ export const getImoveis = async () => {
         descricao: data.descricao || 'Não informada',
         disponibilidade: data.disponibilidade || 'Não informado',
         titulo: data.titulo || 'Sem título',
-        imagens: data.fotos || [], // Pode combinar imagens e fotos se necessário
+        imagens: doc.data().imagens || [], // Pode combinar imagens e fotos se necessário
         videos: data.videos || [],
         condominio: data.condominio || 0,
         dt_criacao: data.dt_criacao || ''

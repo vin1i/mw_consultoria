@@ -9,8 +9,10 @@ import CloudinaryImage from "../CloudinaryImage";
 import { CardContainer, CardInfo, DetailsButton, LocationText } from "./styles";
 
 const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
+  console.log("Imagens no Card:", { thumb, imagens });
   const navigate = useNavigate();
 
+  // Configurações do carrossel
   const settings = {
     dots: true,
     infinite: true,
@@ -30,9 +32,14 @@ const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
     ],
   };
 
+  const thumbImage =
+    thumb || "https://via.placeholder.com/500x300?text=Sem+Imagem";
+
   return (
     <CardContainer>
+      {/* Slider para as imagens */}
       <Slider {...settings}>
+        {/* Exibe a imagem destacada (thumb) */}
         <div>
           <CloudinaryImage
             publicId={thumb}
@@ -41,22 +48,36 @@ const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
             alt={`Imagem destacada do imóvel: ${tipo}, localizado em ${endereco}`}
           />
         </div>
+
+        {/* Mapeia imagens adicionais */}
         {imagens.length > 0 ? (
-          imagens.map((imagem, index) => (
-            <div key={index}>
-              <CloudinaryImage
-                publicId={imagem}
-                width={500}
-                height={300}
-                alt={`Imagem adicional do imóvel: ${tipo}, localizado em ${endereco}`}
-              />
-            </div>
-          ))
+          imagens.map((imagem, index) => {
+            const imageUrl = `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/${imagem}`;
+            console.log(`Imagem adicional no card ${id}:`, imageUrl); // Verificar URL gerada
+
+            return (
+              <div key={index}>
+                <CloudinaryImage
+                  publicId={imagem}
+                  width={500}
+                  height={300}
+                  alt={`Imagem adicional do imóvel: ${tipo}, localizado em ${endereco}`}
+                />
+              </div>
+            );
+          })
         ) : (
-          <div>Sem imagens adicionais disponíveis</div>
+          <div>
+            <img
+              src="https://via.placeholder.com/500x300?text=Sem+Imagens+Adicionais"
+              alt="Sem imagens adicionais disponíveis"
+              style={{ width: "100%", height: "auto" }}
+            />
+          </div>
         )}
       </Slider>
 
+      {/* Informações do imóvel */}
       <CardInfo>
         <h3>{tipo}</h3>
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -64,7 +85,14 @@ const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
           <LocationText>{endereco}</LocationText>
         </div>
         <h4>
-          <strong>{valor || "Valor não disponível"}</strong>
+          <strong>
+            {valor
+              ? valor.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })
+              : "Valor não disponível"}
+          </strong>
         </h4>
         <DetailsButton onClick={() => navigate(`/imoveis/${id}`)}>
           Detalhes <FaArrowRight />
@@ -74,12 +102,13 @@ const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
   );
 };
 
+// Validação das props
 Card.propTypes = {
   id: PropTypes.string.isRequired,
   tipo: PropTypes.string.isRequired,
   endereco: PropTypes.string.isRequired,
   valor: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  thumb: PropTypes.string.isRequired,
+  thumb: PropTypes.string,
   imagens: PropTypes.arrayOf(PropTypes.string),
 };
 
