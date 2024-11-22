@@ -9,8 +9,10 @@ import CloudinaryImage from "../CloudinaryImage";
 import { CardContainer, CardInfo, DetailsButton, LocationText } from "./styles";
 
 const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
-  console.log("Imagens no Card:", { thumb, imagens });
   const navigate = useNavigate();
+
+  // Configurações do Cloudinary
+  const cloudinaryCloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 
   // Configurações do carrossel
   const settings = {
@@ -32,49 +34,38 @@ const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
     ],
   };
 
-  const thumbImage =
-    thumb || "https://via.placeholder.com/500x300?text=Sem+Imagem";
+  const fallbackImage = "https://via.placeholder.com/500x300?text=Sem+Imagem";
+  const thumbImage = thumb || fallbackImage;
 
   return (
     <CardContainer>
-      {/* Slider para as imagens */}
       <Slider {...settings}>
-        {/* Exibe a imagem destacada (thumb) */}
+        {/* Imagem destacada (thumb) */}
         <div>
           <CloudinaryImage
-            publicId={thumb}
+            publicId={thumbImage}
             width={500}
             height={300}
             alt={`Imagem destacada do imóvel: ${tipo}, localizado em ${endereco}`}
           />
         </div>
 
-        {/* Mapeia imagens adicionais */}
-        {imagens.length > 0 ? (
-          imagens.map((imagem, index) => {
-            const imageUrl = `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/${imagem}`;
-            console.log(`Imagem adicional no card ${id}:`, imageUrl); // Verificar URL gerada
-
-            return (
-              <div key={index}>
-                <CloudinaryImage
-                  publicId={imagem}
-                  width={500}
-                  height={300}
-                  alt={`Imagem adicional do imóvel: ${tipo}, localizado em ${endereco}`}
-                />
-              </div>
-            );
-          })
-        ) : (
-          <div>
-            <img
-              src="https://via.placeholder.com/500x300?text=Sem+Imagens+Adicionais"
-              alt="Sem imagens adicionais disponíveis"
-              style={{ width: "100%", height: "auto" }}
-            />
-          </div>
-        )}
+        {/* Imagens adicionais */}
+        {imagens.length > 0
+          ? imagens.map((imagem, index) => {
+              const imageUrl = `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/${imagem}`;
+              return (
+                <div key={index}>
+                  <CloudinaryImage
+                    publicId={imagem}
+                    width={500}
+                    height={300}
+                    alt={`Imagem adicional do imóvel: ${tipo}, localizado em ${endereco}`}
+                  />
+                </div>
+              );
+            })
+          : null}
       </Slider>
 
       {/* Informações do imóvel */}
@@ -102,7 +93,6 @@ const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
   );
 };
 
-// Validação das props
 Card.propTypes = {
   id: PropTypes.string.isRequired,
   tipo: PropTypes.string.isRequired,
