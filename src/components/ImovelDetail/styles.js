@@ -57,7 +57,7 @@ export const Features = styled.div`
 export const Price = styled.p`
   font-size: 22px;
   font-weight: bold;
-  color: #28a745;
+  color: var(--red);
 `;
 
 export const Description = styled.p`
@@ -69,7 +69,7 @@ export const WhatsAppButton = styled.a`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #25d366;
+  background-color: var(--red);
   color: white;
   text-decoration: none;
   padding: 10px 20px;
@@ -80,7 +80,7 @@ export const WhatsAppButton = styled.a`
   width: fit-content;
 
   &:hover {
-    background-color: #20b558;
+    background-color: var(--dark-red);
   }
 
   svg {

@@ -9,7 +9,8 @@ import {
   getDoc,
 } from "firebase/firestore";
 
-const propertyCollection = collection(db, "imoveis");
+// Use o nome correto da coleção no Firebase: "properties"
+const propertyCollection = collection(db, "properties");
 
 export const addImovel = async (imovelData) => {
   if (!imovelData || !imovelData.tp_imovel || !imovelData.ds_localizacao || !imovelData.vl_preco) {
@@ -59,7 +60,8 @@ export const getImoveis = async () => {
 
 export const getImovelById = async (id) => {
   try {
-    const docRef = doc(db, "imoveis", id);
+    // Certifique-se de usar o nome correto da coleção: "properties"
+    const docRef = doc(db, "properties", id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       return { id: docSnap.id, ...docSnap.data() };
@@ -80,7 +82,8 @@ export const updateImovel = async (id, updatedData) => {
   }
 
   try {
-    const propertyRef = doc(db, "imoveis", id);
+    // Use o nome correto da coleção: "properties"
+    const propertyRef = doc(db, "properties", id);
     await updateDoc(propertyRef, updatedData);
     console.log("Imóvel atualizado com sucesso!");
   } catch (error) {
@@ -97,11 +100,12 @@ export const deleteImovel = async (id) => {
   }
 
   try {
-    const propertyRef = doc(db, "imoveis", id);
+    // Use o nome correto da coleção: "properties"
+    const propertyRef = doc(db, "properties", id);
     await deleteDoc(propertyRef);
     console.log("Imóvel deletado com sucesso!");
   } catch (error) {
     console.error("Erro ao deletar imóvel:", error);
     throw error;
   }
-};  
+};

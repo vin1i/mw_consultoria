@@ -53,10 +53,13 @@ const ImobiDetails = () => {
     return <p>Imóvel não encontrado.</p>;
   }
 
-  const images = [
-    { src: property.thumb, alt: property.tipo },
-    ...(property.imagens || []).map((img) => ({ src: img, alt: property.tipo })),
-  ];
+  const images = property.imagens && property.imagens.length > 0
+  ? property.imagens.map((img) => ({
+      src: `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload/${img}`,
+      alt: property.tipo,
+    }))
+  : [{ src: "https://via.placeholder.com/300x200?text=Sem+Imagem", alt: "Sem Imagem" }];
+
 
   return (
     <Wrapper>
