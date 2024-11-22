@@ -12,6 +12,21 @@ export const Container = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+
+  @media (max-width: 1024px) {
+    padding: 20px;
+    height: 70vh;
+  }
+
+  @media (max-width: 768px) {
+    padding: 15px;
+    height: 60vh;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+    height: 50vh;
+  }
 `;
 
 export const Text = styled.div`
@@ -28,6 +43,26 @@ export const Text = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  @media (max-width: 1024px) {
+    font-size: 24px;
+    padding: 25px 15px;
+    max-width: 60%;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+    padding: 20px 10px;
+    max-width: 70%;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+    padding: 15px 8px;
+    max-width: 90%;
+    align-items: center;
+    text-align: center;
+  }
 `;
 
 export const Divider = styled.div`
@@ -35,5 +70,12 @@ export const Divider = styled.div`
   height: 2px;
   background-color: var(--white);
   margin: 5px 0;
-`;
 
+  @media (max-width: 768px) {
+    width: 70%;
+  }
+
+  @media (max-width: 480px) {
+    width: 60%;
+  }
+`;
