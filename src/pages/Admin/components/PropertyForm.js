@@ -107,6 +107,16 @@ const PropertyForm = ({ existingProperty }) => {
     fotos: [],
   });
   const [error, setError] = useState(null);
+  const [previewImages, setPreviewImages] = useState([]);
+  const [newVideos, setNewVideos] = useState([]);
+
+  useEffect(() => {
+    if (existingProperty) {
+      setFormData(existingProperty);
+      setPreviewImages(existingProperty.fotos || []);
+      setNewVideos(existingProperty.videos || []);
+    }
+  }, [existingProperty]);
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({
@@ -117,6 +127,8 @@ const PropertyForm = ({ existingProperty }) => {
 
   const handleFotosChange = (e) => {
     const files = Array.from(e.target.files);
+    const imageUrls = files.map((file) => URL.createObjectURL(file));
+    setPreviewImages((prev) => [...prev, ...imageUrls]);
     handleChange("fotos", files);
   };
 
@@ -132,40 +144,21 @@ const PropertyForm = ({ existingProperty }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
     try {
       console.log("Enviando dados do formulário:", formData);
-  
-      // Upload de imagens
       const fotoUrls = await uploadImagesToCloudinary(formData.fotos);
-  
-      // Mapear os campos para o formato esperado
       const payload = {
-        descricao: formData.dsDescricao,
-        endereco: formData.dsLocalizacao,
-        titulo: formData.nmTitulo,
-        banheiros: parseInt(formData.nrBanheiros, 10),
-        quartos: parseInt(formData.nrQuartos, 10),
-        suites: parseInt(formData.nrSuites, 10),
-        metrosQuadrados: parseFloat(formData.nrTamanho),
-        vagas: parseInt(formData.nrVagasGaragem, 10),
-        disponibilidade: formData.stDisponibilidade ? "Disponível" : "Indisponível",
-        tipo: formData.tpImovel,
-        condominio: parseFloat(formData.vlCondominio || 0),
-        valor: parseFloat(formData.vlPreco),
+        ...formData,
+        fotos: fotoUrls,
         videos: formData.videos.filter((url) => url.trim() !== ""),
-        imagens: fotoUrls,
       };
-  
-      console.log("Payload enviado para o serviço:", payload);
-  
-      // Chamada ao serviço
+
       if (existingProperty) {
         await updateImovel(existingProperty.id, payload);
       } else {
         await addProperty(payload);
       }
-  
+
       alert("Imóvel salvo com sucesso!");
       setFormData({
         nmTitulo: "",
@@ -183,6 +176,8 @@ const PropertyForm = ({ existingProperty }) => {
         videos: [""],
         fotos: [],
       });
+      setPreviewImages([]);
+      setNewVideos([]);
     } catch (error) {
       console.error("Erro ao salvar imóvel:", error);
       setError("Erro ao salvar imóvel. Tente novamente.");
@@ -193,140 +188,81 @@ const PropertyForm = ({ existingProperty }) => {
     <FormContainer onSubmit={handleSubmit}>
       <h2>{existingProperty ? "Editar Imóvel" : "Cadastrar Novo Imóvel"}</h2>
 
-      <FormRow>
-        <FormColumn>
-          <Label>Título:</Label>
+      <Section>
+        <h3>Dados do Imóvel</h3>
+        <InputGroup>
+          <Label>Título</Label>
           <Input
             type="text"
             value={formData.nmTitulo}
             onChange={(e) => handleChange("nmTitulo", e.target.value)}
             required
           />
+        </InputGroup>
 
-          <Label>Localização:</Label>
-          <Input
-            type="text"
-            value={formData.dsLocalizacao}
-            onChange={(e) => handleChange("dsLocalizacao", e.target.value)}
+        <InputGroup>
+          <Label>Descrição</Label>
+          <Textarea
+            value={formData.dsDescricao}
+            onChange={(e) => handleChange("dsDescricao", e.target.value)}
+            rows="5"
             required
           />
+        </InputGroup>
 
-          <Label>Tamanho (m²):</Label>
-          <Input
-            type="number"
-            value={formData.nrTamanho}
-            onChange={(e) => handleChange("nrTamanho", e.target.value)}
-            required
-          />
-
-          <Label>Quartos:</Label>
-          <Input
-            type="number"
-            value={formData.nrQuartos}
-            onChange={(e) => handleChange("nrQuartos", e.target.value)}
-            required
-          />
-
-          <Label>Banheiros:</Label>
-          <Input
-            type="number"
-            value={formData.nrBanheiros}
-            onChange={(e) => handleChange("nrBanheiros", e.target.value)}
-            required
-          />
-
-          <Label>Vagas de Garagem:</Label>
-          <Input
-            type="number"
-            value={formData.nrVagasGaragem}
-            onChange={(e) => handleChange("nrVagasGaragem", e.target.value)}
-            required
-          />
-        </FormColumn>
-
-        <FormColumn>
-          <Label>Suítes:</Label>
-          <Input
-            type="number"
-            value={formData.nrSuites}
-            onChange={(e) => handleChange("nrSuites", e.target.value)}
-            required
-          />
-
-          <Label>Preço:</Label>
+        <InputGroup>
+          <Label>Preço</Label>
           <Input
             type="number"
             value={formData.vlPreco}
             onChange={(e) => handleChange("vlPreco", e.target.value)}
             required
           />
+        </InputGroup>
 
-          <Label>Condomínio:</Label>
+        <InputGroup>
+          <Label>Localização</Label>
           <Input
-            type="number"
-            value={formData.vlCondominio}
-            onChange={(e) => handleChange("vlCondominio", e.target.value)}
-            placeholder="Preço do condomínio"
-          />
-
-          <Label>Categoria:</Label>
-          <Select
-            value={formData.tpImovel}
-            onChange={(e) => handleChange("tpImovel", e.target.value)}
-            required
-          >
-            <option value="venda">Venda</option>
-            <option value="aluguel">Aluguel</option>
-          </Select>
-
-          <Label>Descrição:</Label>
-          <Textarea
-            value={formData.dsDescricao}
-            onChange={(e) => handleChange("dsDescricao", e.target.value)}
-            rows="5"
-            placeholder="Descrição do imóvel"
+            type="text"
+            value={formData.dsLocalizacao}
+            onChange={(e) => handleChange("dsLocalizacao", e.target.value)}
             required
           />
+        </InputGroup>
+      </Section>
 
-          <Label>Disponibilidade:</Label>
-          <Input
-            type="checkbox"
-            checked={formData.stDisponibilidade}
-            onChange={(e) => handleChange("stDisponibilidade", e.target.value)}
-          />
-        </FormColumn>
-      </FormRow>
+      <Section>
+        <h3>Mídias</h3>
+        <MediaContainer>
+          <Carousel images={previewImages.map((src) => ({ src, alt: "Imagem" }))} />
+          <FileInput type="file" multiple accept="image/*" onChange={handleFotosChange} />
+        </MediaContainer>
 
-      <Label>Fotos:</Label>
-      <FileInput
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleFotosChange}
-      />
-      
+        {newVideos.map((video, index) => (
+          <VideoPlayer key={index} videoUrl={video} />
+        ))}
+        <InputGroup>
+          <Label>Adicionar Vídeo</Label>
+          {formData.videos.map((url, index) => (
+            <Input
+              key={index}
+              type="text"
+              value={url}
+              placeholder="URL do vídeo"
+              onChange={(event) => handleVideoUrlChange(index, event)}
+            />
+          ))}
+          <Button type="button" onClick={handleAddVideoUrl}>
+            Adicionar outro vídeo
+          </Button>
+        </InputGroup>
+      </Section>
 
-      <Label>URLs de Vídeos</Label>
-      {formData.videos.map((url, index) => (
-        <Input
-          key={index}
-          type="text"
-          value={url}
-          placeholder="Insira a URL do vídeo do YouTube"
-          onChange={(event) => handleVideoUrlChange(index, event)}
-        />
-      ))}
-      <Button type="button" onClick={handleAddVideoUrl}>
-        Adicionar outra URL
-      </Button>
-
-      <Button type="submit">
-        {existingProperty ? "Salvar alterações" : "Cadastrar Imóvel"}
-      </Button>
+      <Button type="submit">{existingProperty ? "Salvar Alterações" : "Cadastrar"}</Button>
 
       {error && <ErrorMessage>{error}</ErrorMessage>}
     </FormContainer>
   );
-}
+};
 
 export default PropertyForm;
