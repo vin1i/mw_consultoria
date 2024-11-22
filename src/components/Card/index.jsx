@@ -8,11 +8,9 @@ import "slick-carousel/slick/slick-theme.css";
 import CloudinaryImage from "../CloudinaryImage";
 import { CardContainer, CardInfo, DetailsButton, LocationText } from "./styles";
 
-// Definindo as PropTypes para garantir a tipagem das props
 const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
   const navigate = useNavigate();
 
-  // Configurações do Slider
   const settings = {
     dots: true,
     infinite: true,
@@ -22,7 +20,7 @@ const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
     adaptiveHeight: true,
     responsive: [
       {
-        breakpoint: 768, // ajuste para telas pequenas
+        breakpoint: 768,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -34,35 +32,31 @@ const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
 
   return (
     <CardContainer>
-      {/* Slider de imagens */}
       <Slider {...settings}>
         <div>
-          {/* Carregamento da imagem do Cloudinary */}
           <CloudinaryImage
             publicId={thumb}
             width={500}
             height={300}
-            alt={`Imagem do imóvel ${tipo}`}
+            alt={`Imagem destacada do imóvel: ${tipo}, localizado em ${endereco}`}
           />
         </div>
-        {imagens && imagens.length > 0 ? (
+        {imagens.length > 0 ? (
           imagens.map((imagem, index) => (
             <div key={index}>
-              {/* Carregar imagens adicionais do Cloudinary */}
               <CloudinaryImage
                 publicId={imagem}
                 width={500}
                 height={300}
-                alt={`Imagem do imóvel ${tipo}`}
+                alt={`Imagem adicional do imóvel: ${tipo}, localizado em ${endereco}`}
               />
             </div>
           ))
         ) : (
-          <div>No additional images available</div>
+          <div>Sem imagens adicionais disponíveis</div>
         )}
       </Slider>
 
-      {/* Informações do Card */}
       <CardInfo>
         <h3>{tipo}</h3>
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -72,7 +66,7 @@ const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
         <h4>
           <strong>{valor || "Valor não disponível"}</strong>
         </h4>
-        <DetailsButton onClick={() => navigate(`/imoveis/${id}`, { replace: true })}>
+        <DetailsButton onClick={() => navigate(`/imoveis/${id}`)}>
           Detalhes <FaArrowRight />
         </DetailsButton>
       </CardInfo>
@@ -80,13 +74,12 @@ const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
   );
 };
 
-// Validação das props com PropTypes
 Card.propTypes = {
   id: PropTypes.string.isRequired,
   tipo: PropTypes.string.isRequired,
   endereco: PropTypes.string.isRequired,
   valor: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  thumb: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired, // Aceitar tanto string quanto objeto
+  thumb: PropTypes.string.isRequired,
   imagens: PropTypes.arrayOf(PropTypes.string),
 };
 

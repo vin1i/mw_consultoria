@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getImoveis, deleteImovel } from '../services/propertyService';
 
+const cloudinaryCloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+
 function PropertyList({ onEdit, onDelete }) {
   const [properties, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -49,14 +51,13 @@ function PropertyList({ onEdit, onDelete }) {
             <p><strong>Descrição:</strong> {property.descricao}</p>
             <p><strong>Data de criação:</strong> {new Date(property.dt_criacao).toLocaleString()}</p>
 
-            {/* Exibição de imagens do Cloudinary */}
             <div>
               <strong>Imagens:</strong>
               <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                 {property.imagens?.map((img, index) => (
                   <img
                     key={index}
-                    src={`https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/${img}`}
+                    src={`https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/${img}`}
                     alt={`Imagem ${index + 1}`}
                     style={{ width: '100px', height: '100px', objectFit: 'cover' }}
                   />
@@ -64,7 +65,6 @@ function PropertyList({ onEdit, onDelete }) {
               </div>
             </div>
 
-            {/* Exibição de vídeos do YouTube */}
             <div>
               <strong>Vídeos:</strong>
               <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
