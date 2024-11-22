@@ -12,6 +12,18 @@ export const Container = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
+
+  @media (max-width: 1024px) {
+    padding: 20px;
+    min-height: 100vh;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px 10px;
+    min-height: auto;
+  }
 `;
 
 export const TextContainer = styled.div`
@@ -19,6 +31,16 @@ export const TextContainer = styled.div`
   padding-left: 250px;
   color: var(--black);
   z-index: 2;
+
+  @media (max-width: 1024px) {
+    padding-left: 50px;
+    width: 60%;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px;
+    width: 100%;
+  }
 `;
 
 export const Text = styled.div`
@@ -28,6 +50,16 @@ export const Text = styled.div`
   p {
     margin-bottom: 20px;
   }
+
+  @media (max-width: 1024px) {
+    font-size: 1.4rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    text-align: center;
+  }
 `;
 
 export const Logo = styled.img`
@@ -35,4 +67,9 @@ export const Logo = styled.img`
   max-width: 300px;
   height: auto;
   display: block;
+
+  @media (max-width: 768px) {
+    margin-top: 30px;
+    max-width: 200px;
+  }
 `;
