@@ -1,32 +1,36 @@
-import React from 'react';
-import ReactPlayer from 'react-player';
+import React from "react";
+import ReactPlayer from "react-player";
+import styled from "styled-components";
 
 const VideoPlayer = ({ videoUrl }) => {
-  let videoId = videoUrl;
+  // Detecta a plataforma e ajusta a URL
+  let videoSource = videoUrl;
 
-  // Verifica se a URL é do YouTube e extrai o ID
-  if (videoUrl.includes("youtube.com")) {
-    const match = videoUrl.match(/[?&]v=([^&]+)/);
+  if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
+    const match = videoUrl.match(/[?&]v=([^&]+)/) || videoUrl.match(/youtu\.be\/([^?]+)/);
     if (match && match[1]) {
-      videoId = match[1];
+      videoSource = `https://www.youtube.com/watch?v=${match[1]}`;
     }
   }
 
-  // Você pode adicionar outros suportes de URL aqui, se necessário
-  // Exemplo para o Vimeo
   if (videoUrl.includes("vimeo.com")) {
-    videoId = videoUrl.split('/').pop(); // Extrai o ID do Vimeo
+    const videoId = videoUrl.split("/").pop();
+    videoSource = `https://vimeo.com/${videoId}`;
   }
 
   return (
-    <div className="video-player">
-      <ReactPlayer 
-        url={videoUrl.includes("youtube.com") ? `https://www.youtube.com/watch?v=${videoId}` : videoUrl} 
+    <VideoContainer>
+      <ReactPlayer
+        url={videoSource}
         controls
         width="100%"
         height="100%"
+        config={{
+          youtube: { playerVars: { showinfo: 0 } },
+          vimeo: { playerOptions: { title: 0, byline: 0 } },
+        }}
       />
-    </div>
+    </VideoContainer>
   );
 };
 
