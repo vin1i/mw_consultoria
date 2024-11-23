@@ -32,7 +32,10 @@ const Carousel = ({ images }) => {
           <img
             src={image.src}
             alt={image.alt}
-            onError={(e) => (e.target.src = "https://via.placeholder.com/800x400?text=Imagem+Indisponível")}
+            onError={(e) =>
+              (e.target.src =
+                "https://via.placeholder.com/800x400?text=Imagem+Indisponível")
+            }
           />
           {image.caption && <p>{image.caption}</p>}
         </SlideContainer>
@@ -66,14 +69,18 @@ const CustomArrow = ({ direction, onClick }) => (
 // Estilos personalizados
 const ArrowButton = styled.button`
   position: absolute;
-  top: 50%;
-  ${(props) => (props.direction === "next" ? "right: 10px;" : "left: 10px;")}
-  transform: translateY(-50%);
+  top: 50%; /* Centraliza verticalmente */
+  transform: translateY(-50%); /* Corrige o alinhamento */
+  ${(props) => (props.direction === "next" ? "right: 15px;" : "left: 15px;")} /* Posiciona à esquerda ou direita */
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
-  padding: 10px;
-  font-size: 20px;
+  width: 40px; /* Tamanho fixo para consistência */
+  height: 40px; /* Tamanho fixo para consistência */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px; /* Tamanho da seta */
   cursor: pointer;
   z-index: 2;
   border-radius: 50%;
