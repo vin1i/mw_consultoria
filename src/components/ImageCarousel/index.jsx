@@ -15,7 +15,7 @@ const ImageCarousel = ({ images, cloudinaryBaseUrl }) => {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 300,
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
@@ -57,8 +57,8 @@ const StyledSlider = styled(Slider)`
 
   .slick-prev,
   .slick-next {
-    width: 40px;
-    height: 40px;
+    width: 70px;
+    height: 70px;
   }
 
   .slick-prev:before,

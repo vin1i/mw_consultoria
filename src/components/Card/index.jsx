@@ -11,7 +11,6 @@ import {
 } from "react-icons/fa";
 import {
   CardContainer,
-  ImageContainer,
   InfoContainer,
   Title,
   Address,

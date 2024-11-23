@@ -42,12 +42,14 @@ const ImobiList = () => {
         setImoveis(fetchedImoveis);
       } catch (error) {
         console.error("Erro ao buscar imóveis:", error);
-        setError("Ocorreu um problema ao carregar os imóveis. Tente novamente mais tarde.");
+        setError(
+          "Ocorreu um problema ao carregar os imóveis. Tente novamente mais tarde."
+        );
       } finally {
         setLoading(false);
       }
     };
-  
+
     fetchImoveis();
   }, []);
 
@@ -95,19 +97,21 @@ const ImobiList = () => {
           </Sidebar>
           <ListingsSection>
             {currentProperties.map((property) => {
-
               return (
                 <Card
                   key={property.id}
                   id={property.id}
-                  tipo={property.tipo}
+                  titulo={property.titulo} // Adicione o título corretamente
+                  tipo={property.tipo} // Tipo do imóvel
                   endereco={property.endereco}
-                  valor={property.valor.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
-                  thumb={getImageURL(property.imagens)}
+                  valor={property.valor} // Não formate aqui
                   imagens={property.imagens} // Passe todas as imagens
+                  quartos={property.quartos}
+                  banheiros={property.banheiros}
+                  vagas={property.vagas}
+                  metrosQuadrados={property.metrosQuadrados}
+                  suites={property.suites}
+                  descricao={property.descricao}
                 />
               );
             })}
