@@ -17,6 +17,7 @@ const ImobiList = () => {
     banheiros: "",
     vagas: "",
   });
+  console.log("Imóveis recebidos:", imoveis);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 

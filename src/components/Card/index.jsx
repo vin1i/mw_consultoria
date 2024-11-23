@@ -1,105 +1,63 @@
+// src/components/Card/index.jsx
 import React from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import Slider from "react-slick";
-import { FaArrowRight, FaMapMarkerAlt } from "react-icons/fa";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import CloudinaryImage from "../CloudinaryImage";
-import { CardContainer, CardInfo, DetailsButton, LocationText } from "./styles";
+import { FaMapMarkerAlt, FaBed, FaBath, FaCar } from "react-icons/fa";
+import {
+  CardContainer,
+  InfoContainer,
+  Title,
+  Address,
+  Features,
+  Price,
+  Button,
+} from "./styles";
+import ImageCarousel from "../ImageCarousel";
 
-const Card = ({ id, tipo, endereco, valor, thumb, imagens = [] }) => {
+const Card = ({ id, tipo, endereco, valor, imagens, titulo, quartos, banheiros, vagas }) => {
   const navigate = useNavigate();
-
-  // Configurações do Cloudinary
-  const cloudinaryCloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
-
-  // Configurações do carrossel
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    adaptiveHeight: true,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          adaptiveHeight: true,
-        },
-      },
-    ],
-  };
-
-  const fallbackImage = "https://via.placeholder.com/500x300?text=Sem+Imagem";
-  const thumbImage = thumb || fallbackImage;
+  const cloudinaryBaseUrl = `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}`;
 
   return (
     <CardContainer>
-      <Slider {...settings}>
-        {/* Imagem destacada (thumb) */}
-        <div>
-          <CloudinaryImage
-            publicId={thumbImage}
-            width={500}
-            height={300}
-            alt={`Imagem destacada do imóvel: ${tipo}, localizado em ${endereco}`}
-          />
-        </div>
+      {/* Carrossel de Imagens */}
+      <ImageCarousel images={imagens} cloudinaryBaseUrl={cloudinaryBaseUrl} />
 
-        {/* Imagens adicionais */}
-        {imagens.length > 0
-          ? imagens.map((imagem, index) => {
-              const imageUrl = `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/${imagem}`;
-              return (
-                <div key={index}>
-                  <CloudinaryImage
-                    publicId={imagem}
-                    width={500}
-                    height={300}
-                    alt={`Imagem adicional do imóvel: ${tipo}, localizado em ${endereco}`}
-                  />
-                </div>
-              );
-            })
-          : null}
-      </Slider>
-
-      {/* Informações do imóvel */}
-      <CardInfo>
-        <h3>{tipo}</h3>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <FaMapMarkerAlt style={{ marginRight: "8px" }} />
-          <LocationText>{endereco}</LocationText>
-        </div>
-        <h4>
-          <strong>
-            {valor
-              ? valor.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })
-              : "Valor não disponível"}
-          </strong>
-        </h4>
-        <DetailsButton onClick={() => navigate(`/imoveis/${id}`)}>
-          Detalhes <FaArrowRight />
-        </DetailsButton>
-      </CardInfo>
+      {/* Informações do Imóvel */}
+      <InfoContainer>
+        <Title>{titulo}</Title>
+        <Address>
+          <FaMapMarkerAlt /> {endereco}
+        </Address>
+        <Features>
+          <span>
+            <FaBed /> {quartos || 0} Quartos
+          </span>
+          <span>
+            <FaBath /> {banheiros || 0} Banheiros
+          </span>
+          <span>
+            <FaCar /> {vagas || 0} Vagas
+          </span>
+        </Features>
+        <Price>
+          R$ {valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+        </Price>
+        <Button onClick={() => navigate(`/imoveis/${id}`)}>VER MAIS</Button>
+      </InfoContainer>
     </CardContainer>
   );
 };
 
 Card.propTypes = {
   id: PropTypes.string.isRequired,
-  tipo: PropTypes.string.isRequired,
+  titulo: PropTypes.string.isRequired,
   endereco: PropTypes.string.isRequired,
-  valor: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  thumb: PropTypes.string,
-  imagens: PropTypes.arrayOf(PropTypes.string),
+  valor: PropTypes.number.isRequired,
+  imagens: PropTypes.arrayOf(PropTypes.string).isRequired,
+  quartos: PropTypes.number,
+  banheiros: PropTypes.number,
+  vagas: PropTypes.number,
 };
 
 export default Card;

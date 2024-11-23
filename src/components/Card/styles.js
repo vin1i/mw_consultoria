@@ -1,79 +1,77 @@
 import styled from "styled-components";
 
 export const CardContainer = styled.div`
-  width: 300px;
-  margin: 16px;
-  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  @media (max-width: 768px) {
-    width: 90%;
-    margin: 10px auto;
-    padding: 12px;
-  }
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  gap: 16px;
 `;
 
-export const CardInfo = styled.div`
-  margin-top: 8px;
+export const InfoContainer = styled.div`
+  flex: 2;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  align-items: start;
-
-  h3 {
-    font-size: 1.4rem;
-    font-weight: bold;
-    margin-bottom: 4px;
-    color: #333;
-  }
-
-  p {
-    margin: 0;
-    font-size: 1rem;
-    color: #555;
-  }
+  justify-content: space-between;
 `;
 
-export const DetailsButton = styled.button`
+export const Title = styled.h3`
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: var(--red);
+  font-weight: bold;
+`;
+
+export const Address = styled.p`
   display: flex;
   align-items: center;
-  margin-top: 10px;
-  padding: 10px 15px;
-  background-color: var(--red, #ff4c4c);
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s, transform 0.2s ease-in-out;
-  cursor: pointer;
-  outline: none;
-  border: none;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
-  &:hover {
-    background-color: var(--dark-red);
-    transform: scale(1.05);
-  }
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 12px;
 
   svg {
-    margin-left: 5px;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-    padding: 8px 12px;
+    margin-right: 8px;
+    color: #e63946;
   }
 `;
 
-export const LocationText = styled.p`
-  margin-left: 8px;
-  font-size: 1rem;
+export const Features = styled.div`
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  color: #555;
 
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
+  span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+`;
+
+export const Price = styled.div`
+  font-size: 20px;
+  font-weight: bold;
+  color: #e63946;
+  margin: 16px 0;
+`;
+
+export const Button = styled.button`
+  background-color: #e63946;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-start;
+
+  &:hover {
+    background-color: #d62839;
   }
 `;

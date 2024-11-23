@@ -13,8 +13,11 @@ const CloudinaryImage = ({
 }) => {
   const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 
+  // Verificação se o Cloudinary Cloud Name está configurado
   if (!cloudName) {
-    console.error("Erro: Cloudinary Cloud Name não configurado. Verifique as variáveis de ambiente.");
+    console.error(
+      "Erro: Cloudinary Cloud Name não configurado. Verifique as variáveis de ambiente."
+    );
     return (
       <p style={{ color: "red" }}>
         Erro: Configuração do Cloudinary ausente. Entre em contato com o suporte.
@@ -22,12 +25,13 @@ const CloudinaryImage = ({
     );
   }
 
+  // Verificação se o publicId foi fornecido
   if (!publicId) {
     console.warn("Public ID não fornecido para o componente CloudinaryImage.");
     return (
       <img
-        src="https://via.placeholder.com/500"
-        alt="Imagem não disponível"
+        src="https://via.placeholder.com/500x500?text=Sem+Imagem"
+        alt={alt}
         width={width}
         height={height}
         style={{ objectFit: "cover", borderRadius: "8px" }}
@@ -35,21 +39,23 @@ const CloudinaryImage = ({
     );
   }
 
+  // Geração do URL do Cloudinary usando publicId
   const cld = new Cloudinary({ cloud: { cloudName } });
-
   const img = cld
     .image(publicId)
     .format("auto")
     .quality("auto")
     .resize(auto().gravity(autoGravity()).width(width).height(height));
 
+  console.log("URL da imagem gerada pelo Cloudinary:", img.toURL());
+
   return (
     <AdvancedImage
       cldImg={img}
       alt={alt}
       style={{
-        width: width === "100%" ? "100%" : `${width}px`,
-        height: height === "auto" ? "auto" : `${height}px`,
+        width: typeof width === "string" ? width : `${width}px`,
+        height: typeof height === "string" ? height : `${height}px`,
         objectFit: "cover",
         borderRadius: "8px",
       }}

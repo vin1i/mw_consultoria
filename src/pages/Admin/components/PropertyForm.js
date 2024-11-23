@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { addProperty, updateImovel } from "../services/propertyService";
 import { uploadImagesToCloudinary } from "../../../services/CloudinaryService";
+import Carousel from "../../../components/Carousel";
+import VideoPlayer from "../../../components/VideoPlayer";
 import styled from "styled-components";
 
 const FormContainer = styled.form`
@@ -87,6 +89,26 @@ const FileInput = styled.input`
 
 const ErrorMessage = styled.p`
   color: red;
+`;
+
+const Section = styled.div`
+  margin-bottom: 20px;
+
+  h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+`;
+
+const InputGroup = styled.div`
+  margin-bottom: 20px;
+`;
+
+const MediaContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 const PropertyForm = ({ existingProperty }) => {

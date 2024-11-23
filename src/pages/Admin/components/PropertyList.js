@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getImoveis, deleteImovel } from "../services/propertyService";
 import styled from "styled-components";
-import Carousel from "../../components/Carousel";
+import Carousel from "../../../components/Carousel";
 
 const PropertyList = ({ onEdit, onDelete }) => {
   const [properties, setProperties] = useState([]);

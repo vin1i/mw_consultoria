@@ -1,6 +1,6 @@
 import React from "react";
 import ReactPlayer from "react-player";
-import styled from "styled-components";
+import { VideoContainer } from "./styles";
 
 const VideoPlayer = ({ videoUrl }) => {
   // Detecta a plataforma e ajusta a URL
