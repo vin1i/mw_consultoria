@@ -16,18 +16,16 @@ import Footer from "../components/Footer";
 const RouterApp = () => {
   return (
     <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/imoveis" element={<ImobiList />} />
-        <Route path="/imoveis/:id" element={<ImobiDetails />} />
-
-        <Route path="/admin/imoveis" element={<PropertyPage />} />
-
-        <Route path="/erro" element={<Error />} />
-        <Route path="*" element={<Navigate to="/erro" />} />
-      </Routes>
-      <Footer />
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/imoveis" element={<ImobiList />} />
+          <Route path="/imoveis/:id" element={<ImobiDetails />} />
+          <Route path="/admin/imoveis" element={<PropertyPage />} />
+          <Route path="/erro" element={<Error />} />
+          <Route path="*" element={<Navigate to="/erro" />} />
+        </Routes>
+        <Footer />
     </Router>
   );
 };

@@ -16,8 +16,9 @@ const Home = () => {
       const imoveisData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
+        imagens: doc.data().imagens || [], // Garantindo que imagens seja um array
       }));
-      setImoveis(imoveisData); // Atualiza o estado com os dados de imóveis
+      setImoveis(imoveisData);
     } catch (error) {
       console.error("Erro ao buscar imóveis:", error);
     }
@@ -33,25 +34,6 @@ const Home = () => {
       <section id="inicio">
         <Banner />
       </section>
-
-      <Header>
-        <h2>Encontre o imóvel dos seus sonhos!</h2>
-        <ImoveisSection>
-          <SectionTitle>Nossos Imóveis</SectionTitle>
-          <Wrapper>
-            {imoveis.map((item) => (
-              <Card
-                key={item.id}
-                thumb={item.thumb} // Certifique-se de que 'thumb' está no Firestore
-                tipo={item.tipo}
-                endereco={item.endereco}
-                valor={item.valor}
-                slug={item.slug}
-              />
-            ))}
-          </Wrapper>
-        </ImoveisSection>
-      </Header>
 
       <section id="sobre-nos">
         <About />

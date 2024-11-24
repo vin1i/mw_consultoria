@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: center;
-  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsivo */
+  gap: 24px; /* Espaçamento entre os cards */
+  padding: 24px;
+  justify-items: center; /* Centraliza os cards */
 `;
 
 export const Header = styled.div`
