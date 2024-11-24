@@ -25,7 +25,10 @@ const Card = ({
   id,
   tipo,
   endereco,
-  valor,
+  valorVenda,
+  valorLocacao,
+  condominio,
+  iptu,
   imagens,
   titulo,
   quartos,
@@ -51,7 +54,6 @@ const Card = ({
       >
         <ImageCarousel images={imagens} cloudinaryBaseUrl={cloudinaryBaseUrl} />
       </div>
-      {/* Informações do Imóvel */}
       <InfoContainer>
         <Title>{titulo || tipo}</Title>
         <Address>
@@ -79,8 +81,30 @@ const Card = ({
             <FaDoorClosed /> {suites || 0} Suítes
           </span>
         </Features>
+        {/* Seção de preços */}
         <Price>
-          R$ {valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+          {valorVenda && (
+            <p>
+              <strong>Venda:</strong> R$ {valorVenda.toLocaleString("pt-BR")}
+            </p>
+          )}
+          {valorLocacao && (
+            <p>
+              <strong>Locação:</strong> R${" "}
+              {valorLocacao.toLocaleString("pt-BR")}
+            </p>
+          )}
+          {condominio && (
+            <p>
+              <strong>Condomínio:</strong> R${" "}
+              {condominio.toLocaleString("pt-BR")}
+            </p>
+          )}
+          {iptu && (
+            <p>
+              <strong>IPTU:</strong> R$ {iptu.toLocaleString("pt-BR")}
+            </p>
+          )}
         </Price>
         <Button onClick={() => navigate(`/imoveis/${id}`)}>VER MAIS</Button>
       </InfoContainer>

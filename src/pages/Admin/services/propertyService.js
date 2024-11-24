@@ -1,32 +1,38 @@
 // Importações do Firebase e Firestore
-import { db } from '../../../services/firebase/firebaseConfig';
-import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-import { uploadImagesToCloudinary } from '../../../services/CloudinaryService'; // Importa a função de upload
+import { db } from "../../../services/firebase/firebaseConfig";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
+import { uploadImagesToCloudinary } from "../../../services/CloudinaryService"; // Importa a função de upload
 
 // Criação da referência à coleção 'properties' no Firestore
-const propertyCollection = collection(db, 'properties');
+const propertyCollection = collection(db, "properties");
 
 // Função para adicionar um novo imóvel com imagens e vídeos
 export const addProperty = async (propertyData) => {
+  console.log("Dados recebidos para adicionar imóvel:", propertyData); // Adicione este log
   try {
-    console.log("Iniciando a adição de imóvel com dados:", JSON.stringify(propertyData, null, 2));
-
-    const imagePublicIds = propertyData.imagens 
-      ? await uploadImagesToCloudinary(propertyData.imagens) 
+    const imagePublicIds = propertyData.imagens
+      ? await uploadImagesToCloudinary(propertyData.imagens)
       : [];
-    console.log("IDs das imagens retornados pelo Cloudinary:", imagePublicIds);
 
     const newPropertyData = {
       ...propertyData,
       fotos: imagePublicIds,
+      vlCondominio: propertyData.vlCondominio || 0,
+      vlIptu: propertyData.vlIptu || 0,
+      valorVenda: propertyData.valorVenda || 0,
+      valorLocacao: propertyData.valorLocacao || 0,
       dt_criacao: new Date().toISOString(),
     };
 
-    console.log("Dados formatados para Firestore:", JSON.stringify(newPropertyData, null, 2));
-
+    console.log("Dados formatados para Firestore:", newPropertyData); // Adicione este log
     const docRef = await addDoc(propertyCollection, newPropertyData);
-
-    console.log("Imóvel adicionado com sucesso! ID:", docRef.id);
     return docRef.id;
   } catch (error) {
     console.error("Erro ao adicionar imóvel:", error.message);
@@ -41,29 +47,31 @@ export const getImoveis = async () => {
 
     const imoveis = querySnapshot.docs.map((doc) => {
       const data = doc.data();
-      console.log("Imóvel recebido do Firestore:", JSON.stringify(data, null, 2));
+      console.log("Dados brutos recebidos do Firestore:", data); // Adicione este log
 
       return {
         id: doc.id,
-        tipo: data.tipo || 'Indefinido',
-        endereco: data.endereco || 'Não informado',
-        valor: data.valor || 0,
+        tipo: data.tipo || "Indefinido",
+        endereco: data.endereco || "Não informado",
+        valorVenda: data.valorVenda || 0,
+        valorLocacao: data.valorLocacao || 0,
+        vlCondominio: data.vlCondominio || 0,
+        vlIptu: data.vlIptu || 0,
         quartos: data.quartos || 0,
         banheiros: data.banheiros || 0,
         vagas: data.vagas || 0,
         suites: data.suites || 0,
         metrosQuadrados: data.metrosQuadrados || 0,
-        descricao: data.descricao || 'Não informada',
-        disponibilidade: data.disponibilidade || 'Não informado',
-        titulo: data.titulo || 'Sem título',
-        imagens: doc.data().imagens || [], // Pode combinar imagens e fotos se necessário
+        descricao: data.descricao || "Não informada",
+        disponibilidade: data.disponibilidade || "Não informado",
+        titulo: data.titulo || "Sem título",
+        imagens: data.imagens || [],
         videos: data.videos || [],
-        condominio: data.condominio || 0,
-        dt_criacao: data.dt_criacao || ''
+        dt_criacao: data.dt_criacao || "",
       };
     });
 
-    console.log("Lista de imóveis formatada:", JSON.stringify(imoveis, null, 2));
+    console.log("Imóveis formatados:", imoveis); // Adicione este log
     return imoveis;
   } catch (error) {
     console.error("Erro ao buscar imóveis:", error.message);
@@ -73,25 +81,32 @@ export const getImoveis = async () => {
 
 // Função para atualizar imóvel
 export const updateImovel = async (id, updatedData) => {
+  console.log("Dados recebidos para atualização:", updatedData); // Adicione este log
   try {
-    console.log("Dados recebidos para atualização:", JSON.stringify(updatedData, null, 2));
+    const propertyRef = doc(db, "properties", id);
+    const updatedPropertyData = {
+      ...updatedData,
+      vlCondominio: updatedData.vlCondominio || 0,
+      vlIptu: updatedData.vlIptu || 0,
+      valorVenda: updatedData.valorVenda || 0,
+      valorLocacao: updatedData.valorLocacao || 0,
+    };
 
-    const propertyRef = doc(db, 'properties', id);
-    await updateDoc(propertyRef, updatedData);
-
-    console.log("Imóvel atualizado com sucesso!");
+    console.log("Dados formatados para Firestore (update):", updatedPropertyData); // Adicione este log
+    await updateDoc(propertyRef, updatedPropertyData);
   } catch (error) {
     console.error("Erro ao atualizar imóvel:", error.message);
     throw error;
   }
 };
 
+
 // Função para deletar imóvel
 export const deleteImovel = async (id) => {
   try {
     console.log("ID do imóvel a ser deletado:", id);
 
-    const propertyRef = doc(db, 'properties', id);
+    const propertyRef = doc(db, "properties", id);
     await deleteDoc(propertyRef);
 
     console.log("Imóvel deletado com sucesso!");

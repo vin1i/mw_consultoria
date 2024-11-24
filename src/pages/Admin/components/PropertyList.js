@@ -42,65 +42,63 @@ const PropertyList = ({ onEdit, onDelete }) => {
         <Grid>
           {properties.map((property) => (
             <Card key={property.id}>
-              <Title>{property.titulo}</Title>
+              <Title>{property.titulo || "Sem título"}</Title>
               <Details>
                 <p>
-                  <strong>Endereço:</strong> {property.endereco}
+                  <strong>Endereço:</strong>{" "}
+                  {property.endereco || "Não informado"}
                 </p>
                 <p>
-                  <strong>Valor:</strong> R$ {property.valor.toLocaleString()}
+                  <strong>Valor Venda:</strong>{" "}
+                  {property.valorVenda
+                    ? `R$ ${property.valorVenda.toLocaleString("pt-BR")}`
+                    : "Não disponível"}
                 </p>
                 <p>
-                  <strong>Quartos:</strong> {property.quartos}
+                  <strong>Valor Locação:</strong>{" "}
+                  {property.valorLocacao
+                    ? `R$ ${property.valorLocacao.toLocaleString("pt-BR")}`
+                    : "Não disponível"}
                 </p>
                 <p>
-                  <strong>Banheiros:</strong> {property.banheiros}
+                  <strong>Condomínio:</strong>{" "}
+                  {property.vlCondominio
+                    ? `R$ ${property.vlCondominio.toLocaleString("pt-BR")}`
+                    : "Não disponível"}
                 </p>
                 <p>
-                  <strong>Suítes:</strong> {property.suites}
+                  <strong>IPTU:</strong>{" "}
+                  {property.vlIptu
+                    ? `R$ ${property.vlIptu.toLocaleString("pt-BR")}`
+                    : "Não disponível"}
                 </p>
                 <p>
-                  <strong>Vagas:</strong> {property.vagas}
+                  <strong>Quartos:</strong>{" "}
+                  {property.quartos || "Não informado"}
                 </p>
                 <p>
-                  <strong>Metragem:</strong> {property.metrosQuadrados} m²
+                  <strong>Banheiros:</strong>{" "}
+                  {property.banheiros || "Não informado"}
                 </p>
                 <p>
-                  <strong>Disponibilidade:</strong> {property.disponibilidade}
+                  <strong>Suítes:</strong> {property.suites || "Não informado"}
                 </p>
                 <p>
-                  <strong>Descrição:</strong> {property.descricao}
+                  <strong>Vagas:</strong> {property.vagas || "Não informado"}
+                </p>
+                <p>
+                  <strong>Metragem:</strong>{" "}
+                  {property.metrosQuadrados || "Não informado"} m²
+                </p>
+                <p>
+                  <strong>Disponibilidade:</strong>{" "}
+                  {property.disponibilidade || "Não informado"}
+                </p>
+                <p>
+                  <strong>Descrição:</strong>{" "}
+                  {property.descricao || "Não informada"}
                 </p>
               </Details>
-
-              <CarouselContainer>
-                <Carousel
-                  images={property.imagens?.map((img) => ({
-                    src: `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/${img}`,
-                    alt: "Imagem do imóvel",
-                  }))}
-                />
-              </CarouselContainer>
-
-              <VideoContainer>
-                {property.videos?.map((video, index) => (
-                  <iframe
-                    key={index}
-                    width="100%"
-                    height="200"
-                    src={`https://www.youtube.com/embed/${video}`}
-                    title={`Vídeo ${index + 1}`}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                ))}
-              </VideoContainer>
-
-              <ButtonContainer>
-                <ActionButton onClick={() => onEdit(property)}>Editar</ActionButton>
-                <ActionButton onClick={() => confirmDelete(property.id)}>Deletar</ActionButton>
-              </ButtonContainer>
             </Card>
           ))}
         </Grid>

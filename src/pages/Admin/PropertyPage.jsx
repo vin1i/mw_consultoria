@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import PropertyList from "../Admin/components/PropertyList";
 import PropertyForm from "../Admin/components/PropertyForm";
-import { getImoveis, addProperty, updateImovel, deleteImovel } from '../Admin/services/propertyService';
+import {
+  getImoveis,
+  addProperty,
+  updateImovel,
+  deleteImovel,
+} from "../Admin/services/propertyService";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -96,8 +101,22 @@ function PropertyPage() {
       <Button onClick={() => setShowForm(true)}>Adicionar Imóvel</Button>
       {showForm && (
         <PropertyForm
-          existingProperty={selectedProperty}
-          onSave={selectedProperty ? handleEdit : handleAdd}
+          existingProperty={{
+            ...selectedProperty,
+            vlCondominio: selectedProperty?.vlCondominio || 0,
+            vlIptu: selectedProperty?.vlIptu || 0,
+            valorVenda: selectedProperty?.valorVenda || 0,
+            valorLocacao: selectedProperty?.valorLocacao || 0,
+          }}
+          onSave={(updatedProperty) => {
+            console.log(
+              "Dados enviados para salvar (onSave):",
+              updatedProperty
+            ); // Adicione este log
+            selectedProperty
+              ? handleEdit(updatedProperty)
+              : handleAdd(updatedProperty);
+          }}
           onCancel={() => {
             setShowForm(false);
             setSelectedProperty(null);
@@ -108,7 +127,13 @@ function PropertyPage() {
         <Message>Carregando imóveis...</Message>
       ) : imoveis.length > 0 ? (
         <PropertyList
-          properties={imoveis}
+          properties={imoveis.map((property) => ({
+            ...property,
+            vlCondominio: property.vlCondominio || 0, // Valor padrão
+            vlIptu: property.vlIptu || 0, // Valor padrão
+            valorVenda: property.valorVenda || 0, // Valor padrão
+            valorLocacao: property.valorLocacao || 0, // Valor padrão
+          }))}
           onEdit={(property) => {
             setSelectedProperty(property);
             setShowForm(true);

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { addProperty, updateImovel } from "../services/propertyService";
 import { uploadImagesToCloudinary } from "../../../services/CloudinaryService";
 import Carousel from "../../../components/Carousel";
-import VideoPlayer from "../../../components/VideoPlayer";
 import styled from "styled-components";
 
 const FormContainer = styled.form`
@@ -14,13 +12,8 @@ const FormContainer = styled.form`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
-const FormRow = styled.div`
-  display: flex;
-  gap: 20px;
-`;
-
-const FormColumn = styled.div`
-  flex: 1;
+const InputGroup = styled.div`
+  margin-bottom: 20px;
 `;
 
 const Label = styled.label`
@@ -33,8 +26,6 @@ const Label = styled.label`
 const Input = styled.input`
   width: 100%;
   padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
@@ -43,8 +34,6 @@ const Input = styled.input`
 const Textarea = styled.textarea`
   width: 100%;
   padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
@@ -54,8 +43,14 @@ const Textarea = styled.textarea`
 const Select = styled.select`
   width: 100%;
   padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+
+const FileInput = styled.input`
+  width: 100%;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
@@ -77,66 +72,78 @@ const Button = styled.button`
   }
 `;
 
-const FileInput = styled.input`
+const AddVideoButton = styled.button`
   width: 100%;
   padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
+  margin-top: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
   border-radius: 4px;
-  font-size: 16px;
-`;
+  font-size: 14px;
+  cursor: pointer;
 
-const ErrorMessage = styled.p`
-  color: red;
-`;
-
-const Section = styled.div`
-  margin-bottom: 20px;
-
-  h3 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 10px;
+  &:hover {
+    background-color: #0056b3;
   }
 `;
 
-const InputGroup = styled.div`
-  margin-bottom: 20px;
-`;
-
-const MediaContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-`;
-
-const PropertyForm = ({ existingProperty }) => {
+const PropertyForm = ({ existingProperty, onSave }) => {
   const [formData, setFormData] = useState({
-    nmTitulo: "",
-    dsDescricao: "",
-    vlPreco: "",
-    dsLocalizacao: "",
-    tpImovel: "venda",
-    nrTamanho: "",
-    nrQuartos: "",
-    nrBanheiros: "",
-    nrVagasGaragem: "",
-    nrSuites: "",
-    stDisponibilidade: true,
+    tipo: "venda",
+    endereco: "",
+    valorVenda: "",
+    valorLocacao: "",
     vlCondominio: "",
+    vlIptu: "",
+    quartos: "",
+    banheiros: "",
+    vagas: "",
+    suites: "",
+    metrosQuadrados: "",
+    descricao: "",
+    disponibilidade: "Disponível",
+    titulo: "",
+    imagens: [],
     videos: [""],
-    fotos: [],
+    dt_criacao: "",
   });
-  const [error, setError] = useState(null);
+
   const [previewImages, setPreviewImages] = useState([]);
-  const [newVideos, setNewVideos] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (existingProperty) {
-      setFormData(existingProperty);
-      setPreviewImages(existingProperty.fotos || []);
-      setNewVideos(existingProperty.videos || []);
+      setFormData((prev) => ({
+        ...prev,
+        ...existingProperty,
+        videos: existingProperty.videos || [""],
+        vlCondominio: existingProperty.vlCondominio
+          ? existingProperty.vlCondominio.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })
+          : "",
+        vlIptu: existingProperty.vlIptu
+          ? existingProperty.vlIptu.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })
+          : "",
+        valorVenda: existingProperty.valorVenda
+          ? existingProperty.valorVenda.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })
+          : "",
+        valorLocacao: existingProperty.valorLocacao
+          ? existingProperty.valorLocacao.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })
+          : "",
+      }));
+      setPreviewImages(existingProperty.imagens || []);
     }
   }, [existingProperty]);
 
@@ -147,62 +154,46 @@ const PropertyForm = ({ existingProperty }) => {
     }));
   };
 
-  const handleFotosChange = (e) => {
+  const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     const imageUrls = files.map((file) => URL.createObjectURL(file));
     setPreviewImages((prev) => [...prev, ...imageUrls]);
-    handleChange("fotos", files);
+    handleChange("imagens", files);
   };
 
-  const handleVideoUrlChange = (index, event) => {
+  const handleVideoChange = (index, value) => {
     const updatedVideos = [...formData.videos];
-    updatedVideos[index] = event.target.value;
+    updatedVideos[index] = value;
     handleChange("videos", updatedVideos);
   };
 
-  const handleAddVideoUrl = () => {
+  const handleAddVideo = () => {
     handleChange("videos", [...formData.videos, ""]);
+  };
+
+  const handleRemoveVideo = (index) => {
+    const updatedVideos = formData.videos.filter((_, i) => i !== index);
+    handleChange("videos", updatedVideos);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Enviando dados do formulário:", formData);
-      const fotoUrls = await uploadImagesToCloudinary(formData.fotos);
+      const fotos = await uploadImagesToCloudinary(formData.imagens);
       const payload = {
         ...formData,
-        fotos: fotoUrls,
-        videos: formData.videos.filter((url) => url.trim() !== ""),
+        imagens: fotos,
+        valorVenda: parseFloat(formData.valorVenda.replace(",", ".")) || 0,
+        valorLocacao: parseFloat(formData.valorLocacao.replace(",", ".")) || 0,
+        vlCondominio: parseFloat(formData.vlCondominio.replace(",", ".")) || 0,
+        vlIptu: parseFloat(formData.vlIptu.replace(",", ".")) || 0,
       };
-
-      if (existingProperty) {
-        await updateImovel(existingProperty.id, payload);
-      } else {
-        await addProperty(payload);
-      }
-
+  
+      await onSave(payload);
       alert("Imóvel salvo com sucesso!");
-      setFormData({
-        nmTitulo: "",
-        dsDescricao: "",
-        vlPreco: "",
-        dsLocalizacao: "",
-        tpImovel: "venda",
-        nrTamanho: "",
-        nrQuartos: "",
-        nrBanheiros: "",
-        nrVagasGaragem: "",
-        nrSuites: "",
-        stDisponibilidade: true,
-        vlCondominio: "",
-        videos: [""],
-        fotos: [],
-      });
-      setPreviewImages([]);
-      setNewVideos([]);
-    } catch (error) {
-      console.error("Erro ao salvar imóvel:", error);
-      setError("Erro ao salvar imóvel. Tente novamente.");
+    } catch (err) {
+      console.error("Erro ao salvar imóvel:", err);
+      setError("Erro ao salvar o imóvel. Tente novamente.");
     }
   };
 
@@ -210,79 +201,191 @@ const PropertyForm = ({ existingProperty }) => {
     <FormContainer onSubmit={handleSubmit}>
       <h2>{existingProperty ? "Editar Imóvel" : "Cadastrar Novo Imóvel"}</h2>
 
-      <Section>
-        <h3>Dados do Imóvel</h3>
-        <InputGroup>
-          <Label>Título</Label>
-          <Input
-            type="text"
-            value={formData.nmTitulo}
-            onChange={(e) => handleChange("nmTitulo", e.target.value)}
-            required
+      {/* Tipo do imóvel */}
+      <InputGroup>
+        <Label>Tipo</Label>
+        <Select
+          value={formData.tipo}
+          onChange={(e) => handleChange("tipo", e.target.value)}
+        >
+          <option value="venda">Venda</option>
+          <option value="locacao">Locação</option>
+          <option value="vendaLocacao">Venda e Locação</option>
+        </Select>
+      </InputGroup>
+
+      {/* Endereço */}
+      <InputGroup>
+        <Label>Endereço</Label>
+        <Input
+          type="text"
+          value={formData.endereco}
+          onChange={(e) => handleChange("endereco", e.target.value)}
+          required
+          placeholder="Digite o endereço completo"
+        />
+      </InputGroup>
+
+      {/* Valores financeiros */}
+      <InputGroup>
+        <Label>Valor de Venda</Label>
+        <Input
+          type="text"
+          value={formData.valorVenda}
+          onChange={(e) => handleChange("valorVenda", e.target.value)}
+          placeholder="Preço para venda do imóvel"
+        />
+      </InputGroup>
+
+      <InputGroup>
+        <Label>Valor de Locação</Label>
+        <Input
+          type="text"
+          value={formData.valorLocacao}
+          onChange={(e) => handleChange("valorLocacao", e.target.value)}
+          placeholder="Preço para locação do imóvel"
+        />
+      </InputGroup>
+
+      <InputGroup>
+        <Label>Valor do Condomínio</Label>
+        <Input
+          type="text"
+          value={formData.vlCondominio}
+          onChange={(e) => handleChange("vlCondominio", e.target.value)}
+          placeholder="Preço do condomínio do imóvel"
+        />
+      </InputGroup>
+
+      <InputGroup>
+        <Label>Valor do IPTU</Label>
+        <Input
+          type="text"
+          value={formData.vlIptu}
+          onChange={(e) => handleChange("vlIptu", e.target.value)}
+          placeholder="Valor do IPTU do imóvel"
+        />
+      </InputGroup>
+
+      {/* Informações do imóvel */}
+      <InputGroup>
+        <Label>Quartos</Label>
+        <Input
+          type="number"
+          value={formData.quartos}
+          onChange={(e) => handleChange("quartos", e.target.value)}
+          placeholder="Quantidade de quartos"
+        />
+      </InputGroup>
+
+      <InputGroup>
+        <Label>Banheiros</Label>
+        <Input
+          type="number"
+          value={formData.banheiros}
+          onChange={(e) => handleChange("banheiros", e.target.value)}
+          placeholder="Quantidade de banheiros"
+        />
+      </InputGroup>
+
+      <InputGroup>
+        <Label>Vagas de Garagem</Label>
+        <Input
+          type="number"
+          value={formData.vagas}
+          onChange={(e) => handleChange("vagas", e.target.value)}
+          placeholder="Quantidade de vagas de garagem"
+        />
+      </InputGroup>
+
+      <InputGroup>
+        <Label>Suítes</Label>
+        <Input
+          type="number"
+          value={formData.suites}
+          onChange={(e) => handleChange("suites", e.target.value)}
+          placeholder="Quantidade de suítes"
+        />
+      </InputGroup>
+
+      <InputGroup>
+        <Label>Metragem (m²)</Label>
+        <Input
+          type="number"
+          value={formData.metrosQuadrados}
+          onChange={(e) => handleChange("metrosQuadrados", e.target.value)}
+          placeholder="Tamanho do imóvel em metros quadrados"
+        />
+      </InputGroup>
+
+      {/* Outros campos */}
+      <InputGroup>
+        <Label>Título</Label>
+        <Input
+          type="text"
+          value={formData.titulo}
+          onChange={(e) => handleChange("titulo", e.target.value)}
+          placeholder="Digite o título do imóvel"
+        />
+      </InputGroup>
+
+      <InputGroup>
+        <Label>Descrição</Label>
+        <Textarea
+          value={formData.descricao}
+          onChange={(e) => handleChange("descricao", e.target.value)}
+          placeholder="Descreva o imóvel"
+        />
+      </InputGroup>
+
+      {/* Mídias */}
+      <InputGroup>
+        <Label>Imagens</Label>
+        <FileInput
+          type="file"
+          multiple
+          accept="image/*"
+          onChange={handleFileChange}
+        />
+        {previewImages.length > 0 && (
+          <Carousel
+            images={previewImages.map((src) => ({
+              src,
+              alt: "Imagem do Imóvel",
+            }))}
           />
-        </InputGroup>
+        )}
+      </InputGroup>
 
-        <InputGroup>
-          <Label>Descrição</Label>
-          <Textarea
-            value={formData.dsDescricao}
-            onChange={(e) => handleChange("dsDescricao", e.target.value)}
-            rows="5"
-            required
-          />
-        </InputGroup>
-
-        <InputGroup>
-          <Label>Preço</Label>
-          <Input
-            type="number"
-            value={formData.vlPreco}
-            onChange={(e) => handleChange("vlPreco", e.target.value)}
-            required
-          />
-        </InputGroup>
-
-        <InputGroup>
-          <Label>Localização</Label>
-          <Input
-            type="text"
-            value={formData.dsLocalizacao}
-            onChange={(e) => handleChange("dsLocalizacao", e.target.value)}
-            required
-          />
-        </InputGroup>
-      </Section>
-
-      <Section>
-        <h3>Mídias</h3>
-        <MediaContainer>
-          <Carousel images={previewImages.map((src) => ({ src, alt: "Imagem" }))} />
-          <FileInput type="file" multiple accept="image/*" onChange={handleFotosChange} />
-        </MediaContainer>
-
-        {newVideos.map((video, index) => (
-          <VideoPlayer key={index} videoUrl={video} />
-        ))}
-        <InputGroup>
-          <Label>Adicionar Vídeo</Label>
-          {formData.videos.map((url, index) => (
-            <Input
+      <InputGroup>
+        <Label>URLs de Vídeos do YouTube</Label>
+        {Array.isArray(formData.videos) &&
+          formData.videos.map((video, index) => (
+            <div
               key={index}
-              type="text"
-              value={url}
-              placeholder="URL do vídeo"
-              onChange={(event) => handleVideoUrlChange(index, event)}
-            />
+              style={{ display: "flex", alignItems: "center", gap: "10px" }}
+            >
+              <Input
+                type="text"
+                value={video}
+                onChange={(e) => handleVideoChange(index, e.target.value)}
+                placeholder="URL do vídeo do YouTube"
+              />
+              <Button type="button" onClick={() => handleRemoveVideo(index)}>
+                Remover
+              </Button>
+            </div>
           ))}
-          <Button type="button" onClick={handleAddVideoUrl}>
-            Adicionar outro vídeo
-          </Button>
-        </InputGroup>
-      </Section>
+        <AddVideoButton type="button" onClick={handleAddVideo}>
+          Adicionar outro vídeo
+        </AddVideoButton>
+      </InputGroup>
 
-      <Button type="submit">{existingProperty ? "Salvar Alterações" : "Cadastrar"}</Button>
+      <Button type="submit">
+        {existingProperty ? "Salvar Alterações" : "Cadastrar Imóvel"}
+      </Button>
 
-      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </FormContainer>
   );
 };

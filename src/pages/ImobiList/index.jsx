@@ -101,11 +101,13 @@ const ImobiList = () => {
                 <Card
                   key={property.id}
                   id={property.id}
-                  titulo={property.titulo} // Adicione o título corretamente
-                  tipo={property.tipo} // Tipo do imóvel
+                  tipo={property.tipo} // Pode ser "venda", "locacao" ou "venda_locacao"
                   endereco={property.endereco}
-                  valor={property.valor} // Não formate aqui
-                  imagens={property.imagens} // Passe todas as imagens
+                  valorVenda={property.valorVenda || null} // Novo campo para venda
+                  valorLocacao={property.valorLocacao || null} // Novo campo para locação
+                  condominio={property.condominio || null} // Novo campo para condomínio
+                  iptu={property.iptu || null} // Novo campo para IPTU
+                  imagens={property.imagens || []} // Passe todas as imagens
                   quartos={property.quartos}
                   banheiros={property.banheiros}
                   vagas={property.vagas}

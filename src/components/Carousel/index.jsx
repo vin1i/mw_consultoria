@@ -27,17 +27,21 @@ const Carousel = ({ images }) => {
 
   return (
     <Slider {...settings}>
-      {images.map((image, index) => (
+      {images.map((item, index) => (
         <SlideContainer key={index}>
-          <img
-            src={image.src}
-            alt={image.alt}
-            onError={(e) =>
-              (e.target.src =
-                "https://via.placeholder.com/800x400?text=Imagem+Indisponível")
-            }
-          />
-          {image.caption && <p>{image.caption}</p>}
+          {item.type === "video" ? (
+            <iframe
+              width="100%"
+              height="400px"
+              src={item.src.replace("watch?v=", "embed/")} // Formata a URL do YouTube
+              title="Vídeo do imóvel"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          ) : (
+            <img src={item.src} alt={item.alt} />
+          )}
         </SlideContainer>
       ))}
     </Slider>
