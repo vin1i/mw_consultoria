@@ -8,6 +8,7 @@ import {
   deleteImovel,
 } from "../Admin/services/propertyService";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
   max-width: 1200px;
@@ -68,10 +69,15 @@ function PropertyPage() {
   const handleAdd = async (newProperty) => {
     try {
       await addProperty(newProperty);
-      fetchProperties(); // Atualizar lista
-      setShowForm(false);
+      toast.success("Imóvel cadastrado com sucesso!", { autoClose: 8000 });
+      
+      setTimeout(() => {
+        fetchProperties(); // Atualiza a lista após 3 segundos
+        setShowForm(false);
+      }, 3000); // 3 segundos para o *toast* ser exibido
     } catch (error) {
       console.error("Erro ao adicionar imóvel:", error);
+      toast.error("Erro ao cadastrar o imóvel. Tente novamente.", { autoClose: 10000 });
     }
   };
 
@@ -101,25 +107,15 @@ function PropertyPage() {
       <Button onClick={() => setShowForm(true)}>Adicionar Imóvel</Button>
       {showForm && (
         <PropertyForm
-          existingProperty={{
-            ...selectedProperty,
-            vlCondominio: selectedProperty?.vlCondominio || 0,
-            vlIptu: selectedProperty?.vlIptu || 0,
-            valorVenda: selectedProperty?.valorVenda || 0,
-            valorLocacao: selectedProperty?.valorLocacao || 0,
-          }}
+          existingProperty={selectedProperty}
           onSave={(updatedProperty) => {
-            console.log(
-              "Dados enviados para salvar (onSave):",
-              updatedProperty
-            ); // Adicione este log
             selectedProperty
               ? handleEdit(updatedProperty)
               : handleAdd(updatedProperty);
           }}
           onCancel={() => {
-            setShowForm(false);
-            setSelectedProperty(null);
+            setShowForm(false); // Fecha o formulário
+            setSelectedProperty(null); // Limpa o imóvel selecionado
           }}
         />
       )}

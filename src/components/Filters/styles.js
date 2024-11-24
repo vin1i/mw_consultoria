@@ -16,10 +16,15 @@ export const FiltersContainer = styled.div`
   }
 `;
 
+export const FieldContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Espaço entre o label e o campo */
+`;
+
 export const Label = styled.label`
   font-weight: bold;
   color: #333;
-  margin-bottom: 0.5rem;
   font-size: 1rem;
 `;
 

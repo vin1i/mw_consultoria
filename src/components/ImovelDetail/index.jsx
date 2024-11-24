@@ -9,6 +9,7 @@ import {
   Features,
   Description,
   WhatsAppButton,
+  CarouselWrapper,
 } from "./styles";
 import {
   FaBath,
@@ -90,7 +91,9 @@ const ImobiDetails = () => {
   return (
     <Wrapper>
       {/* Carrossel de Imagens e Vídeo */}
-      <Carousel images={images} />
+      <CarouselWrapper>
+        <Carousel images={images} />
+      </CarouselWrapper>
 
       {/* Informações do Imóvel */}
       <ContentContainer>
@@ -116,22 +119,22 @@ const ImobiDetails = () => {
         </Features>
         {/* Seção de preços */}
         <Price>
-          {property.valor !== undefined && (
+          {property.valorVenda !== undefined && (
             <p>
               <strong>Valor do Imóvel:</strong> R${" "}
-              {property.valor.toLocaleString("pt-BR")}
+              {property.valorVenda.toLocaleString("pt-BR")}
             </p>
           )}
-          {property.condominio !== undefined && (
+          {property.vlCondominio !== undefined && (
             <p>
               <strong>Condomínio:</strong> R${" "}
-              {property.condominio.toLocaleString("pt-BR")}
+              {property.vlCondominio.toLocaleString("pt-BR")}
             </p>
           )}
-          {property.iptu !== undefined && (
+          {property.vlIptu !== undefined && (
             <p>
               <strong>IPTU:</strong> R${" "}
-              {property.iptu.toLocaleString("pt-BR")}
+              {property.vlIptu.toLocaleString("pt-BR")}
             </p>
           )}
         </Price>

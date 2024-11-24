@@ -37,6 +37,7 @@ export const ContentContainer = styled.div`
 export const Title = styled.h1`
   font-size: 24px;
   color: #333;
+  margin-top: 10px;
 `;
 
 export const Address = styled.p`
@@ -55,6 +56,7 @@ export const Features = styled.div`
     align-items: center;
     font-size: 16px;
     gap: 5px;
+    margin: 5px 0;
   }
 
   @media (max-width: 768px) {
@@ -73,6 +75,10 @@ export const Price = styled.p`
   @media (max-width: 768px) {
     font-size: 18px;
   }
+`;
+
+export const CarouselWrapper = styled.div`
+  margin-bottom: 30px;
 `;
 
 

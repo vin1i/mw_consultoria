@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { getImoveis, deleteImovel } from "../services/propertyService";
 import styled from "styled-components";
 import Carousel from "../../../components/Carousel";
+import Swal from "sweetalert2";
 
 const PropertyList = ({ onEdit, onDelete }) => {
   const [properties, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const cloudinaryCloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 
   useEffect(() => {
     async function fetchProperties() {
@@ -24,14 +23,39 @@ const PropertyList = ({ onEdit, onDelete }) => {
   }, []);
 
   const confirmDelete = async (id) => {
-    if (window.confirm("Tem certeza de que deseja excluir este imóvel?")) {
+    const result = await Swal.fire({
+      title: "Você tem certeza?",
+      text: "Esta ação não pode ser desfeita!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "var(--light-green)",
+      cancelButtonColor: "var(--red)",
+      confirmButtonText: "Sim, excluir!",
+      cancelButtonText: "Cancelar",
+    });
+  
+    if (result.isConfirmed) {
       try {
-        await deleteImovel(id);
-        setProperties((prev) => prev.filter((property) => property.id !== id));
+        await deleteImovel(id); // Função para excluir o imóvel
+        setProperties((prev) => prev.filter((property) => property.id !== id)); // Atualiza a lista
+        await Swal.fire({
+          title: "Excluído!",
+          text: "O imóvel foi excluído com sucesso.",
+          icon: "success",
+          confirmButtonColor: "var(--red)", // Personaliza o botão de "OK" no modal de sucesso
+          confirmButtonText: "OK",
+        });
       } catch (error) {
         console.error("Erro ao deletar imóvel:", error);
+        await Swal.fire({
+          title: "Erro!",
+          text: "Não foi possível excluir o imóvel. Tente novamente.",
+          icon: "error",
+          confirmButtonColor: "var(--red)", // Mesma personalização no erro
+          confirmButtonText: "OK",
+        });
       }
-    }
+    }	
   };
 
   return (
@@ -99,6 +123,10 @@ const PropertyList = ({ onEdit, onDelete }) => {
                   {property.descricao || "Não informada"}
                 </p>
               </Details>
+              <ButtonContainer>
+                <ActionButton onClick={() => onEdit(property)}>Editar</ActionButton>
+                <ActionButton onClick={() => confirmDelete(property.id)}>Excluir</ActionButton>
+              </ButtonContainer>
             </Card>
           ))}
         </Grid>

@@ -98,26 +98,16 @@ const SlideContainer = styled.div`
   position: relative;
   text-align: center;
 
-  img {
+  img, iframe {
     width: 100%;
-    height: auto;
+    max-height: 400px; /* Limita a altura do carrossel */
+    object-fit: cover; /* Garante proporção */
     border-radius: 8px;
   }
 
-  p {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
-    font-size: 1.2rem;
-    font-weight: bold;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 5px 10px;
-    border-radius: 4px;
-
-    @media (max-width: 768px) {
-      font-size: 1rem;
+  @media (max-width: 768px) {
+    img, iframe {
+      max-height: 300px; /* Reduz altura para telas menores */
     }
   }
 `;
