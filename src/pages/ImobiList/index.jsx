@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import Card from "../../components/Card";
 import Pagination from "../../components/Pagination";
 import Filters from "../../components/Filters";
-import { Wrapper, Sidebar, ListingsSection } from "./styles";
+import { Wrapper, Sidebar, ListingsSection, PaginationWrapper } from "./styles";
 import { getImoveis } from "../Admin/services/propertyService";
 
 const cloudinaryCloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
@@ -108,7 +108,7 @@ const ImobiList = () => {
         ) {
           return false;
         }
-  
+
         if (
           filters.tipo === "locacao" &&
           property.tipo !== "locacao" &&
@@ -116,7 +116,7 @@ const ImobiList = () => {
         ) {
           return false;
         }
-  
+
         if (
           filters.tipo !== "venda" &&
           filters.tipo !== "locacao" &&
@@ -125,7 +125,7 @@ const ImobiList = () => {
           return false;
         }
       }
-  
+
       // Filtro por quartos
       if (filters.quartos) {
         const quartosFilter = Number(filters.quartos.replace("+", ""));
@@ -137,7 +137,7 @@ const ImobiList = () => {
           return false;
         }
       }
-  
+
       // Filtro por banheiros
       if (filters.banheiros) {
         const banheirosFilter = Number(filters.banheiros.replace("+", ""));
@@ -151,7 +151,7 @@ const ImobiList = () => {
           return false;
         }
       }
-  
+
       // Filtro por vagas
       if (filters.vagas) {
         const vagasFilter = Number(filters.vagas.replace("+", ""));
@@ -163,7 +163,7 @@ const ImobiList = () => {
           return false;
         }
       }
-  
+
       return true;
     });
   }, [imoveis, filters]);
@@ -212,19 +212,28 @@ const ImobiList = () => {
                   endereco={property.endereco}
                   valorVenda={property.valorVenda}
                   valorLocacao={property.valorLocacao}
-                  condominio={Number(property.condominio) || 0} // Converte para número
-                  iptu={Number(property.iptu) || 0} // Converte para número
-                  quartos={Number(property.quartos)} // Converte para número
-                  banheiros={Number(property.banheiros)} // Converte para número
-                  vagas={Number(property.vagas)} // Converte para número
-                  metrosQuadrados={Number(property.metrosQuadrados)} // Converte para número
-                  suites={Number(property.suites)} // Converte para número
+                  condominio={Number(property.condominio) || 0}
+                  iptu={Number(property.iptu) || 0}
+                  quartos={Number(property.quartos)}
+                  banheiros={Number(property.banheiros)}
+                  vagas={Number(property.vagas)}
+                  metrosQuadrados={Number(property.metrosQuadrados)}
+                  suites={Number(property.suites)}
                   imagens={property.imagens || []}
                   descricao={property.descricao}
                 />
               ))
             ) : (
               <p>Nenhum imóvel encontrado com os filtros aplicados.</p>
+            )}
+            {totalPages > 1 && (
+              <PaginationWrapper>
+                <Pagination
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  onPageChange={(page) => setCurrentPage(page)}
+                />
+              </PaginationWrapper>
             )}
           </ListingsSection>
         </>

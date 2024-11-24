@@ -9,7 +9,7 @@ export const PaginationContainer = styled.div`
   gap: 8px; /* Adiciona espaço entre os botões */
 
   @media (max-width: 768px) {
-    gap: 4px;
+    gap: 4px; 
   }
 `;
 
@@ -18,7 +18,7 @@ export const PageButton = styled.button`
   padding: 8px 12px;
   font-size: 16px;
   border: none;
-  background-color: ${({ $isActive }) => ($isActive ? "#555" : "#ddd")};
+  background-color: ${({ $isActive }) => ($isActive ? "var(--red)" : "var(--grey)")};
   color: ${({ $isActive }) => ($isActive ? "#fff" : "#333")};
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
@@ -26,7 +26,8 @@ export const PageButton = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: ${({ disabled }) => (!disabled ? "#aaa" : "#ddd")};
+    background-color: ${({ disabled, $isActive }) =>
+      !disabled ? ($isActive ? "var(--dark-red)" : "#aaa") : "#ddd"};
   }
 
   @media (max-width: 768px) {
