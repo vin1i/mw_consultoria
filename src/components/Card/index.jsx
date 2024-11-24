@@ -23,7 +23,6 @@ import ImageCarousel from "../ImageCarousel";
 
 const Card = ({
   id,
-  tipo,
   endereco,
   valorVenda,
   valorLocacao,
@@ -55,7 +54,7 @@ const Card = ({
         <ImageCarousel images={imagens} cloudinaryBaseUrl={cloudinaryBaseUrl} />
       </div>
       <InfoContainer>
-        <Title>{titulo || tipo}</Title>
+        <Title>{titulo || "Sem título"}</Title>
         <Address>
           <FaMapMarkerAlt /> {endereco}
         </Address>
@@ -83,26 +82,40 @@ const Card = ({
         </Features>
         {/* Seção de preços */}
         <Price>
-          {valorVenda && (
+          {valorVenda > 0 && (
             <p>
-              <strong>Venda:</strong> R$ {valorVenda.toLocaleString("pt-BR")}
+              <strong>Venda: </strong>
+              {parseFloat(valorVenda).toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
             </p>
           )}
-          {valorLocacao && (
+          {valorLocacao > 0 && (
             <p>
-              <strong>Locação:</strong> R${" "}
-              {valorLocacao.toLocaleString("pt-BR")}
+              <strong>Locação: </strong>
+              {parseFloat(valorLocacao).toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
             </p>
           )}
-          {condominio && (
+          {condominio > 0 && (
             <p>
-              <strong>Condomínio:</strong> R${" "}
-              {condominio.toLocaleString("pt-BR")}
+              <strong>Condomínio: </strong>
+              {parseFloat(condominio).toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
             </p>
           )}
-          {iptu && (
+          {iptu > 0 && (
             <p>
-              <strong>IPTU:</strong> R$ {iptu.toLocaleString("pt-BR")}
+              <strong>IPTU: </strong>
+              {parseFloat(iptu).toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
             </p>
           )}
         </Price>
@@ -116,7 +129,10 @@ Card.propTypes = {
   id: PropTypes.string.isRequired,
   titulo: PropTypes.string,
   endereco: PropTypes.string.isRequired,
-  valor: PropTypes.number.isRequired,
+  valorVenda: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  valorLocacao: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  condominio: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  iptu: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   imagens: PropTypes.arrayOf(PropTypes.string).isRequired,
   quartos: PropTypes.number,
   banheiros: PropTypes.number,

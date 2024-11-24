@@ -101,6 +101,7 @@ const ImobiList = () => {
                 <Card
                   key={property.id}
                   id={property.id}
+                  titulo= {property.titulo}
                   tipo={property.tipo} // Pode ser "venda", "locacao" ou "venda_locacao"
                   endereco={property.endereco}
                   valorVenda={property.valorVenda || null} // Novo campo para venda

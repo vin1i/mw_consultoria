@@ -31,7 +31,7 @@ export const addProperty = async (propertyData) => {
       dt_criacao: new Date().toISOString(),
     };
 
-    console.log("Dados formatados para Firestore:", newPropertyData); // Adicione este log
+    console.log("Dados formatados para Firestore:", newPropertyData);
     const docRef = await addDoc(propertyCollection, newPropertyData);
     return docRef.id;
   } catch (error) {
@@ -40,23 +40,21 @@ export const addProperty = async (propertyData) => {
   }
 };
 
-// Função para obter todos os imóveis
 export const getImoveis = async () => {
   try {
     const querySnapshot = await getDocs(propertyCollection);
 
     const imoveis = querySnapshot.docs.map((doc) => {
       const data = doc.data();
-      console.log("Dados brutos recebidos do Firestore:", data); // Adicione este log
-
+      console.log("Imóvel recebido do Firebase:", JSON.stringify(data, null, 2)); // Adicione este log para inspecionar os dados
       return {
         id: doc.id,
         tipo: data.tipo || "Indefinido",
         endereco: data.endereco || "Não informado",
         valorVenda: data.valorVenda || 0,
         valorLocacao: data.valorLocacao || 0,
-        vlCondominio: data.vlCondominio || 0,
-        vlIptu: data.vlIptu || 0,
+        condominio: data.vlCondominio || 0,
+        iptu: data.vlIptu || 0,
         quartos: data.quartos || 0,
         banheiros: data.banheiros || 0,
         vagas: data.vagas || 0,
@@ -64,14 +62,14 @@ export const getImoveis = async () => {
         metrosQuadrados: data.metrosQuadrados || 0,
         descricao: data.descricao || "Não informada",
         disponibilidade: data.disponibilidade || "Não informado",
-        titulo: data.titulo || "Sem título",
+        titulo: data.titulo || "Sem título", // Verifique se 'titulo' existe aqui
         imagens: data.imagens || [],
         videos: data.videos || [],
         dt_criacao: data.dt_criacao || "",
       };
     });
 
-    console.log("Imóveis formatados:", imoveis); // Adicione este log
+    console.log("Imóveis formatados para uso:", JSON.stringify(imoveis, null, 2));
     return imoveis;
   } catch (error) {
     console.error("Erro ao buscar imóveis:", error.message);
