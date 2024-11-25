@@ -3,146 +3,16 @@ import styled from "styled-components";
 export const Container = styled.div`
   background-color: #ffffff;
   width: 100%;
-  min-height: 400px;
+  padding: 30px 20px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
+  justify-content: space-around;
+  align-items: flex-start;
 
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
-    gap: 30px; /* Espaço entre os elementos */
-  }
-`;
-
-export const SocialMedia = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  span {
-    color: var(--black);
-    font-size: 1.4rem;
-
-    @media (max-width: 768px) {
-      text-align: center;
-    }
-  }
-
-  .social-icons {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 30px;
-    margin-top: 10px;
-
-    .social-icon {
-      transition: all 0.3s ease-in-out;
-
-      a {
-        color: var(--red);
-        transition: color 0.3s ease-in-out;
-
-        &:hover {
-          color: var(--dark-red);
-        }
-
-        svg {
-          width: 30px;
-          height: 30px;
-        }
-      }
-    }
-
-    @media (max-width: 768px) {
-      justify-content: center; /* Centraliza os ícones */
-      gap: 20px;
-    }
-  }
-`;
-
-export const ContactInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-
-  span {
-    color: var(--red);
-    font-size: 2.6rem;
-
-    @media (max-width: 768px) {
-      text-align: center;
-    }
-  }
-
-  a {
-    color: var(--black);
-    text-decoration: none;
-    font-size: 1.3rem;
-    margin-top: 5px;
-
-    &:hover {
-      color: var(--red);
-    }
-
-    @media (max-width: 768px) {
-      text-align: center;
-    }
-  }
-`;
-
-export const PhoneInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-
-  span {
-    color: var(--black);
-    font-size: 2.6rem;
-
-    @media (max-width: 768px) {
-      text-align: center;
-      font-size: 2rem;
-    }
-  }
-
-  a {
-    color: var(--black);
-    font-size: 1.45rem;
-    text-decoration: none;
-    margin-bottom: 10px;
-
-    @media (max-width: 768px) {
-      text-align: center;
-    }
-  }
-`;
-
-export const WhatsAppButton = styled.a`
-  background-color: var(--white);
-  color: var(--black);
-  padding: 10px 24px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  text-decoration: none;
-  border: 2px solid var(--black);
-  transition: background-color 0.3s ease;
-  border-radius: 8px;
-
-  &:hover {
-    background-color: var(--grey);
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-    font-size: 1rem;
-    padding: 8px;
+    gap: 20px;
+    text-align: center;
   }
 `;
 
@@ -150,6 +20,77 @@ export const RedLine = styled.div`
   background-color: var(--red);
   height: 3px;
   width: 100%;
+`;
+
+export const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @media (max-width: 768px) {
+    align-items: center;
+  }
+`;
+
+export const SectionTitle = styled.h3`
+  color: var(--red);
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+`;
+
+export const LinkList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  .phone-number {
+    color: var(--black);
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  a {
+    color: var(--black);
+    text-decoration: none;
+    font-size: 1.3rem;
+
+    &:hover {
+      color: var(--red);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .phone-number {
+      font-size: 1.8rem;
+    }
+
+    a {
+      font-size: 1.1rem;
+    }
+  }
+`;
+
+export const SocialMedia = styled.div`
+  display: flex;
+  gap: 20px;
+
+  a {
+    color: var(--black);
+    font-size: 1.6rem;
+
+    &:hover {
+      color: var(--red);
+    }
+  }
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    gap: 15px;
+  }
 `;
 
 export const FooterBar = styled.div`
@@ -173,8 +114,8 @@ export const WhatsAppButtonRedondo = styled.a`
   background-color: var(--light-green);
   color: var(--white);
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -187,9 +128,95 @@ export const WhatsAppButtonRedondo = styled.a`
   }
 
   @media (max-width: 768px) {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     bottom: 15px;
     right: 15px;
+  }
+`;
+
+export const QRButton = styled.button`
+  background-color: var(--red);
+  color: var(--white);
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: auto;
+  max-width: 150px;
+  margin: 0 auto;
+  margin-top: 20px;
+
+  &:hover {
+    background-color: var(--dark-red);
+  }
+
+  @media (max-width: 768px) {
+    max-width: 140px;
+    gap: 8px;
+    padding: 6px 13px;
+  }
+`;
+
+export const QRModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+export const QRCodeContainer = styled.div`
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s;
+  max-width: 400px;
+  width: 90%;
+
+  h3 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: var(--black);
+  }
+
+  button {
+    background-color: var(--red);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: var(--dark-red);
+    }
+  }
+`;
+
+export const QRCodeImage = styled.img`
+  width: 250px;
+  height: auto;
+  margin: 20px auto;
+  display: block;
+
+  @media (max-width: 768px) {
+    width: 200px;
   }
 `;
