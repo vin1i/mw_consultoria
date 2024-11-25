@@ -1,5 +1,5 @@
 import React from "react";
-import imagem from "../../assets/MarisaWebberFoto.png";
+import imagem from "../../assets/MarisaWebberFotoNova.jpg";
 import seta from "../../assets/Seta.png";
 import Diferencial from "./Diferencial";
 import { Arrow, Container, Image, Text } from "./styles";

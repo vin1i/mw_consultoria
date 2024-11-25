@@ -1,12 +1,40 @@
-import React from "react";
-import { Container, TextContainer, Text, Logo } from "./DiferencialStyles";
+import React, { useState, useEffect, useRef } from "react";
+import { Container, TextContainer, Text, Logo, TransitionLine, LogoTop } from "./DiferencialStyles";
 import imagem from "../../assets/Faixa.png";
 import logo from "../../assets/MarisaWebberLogo2.png";
 
 const Diferencial = () => {
+  const [isVisible, setIsVisible] = useState(false); // Estado para controlar a visibilidade
+  const containerRef = useRef(null); // Referência ao container
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true); // Define que o elemento está visível
+        } else {
+          setIsVisible(false); // Reseta o estado quando o elemento sai da tela
+        }
+      },
+      { threshold: 0.5 } // Define que 50% do elemento deve estar visível
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current); // Observa o container
+    }
+
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current); // Limpa o observador ao desmontar
+      }
+    };
+  }, []);
+
   return (
-    <Container background={imagem}>
+    <Container ref={containerRef} background={imagem}>
       <TextContainer>
+        <LogoTop src={logo} alt="Logo da MW Consultoria" />
+        <TransitionLine isVisible={isVisible} />
         <Text>
           <p>
             Nosso diferencial está no atendimento único e dedicado. Cada cliente

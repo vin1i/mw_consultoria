@@ -31,7 +31,7 @@ export const Container = styled.div`
 
 export const Text = styled.div`
   font-size: 30px;
-  background-color: rgba(156, 25, 43, 0.75);
+  background-color: rgba(156, 25, 43, 0.75); /* Fundo com transparência */
   color: var(--white);
   padding: 30px 20px;
   position: absolute;
@@ -42,7 +42,8 @@ export const Text = styled.div`
   max-width: 55%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end; /* Alinhamento à direita */
+  text-align: right; /* Texto alinhado à direita */
 
   @media (max-width: 1024px) {
     font-size: 24px;
@@ -60,8 +61,8 @@ export const Text = styled.div`
     font-size: 16px;
     padding: 15px 8px;
     max-width: 90%;
-    align-items: center;
-    text-align: center;
+    align-items: flex-end; /* Mantém o texto alinhado à direita */
+    text-align: right; /* Mantém o texto alinhado à direita */
   }
 `;
 

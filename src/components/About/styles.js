@@ -15,7 +15,11 @@ export const Container = styled.div`
   }
 
   @media (max-width: 768px) {
+    flex-direction: column; /* Empilha os elementos */
+    align-items: center;
+    justify-content: center;
     padding: 20px;
+    gap: 20px; /* Reduz o espaçamento entre os elementos */
   }
 `;
 
@@ -32,46 +36,40 @@ export const Image = styled.img`
   @media (max-width: 768px) {
     max-width: 100%;
     margin-bottom: 20px;
+    border-radius: 10px; /* Adiciona cantos arredondados */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Adiciona um leve sombreado */
   }
 `;
 
 export const Text = styled.div`
   width: 570px;
   padding: 30px 0 0 50px;
-  font-size: 1.6rem;
 
   h1 {
-    position: relative;
-    margin-bottom: 40px;
     font-size: 2.5rem;
-  }
-
-  h1::after {
-    content: "";
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 38%;
-    height: 2px;
-    background-color: var(--black);
+    margin-bottom: 20px;
+    color: var(--red); /* Adiciona destaque com a cor vermelha */
   }
 
   h3 {
     font-size: 2rem;
     margin-top: 10px;
     margin-bottom: 25px;
+    font-weight: 500;
+    color: var(--black); /* Mantém um contraste forte */
   }
 
   p {
     font-size: 1.6rem;
     margin-bottom: 20px;
     line-height: 1.5;
+    color: var(--black); /* Garante legibilidade */
   }
 
   @media (max-width: 1024px) {
     padding: 0 20px;
     text-align: center;
-    width: 100%;
+    width: 90%;
 
     h1 {
       font-size: 2rem;
@@ -88,6 +86,20 @@ export const Text = styled.div`
 
   @media (max-width: 768px) {
     padding: 0;
+    width: 100%;
+
+    h1 {
+      font-size: 1.8rem;
+    }
+
+    h3 {
+      font-size: 1.6rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      line-height: 1.4;
+    }
   }
 `;
 
@@ -98,5 +110,11 @@ export const Arrow = styled.img`
 
   @media (max-width: 1024px) {
     display: none;
+  }
+
+  @media (max-width: 768px) {
+    display: block; /* Mostra a seta no mobile */
+    width: 50px; /* Reduz o tamanho */
+    margin: 20px auto; /* Centraliza */
   }
 `;

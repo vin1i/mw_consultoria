@@ -1,4 +1,14 @@
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
+
+/* Animação para a linha crescer */
+const growLine = keyframes`
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+`;
 
 export const Container = styled.div`
   display: flex;
@@ -13,16 +23,38 @@ export const Container = styled.div`
   background-repeat: no-repeat;
   position: relative;
 
-  @media (max-width: 1024px) {
-    padding: 20px;
-    min-height: 100vh;
-  }
-
   @media (max-width: 768px) {
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     padding: 20px 10px;
     min-height: auto;
+    background-image: none;
+    background-color: var(--white);
+  }
+`;
+
+export const TransitionLine = styled.div`
+  width: 0;
+  height: 4px;
+  background-color: var(--red);
+  margin: 20px 0;
+
+  ${(props) =>
+    props.isVisible &&
+    css`
+      animation: ${growLine} 1s ease-in-out forwards;
+    `}
+`;
+
+export const LogoTop = styled.img`
+  max-width: 200px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    max-width: 150px;
   }
 `;
 
@@ -39,16 +71,22 @@ export const TextContainer = styled.div`
 
   @media (max-width: 768px) {
     padding: 10px;
+    width: 90%;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
     width: 100%;
   }
 `;
 
 export const Text = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   line-height: 1.8;
 
   p {
     margin-bottom: 20px;
+    color: var(--black);
   }
 
   @media (max-width: 1024px) {
@@ -58,7 +96,13 @@ export const Text = styled.div`
 
   @media (max-width: 768px) {
     font-size: 1.2rem;
+    line-height: 1.5;
     text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+    line-height: 1.4;
   }
 `;
 
@@ -69,7 +113,6 @@ export const Logo = styled.img`
   display: block;
 
   @media (max-width: 768px) {
-    margin-top: 30px;
-    max-width: 200px;
+    display: none;
   }
 `;
