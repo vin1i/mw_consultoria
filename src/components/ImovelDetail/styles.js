@@ -6,12 +6,13 @@ export const Wrapper = styled.div`
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
-  background: #f8f9fa;
+  background: var(--white);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
     padding: 15px;
+    margin: 20px;
   }
 `;
 
@@ -36,44 +37,64 @@ export const ContentContainer = styled.div`
 
 export const Title = styled.h1`
   font-size: 24px;
-  color: #333;
+  color: var(--black);
   margin-top: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 
 export const Address = styled.p`
   font-size: 18px;
-  color: #777;
+  color: var(--red);
+
+  @media (max-width: 768px) {
+    font-size: 15px;
+  }
 `;
 
 export const Features = styled.div`
   display: flex;
-  gap: 15px;
   flex-wrap: wrap;
-  color: #555;
+  gap: 85px;
+  font-size: 16px;
+  color: var(--black);
+  margin: 6px 0;
 
   p {
     display: flex;
     align-items: center;
-    font-size: 16px;
     gap: 5px;
     margin: 5px 0;
   }
 
+  svg {
+    color: var(--red);
+  }
+
   @media (max-width: 768px) {
-    gap: 10px;
-    p {
-      font-size: 14px;
+    font-size: 14px;
+    gap: 6px;
+
+    svg {
+      color: var(--red);
     }
   }
 `;
 
-export const Price = styled.p`
-  font-size: 22px;
+export const Price = styled.div`
+  font-size: 18px;
   font-weight: bold;
   color: var(--red);
 
-  @media (max-width: 768px) {
-    font-size: 18px;
+  p {
+    margin: 0;
+    font-size: 20px;
+
+    @media (max-width: 768px) {
+      font-size: 16px;
+    }
   }
 `;
 
@@ -96,9 +117,8 @@ export const WhatsAppButton = styled.a`
   text-decoration: none;
   padding: 10px 20px;
   border-radius: 25px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
-  transition: background-color 0.3s;
   width: fit-content;
 
   &:hover {
@@ -107,5 +127,15 @@ export const WhatsAppButton = styled.a`
 
   svg {
     margin-left: 10px;
+    font-size: 20px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    padding: 8px 15px;
+
+    svg {
+      font-size: 18px;
+    }
   }
 `;

@@ -21,17 +21,18 @@ import {
 } from "react-icons/fa";
 import Carousel from "../Carousel";
 import { getImovelById } from "../../services/firebase/firestoreService";
+import { useLoading } from "../../context/LoadingContext";
 
 const ImobiDetails = () => {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { setIsLoading, isLoading } = useLoading();
 
   useEffect(() => {
     const fetchProperty = async () => {
+      setIsLoading(true);
       try {
         const propertyData = await getImovelById(id);
-        console.log("Detalhes do imóvel recebidos da API:", propertyData); // Debug
         if (propertyData) {
           setProperty(propertyData);
         } else {
@@ -40,14 +41,14 @@ const ImobiDetails = () => {
       } catch (error) {
         console.error("Erro ao buscar imóvel:", error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchProperty();
-  }, [id]);
+  }, [id, setIsLoading]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <Wrapper>
         <p style={{ textAlign: "center", fontSize: "18px", color: "#555" }}>
@@ -61,10 +62,16 @@ const ImobiDetails = () => {
   }
 
   if (!property) {
-    return <p>Imóvel não encontrado.</p>;
+    return (
+      <Wrapper>
+        <p style={{ textAlign: "center", fontSize: "18px", color: "#555" }}>
+          Imóvel não encontrado.
+        </p>
+      </Wrapper>
+    );
   }
 
-  // Verifique e formate as imagens
+  // Formata as imagens
   const images = property.imagens?.length
     ? property.imagens.map((img) => ({
         src: img.startsWith("http")
@@ -79,9 +86,8 @@ const ImobiDetails = () => {
         },
       ];
 
-  // Adicione o vídeo como o último slide, se existir
   if (property.videos?.length > 0) {
-    const videoURL = property.videos[0]; // Considerando que há um vídeo disponível
+    const videoURL = property.videos[0];
     images.push({
       src: videoURL,
       type: "video",
@@ -90,12 +96,9 @@ const ImobiDetails = () => {
 
   return (
     <Wrapper>
-      {/* Carrossel de Imagens e Vídeo */}
       <CarouselWrapper>
         <Carousel images={images} />
       </CarouselWrapper>
-
-      {/* Informações do Imóvel */}
       <ContentContainer>
         <Title>{property.titulo || property.tipo || "Sem Título"}</Title>
         <Address>{property.endereco || "Endereço não informado"}</Address>
@@ -117,7 +120,7 @@ const ImobiDetails = () => {
             <FaDoorClosed /> {property.suites} suítes
           </p>
         </Features>
-        {/* Seção de preços */}
+
         <Price>
           {property.valorVenda !== undefined && (
             <p>
@@ -138,11 +141,11 @@ const ImobiDetails = () => {
             </p>
           )}
         </Price>
+
         <Description style={{ whiteSpace: "pre-wrap" }}>
           {property.descricao || "Descrição não disponível."}
         </Description>
 
-        {/* Botão de WhatsApp */}
         <WhatsAppButton
           href={`https://api.whatsapp.com/send?phone=5511999999999&text=Ol%C3%A1,%20gostaria%20de%20saber%20mais%20sobre%20o%20im%C3%B3vel%20${
             property.titulo || property.tipo
@@ -154,9 +157,7 @@ const ImobiDetails = () => {
           } localizado em ${property.endereco}`}
         >
           Fale conosco!
-          <FaWhatsapp
-            style={{ color: "white", fontSize: "25px", marginLeft: "10px" }}
-          />
+          <FaWhatsapp />
         </WhatsAppButton>
       </ContentContainer>
     </Wrapper>
