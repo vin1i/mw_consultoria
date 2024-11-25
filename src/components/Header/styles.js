@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  padding: 25px 150px;
+  padding: 20px 100px; /* Espaçamento maior para desktop */
   height: 100px;
   display: flex;
   justify-content: space-between;
@@ -10,10 +10,7 @@ export const Container = styled.div`
   background-color: var(--white);
 
   @media (max-width: 768px) {
-    padding: 10px 20px;
-    flex-direction: column;
-    align-items: flex-start;
-    position: relative;
+    justify-content: center;
   }
 `;
 
@@ -24,42 +21,6 @@ export const Logo = styled.div`
   }
 `;
 
-export const HamburgerButton = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  color: var(--black);
-  cursor: pointer;
-
-  @media (max-width: 768px) {
-    display: block;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-  }
-`;
-
-export const MenuContainer = styled.div`
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-
-  @media (max-width: 768px) {
-    display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
-    flex-direction: column;
-    position: absolute;
-    top: 80px;
-    left: 0;
-    width: 100%;
-    background-color: var(--white);
-    border-top: 3px solid var(--red);
-    padding: 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  }
-`;
-
 export const Menu = styled.div`
   ul {
     list-style: none;
@@ -67,33 +28,26 @@ export const Menu = styled.div`
     padding: 0;
     display: flex;
 
-    @media (max-width: 768px) {
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-    }
-  }
-  li {
-    margin-right: 40px;
-    cursor: pointer;
-    padding: 10px;
+    li {
+      margin-right: 40px;
+      cursor: pointer;
+      padding: 10px;
 
-    @media (max-width: 768px) {
-      margin-right: 0;
-      margin-bottom: 20px;
-      text-align: center;
-      width: 100%;
+      &:hover {
+        color: var(--red);
+      }
     }
 
-    &:hover {
-      color: var(--red);
+    span {
+      font-size: 1.4rem;
+      font-family: "Myriad Pro", sans-serif;
+      font-weight: 500;
+      font-stretch: condensed;
     }
-  }
-  span {
-    font-size: 1.4rem;
-    font-family: 'Myriad Pro', sans-serif;
-    font-weight: 500;
-    font-stretch: condensed;
+
+    @media (max-width: 768px) {
+      display: none; /* Esconde o menu na parte superior no mobile */
+    }
   }
 `;
 
@@ -109,9 +63,77 @@ export const SocialLinks = styled.div`
     &:hover {
       color: var(--red);
     }
+  }
 
-    @media (max-width: 768px) {
-      margin-right: 10px;
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+export const BottomNav = styled.div`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--white);
+    border-top: 1px solid var(--grey);
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
+    z-index: 1000;
+  }
+`;
+
+export const BottomNavItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--black);
+  cursor: pointer;
+
+  svg {
+    margin-bottom: 5px;
+    color: var(--black);
+    transition: color 0.3s ease;
+  }
+
+  &:hover {
+    svg {
+      color: var(--red);
+    }
+
+    span {
+      color: var(--red);
     }
   }
+
+  span {
+    font-size: 0.7rem;
+    font-family: "Myriad Pro", sans-serif;
+  }
+`;
+
+export const NavItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--red);
+  }
+`;
+
+export const NavIcon = styled.div`
+  font-size: 1.2rem;
+`;
+
+export const NavText = styled.div`
+  font-size: 0.9rem;
+  text-transform: lowercase;
 `;

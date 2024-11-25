@@ -135,7 +135,7 @@ export const WhatsAppButtonRedondo = styled.a`
   @media (max-width: 768px) {
     width: 50px;
     height: 50px;
-    bottom: 15px;
+    bottom: 75px;
     right: 15px;
   }
 `;
