@@ -9,9 +9,9 @@ export const Container = styled.div`
   align-items: flex-start;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    flex-direction: column; /* Empilha os elementos no mobile */
     align-items: center;
-    gap: 20px;
+    gap: 20px; /* Espaçamento entre as seções */
     text-align: center;
   }
 `;
@@ -25,10 +25,11 @@ export const RedLine = styled.div`
 export const Section = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
 
   @media (max-width: 768px) {
     align-items: center;
+    gap: 10px;
   }
 `;
 
@@ -53,13 +54,15 @@ export const LinkList = styled.div`
     font-weight: bold;
   }
 
-  a {
+  a,
+  span {
     color: var(--black);
     text-decoration: none;
     font-size: 1.3rem;
+    cursor: pointer; /* Garante que o cursor seja de clique */
 
     &:hover {
-      color: var(--red);
+      color: var(--red); /* Cor muda no hover */
     }
   }
 
@@ -68,11 +71,12 @@ export const LinkList = styled.div`
       font-size: 1.8rem;
     }
 
-    a {
+    a,
+    span {
       font-size: 1.1rem;
     }
   }
-`;
+`;  
 
 export const SocialMedia = styled.div`
   display: flex;
@@ -81,6 +85,7 @@ export const SocialMedia = styled.div`
   a {
     color: var(--black);
     font-size: 1.6rem;
+    cursor: pointer;
 
     &:hover {
       color: var(--red);
@@ -148,10 +153,8 @@ export const QRButton = styled.button`
   gap: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
-  width: auto;
   max-width: 150px;
-  margin: 0 auto;
-  margin-top: 20px;
+  margin: 10px auto;
 
   &:hover {
     background-color: var(--dark-red);
@@ -159,7 +162,7 @@ export const QRButton = styled.button`
 
   @media (max-width: 768px) {
     max-width: 140px;
-    gap: 8px;
+    gap: 6px;
     padding: 6px 13px;
   }
 `;
@@ -183,7 +186,6 @@ export const QRCodeContainer = styled.div`
   border-radius: 12px;
   text-align: center;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-  animation: fadeIn 0.3s;
   max-width: 400px;
   width: 90%;
 
@@ -211,12 +213,12 @@ export const QRCodeContainer = styled.div`
 `;
 
 export const QRCodeImage = styled.img`
-  width: 250px;
+  width: 300px;
   height: auto;
   margin: 20px auto;
   display: block;
 
   @media (max-width: 768px) {
-    width: 200px;
+    width: 250px;
   }
 `;
