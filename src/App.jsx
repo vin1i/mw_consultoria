@@ -4,12 +4,15 @@ import Global from "./styles/Global";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AppContextProvider } from "./context/AppContext";
+import { LoadingProvider } from "./context/LoadingContext";
 
 function App() {
   return (
     <Fragment>
       <AppContextProvider>
-        <RouterApp />
+        <LoadingProvider>
+          <RouterApp />
+        </LoadingProvider>
       </AppContextProvider>
       <Global />
       <ToastContainer />

@@ -1,23 +1,23 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useContext } from "react";
 import Card from "../../components/Card";
 import Pagination from "../../components/Pagination";
 import Filters from "../../components/Filters";
 import { Wrapper, Sidebar, ListingsSection, PaginationWrapper } from "./styles";
 import { getImoveis } from "../Admin/services/propertyService";
+import { useLoading } from "../../context/LoadingContext";
 
 const cloudinaryCloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 
 const ImobiList = () => {
   const [imoveis, setImoveis] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(""); // Estado para erro
+  const [error, setError] = useState("");
   const [filters, setFilters] = useState({
     tipo: "",
     quartos: "",
     banheiros: "",
     vagas: "",
   });
-  console.log("Imóveis recebidos:", imoveis);
+  const { setIsLoading, isLoading } = useLoading();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
@@ -69,37 +69,25 @@ const ImobiList = () => {
     },
   ];
 
-  // Função para validar a imagem
-  const getImageURL = (images) => {
-    if (images && images.length > 0 && images[0]) {
-      const url = `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/${images[0]}`;
-      console.log("URL gerada para a imagem:", url); // Verificar a URL gerada
-      return url;
-    }
-    console.warn("Sem imagens válidas. Usando placeholder.");
-    return "https://via.placeholder.com/300x200?text=Sem+Imagem";
-  };
-
   useEffect(() => {
     const fetchImoveis = async () => {
-      setLoading(true);
+      setIsLoading(true);
       try {
         const fetchedImoveis = await getImoveis();
         setImoveis(fetchedImoveis);
       } catch (error) {
         console.error("Erro ao buscar imóveis:", error);
+        setError("Erro ao carregar os imóveis. Tente novamente.");
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchImoveis();
-  }, []);
+  }, [setIsLoading]);
 
-  // Aplica os filtros
   const filteredProperties = useMemo(() => {
     return imoveis.filter((property) => {
-      // Filtro por tipo
       if (filters.tipo) {
         if (
           filters.tipo === "venda" &&
@@ -126,7 +114,6 @@ const ImobiList = () => {
         }
       }
 
-      // Filtro por quartos
       if (filters.quartos) {
         const quartosFilter = Number(filters.quartos.replace("+", ""));
         const quartosProperty = Number(property.quartos);
@@ -138,7 +125,6 @@ const ImobiList = () => {
         }
       }
 
-      // Filtro por banheiros
       if (filters.banheiros) {
         const banheirosFilter = Number(filters.banheiros.replace("+", ""));
         const banheirosProperty = Number(property.banheiros);
@@ -152,7 +138,6 @@ const ImobiList = () => {
         }
       }
 
-      // Filtro por vagas
       if (filters.vagas) {
         const vagasFilter = Number(filters.vagas.replace("+", ""));
         const vagasProperty = Number(property.vagas);
@@ -168,7 +153,6 @@ const ImobiList = () => {
     });
   }, [imoveis, filters]);
 
-  // Paginação
   const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
 
   const currentProperties = useMemo(() => {
@@ -176,33 +160,30 @@ const ImobiList = () => {
     return filteredProperties.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredProperties, currentPage, itemsPerPage]);
 
-  // Atualiza filtros e reseta a página
-  const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
-    setCurrentPage(1); // Resetar para a primeira página ao aplicar filtros
-  };
-
   useEffect(() => {
     setCurrentPage(1);
   }, [filters]);
 
   return (
     <Wrapper>
-      {loading ? (
-        <p>Carregando imóveis...</p>
-      ) : error ? (
+      {error ? (
         <p style={{ color: "red" }}>{error}</p>
       ) : (
         <>
-          <Sidebar>
-            <Filters
-              filters={filters}
-              onFilterChange={setFilters}
-              filterOptions={filterOptions}
-            />
-          </Sidebar>
-          <ListingsSection>
-            {currentProperties.length > 0 ? (
+        <Sidebar>
+          <Filters
+            filters={filters}
+            onFilterChange={setFilters}
+            filterOptions={filterOptions}
+          />
+        </Sidebar>
+        <ListingsSection>
+          {imoveis.length === 0 ? (
+            // Exibe mensagem apenas quando não há imóveis
+            <p>Nenhum imóvel encontrado com os filtros aplicados.</p>
+          ) : (
+            currentProperties.length > 0 ? (
+              // Exibe os imóveis se houver resultados
               currentProperties.map((property) => (
                 <Card
                   key={property.id}
@@ -224,21 +205,23 @@ const ImobiList = () => {
                 />
               ))
             ) : (
+              // Exibe mensagem se os filtros não retornarem resultados
               <p>Nenhum imóvel encontrado com os filtros aplicados.</p>
-            )}
-            {totalPages > 1 && (
-              <PaginationWrapper>
-                <Pagination
-                  totalPages={totalPages}
-                  currentPage={currentPage}
-                  onPageChange={(page) => setCurrentPage(page)}
-                />
-              </PaginationWrapper>
-            )}
-          </ListingsSection>
-        </>
-      )}
-    </Wrapper>
+            )
+          )}
+          {totalPages > 1 && (
+            <PaginationWrapper>
+              <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
+            </PaginationWrapper>
+          )}
+        </ListingsSection>
+      </>
+    )}
+  </Wrapper>
   );
 };
 
