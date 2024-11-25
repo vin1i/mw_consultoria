@@ -13,13 +13,18 @@ export const FiltersContainer = styled.div`
   @media (max-width: 768px) {
     max-width: 100%;
     padding: 0.5rem;
+    gap: 0.8rem;
   }
 `;
 
 export const FieldContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem; /* Espaço entre o label e o campo */
+  gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    gap: 0.3rem;
+  }
 `;
 
 export const Label = styled.label`

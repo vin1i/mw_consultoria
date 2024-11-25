@@ -5,11 +5,12 @@ export const PaginationContainer = styled.div`
   align-items: center;
   justify-content: center;
   margin: 20px 0;
-  flex-wrap: wrap; /* Para garantir boa exibição em telas pequenas */
-  gap: 8px; /* Adiciona espaço entre os botões */
+  flex-wrap: wrap;
+  gap: 8px;
 
   @media (max-width: 768px) {
-    gap: 4px; 
+    gap: 4px;
+    margin: 10px 0;
   }
 `;
 
@@ -27,11 +28,14 @@ export const PageButton = styled.button`
 
   &:hover {
     background-color: ${({ disabled, $isActive }) =>
-      !disabled ? ($isActive ? "var(--dark-red)" : "#aaa") : "#ddd"};
+      !disabled ? ($isActive ? "var(--dark-red)" : "#ccc") : "#ddd"};
   }
 
   @media (max-width: 768px) {
     font-size: 14px;
     padding: 6px 10px;
+    min-width: 36px;
+    text-align: center;
   }
 `;
+
