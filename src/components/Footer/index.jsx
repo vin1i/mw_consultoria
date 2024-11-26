@@ -20,7 +20,7 @@ import {
   FaLinkedin,
   FaQrcode,
 } from "react-icons/fa";
-import QRCode from "../../assets/QrCodeMarisaWeber.jpeg"; // Substitua pelo caminho real da imagem
+import QRCode from "../../assets/QrCodeMarisaWeber.jpeg";
 import { useNavigate } from "react-router-dom";
 
 const Footer = ({ id }) => {
@@ -46,7 +46,7 @@ const Footer = ({ id }) => {
   return (
     <>
       <RedLine />
-      <Container id={id}>
+      <Container id="footer">
         <Section>
           <SectionTitle>Redes Sociais</SectionTitle>
           <SocialMedia>
@@ -97,7 +97,6 @@ const Footer = ({ id }) => {
             <a href="mailto:marisawebbersp@gmail.com">
               marisawebbersp@gmail.com
             </a>
-            {/* Botão QR Code */}
             <QRButton onClick={toggleQR}>
               <FaQrcode size={20} />
               Ver QR Code
