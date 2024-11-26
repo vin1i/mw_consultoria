@@ -12,6 +12,10 @@ const FormContainer = styled.form`
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
 `;
 
 const FormGrid = styled.div`
@@ -21,6 +25,7 @@ const FormGrid = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
 `;
 
@@ -71,9 +76,12 @@ const FileInput = styled.input`
 
 const ButtonGroup = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 10px;
-  margin-top: 20px;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
 
 const Button = styled.button`
@@ -116,6 +124,25 @@ const AddVideoButton = styled.button`
   }
 `;
 
+const PreviewContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+`;
+
+const PreviewImage = styled.img`
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+  }
+`;
 const PropertyForm = ({ existingProperty, onSave }) => {
   const [formData, setFormData] = useState({
     tipo: "venda",
@@ -142,35 +169,28 @@ const PropertyForm = ({ existingProperty, onSave }) => {
 
   useEffect(() => {
     if (existingProperty) {
-      setFormData((prev) => ({
-        ...prev,
+      const formattedProperty = {
         ...existingProperty,
-        videos: existingProperty.videos || [""],
-        vlCondominio: existingProperty.vlCondominio
-          ? existingProperty.vlCondominio.toLocaleString("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            })
-          : "",
-        vlIptu: existingProperty.vlIptu
-          ? existingProperty.vlIptu.toLocaleString("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            })
-          : "",
         valorVenda: existingProperty.valorVenda
-          ? existingProperty.valorVenda.toLocaleString("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            })
+          ? `R$ ${Number(existingProperty.valorVenda).toLocaleString("pt-BR")}`
           : "",
         valorLocacao: existingProperty.valorLocacao
-          ? existingProperty.valorLocacao.toLocaleString("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            })
+          ? `R$ ${Number(existingProperty.valorLocacao).toLocaleString(
+              "pt-BR"
+            )}`
           : "",
-      }));
+        vlCondominio: existingProperty.vlCondominio
+          ? `R$ ${Number(existingProperty.vlCondominio).toLocaleString(
+              "pt-BR"
+            )}`
+          : "",
+        vlIptu: existingProperty.vlIptu
+          ? `R$ ${Number(existingProperty.vlIptu).toLocaleString("pt-BR")}`
+          : "",
+        imagens: existingProperty.imagens || [],
+        videos: existingProperty.videos || [""],
+      };
+      setFormData(formattedProperty);
       setPreviewImages(existingProperty.imagens || []);
     }
   }, [existingProperty]);
@@ -184,9 +204,35 @@ const PropertyForm = ({ existingProperty, onSave }) => {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    const imageUrls = files.map((file) => URL.createObjectURL(file));
-    setPreviewImages((prev) => [...prev, ...imageUrls]);
-    handleChange("imagens", files);
+    const newImageUrls = files.map((file) => URL.createObjectURL(file));
+    setPreviewImages((prev) => [...prev, ...newImageUrls]);
+    handleChange("imagens", [...(formData.imagens || []), ...files]);
+  };
+
+  useEffect(() => {
+    if (existingProperty) {
+      const formattedImages = existingProperty.imagens.map((img) =>
+        img.startsWith("http")
+          ? img
+          : `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload/${img}`
+      );
+
+      setFormData((prev) => ({
+        ...prev,
+        ...existingProperty,
+        imagens: formattedImages,
+      }));
+      setPreviewImages(formattedImages);
+    }
+  }, [existingProperty]);
+
+  const isValidUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
   };
 
   const handleVideoChange = (index, value) => {
@@ -211,8 +257,11 @@ const PropertyForm = ({ existingProperty, onSave }) => {
     );
   };
 
+  const [isSaving, setIsSaving] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSaving(true);
     try {
       const fotos = await uploadImagesToCloudinary(formData.imagens);
       const payload = {
@@ -223,15 +272,39 @@ const PropertyForm = ({ existingProperty, onSave }) => {
         vlCondominio: parseCurrency(formData.vlCondominio),
         vlIptu: parseCurrency(formData.vlIptu),
       };
-
       await onSave(payload);
+      toast.success("Imóvel salvo com sucesso!");
     } catch (err) {
       console.error("Erro ao salvar imóvel:", err);
-      setError("Erro ao salvar o imóvel. Tente novamente.");
-      toast.error("Erro ao salvar o imóvel. Tente novamente.", {
-        autoClose: 15000,
-      });
+      setError(
+        "Erro ao salvar as imagens. Verifique sua conexão ou tente novamente."
+      );
+    } finally {
+      setIsSaving(false);
     }
+  };
+
+  const handleCancel = () => {
+    setFormData({
+      tipo: "venda",
+      endereco: "",
+      valorVenda: "",
+      valorLocacao: "",
+      vlCondominio: "",
+      vlIptu: "",
+      quartos: "",
+      banheiros: "",
+      vagas: "",
+      suites: "",
+      metrosQuadrados: "",
+      descricao: "",
+      disponibilidade: "Disponível",
+      titulo: "",
+      imagens: [],
+      videos: [""],
+      dt_criacao: "",
+    });
+    toast.info("Edição cancelada.");
   };
 
   return (
@@ -240,20 +313,27 @@ const PropertyForm = ({ existingProperty, onSave }) => {
       <FormContainer onSubmit={handleSubmit}>
         <h2>{existingProperty ? "Editar Imóvel" : "Cadastrar Novo Imóvel"}</h2>
         <FormGrid>
-          {/* Tipo do imóvel */}
           <InputGroup>
-            <Label>Tipo</Label>
-            <Select
-              value={formData.tipo}
-              onChange={(e) => handleChange("tipo", e.target.value)}
-            >
-              <option value="venda">Venda</option>
-              <option value="locacao">Locação</option>
-              <option value="vendaLocacao">Venda e Locação</option>
-            </Select>
+            <Label>Imagens</Label>
+            <FileInput
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+            {previewImages.length > 0 && (
+              <PreviewContainer>
+                {previewImages.map((src, index) => (
+                  <PreviewImage
+                    key={index}
+                    src={src}
+                    alt={`Preview ${index + 1}`}
+                  />
+                ))}
+              </PreviewContainer>
+            )}
           </InputGroup>
 
-          {/* Endereço */}
           <InputGroup>
             <Label>Endereço</Label>
             <Input
@@ -265,7 +345,6 @@ const PropertyForm = ({ existingProperty, onSave }) => {
             />
           </InputGroup>
 
-          {/* Valores financeiros */}
           <InputGroup>
             <Label>Valor de Venda</Label>
             <NumericFormat
@@ -277,7 +356,7 @@ const PropertyForm = ({ existingProperty, onSave }) => {
               decimalSeparator=","
               prefix="R$ "
               placeholder="Preço para venda do imóvel"
-              customInput={Input} // Para estilizar com styled-components
+              customInput={Input}
             />
           </InputGroup>
 
@@ -326,7 +405,6 @@ const PropertyForm = ({ existingProperty, onSave }) => {
             />
           </InputGroup>
 
-          {/* Informações do imóvel */}
           <InputGroup>
             <Label>Quartos</Label>
             <Input
@@ -377,7 +455,6 @@ const PropertyForm = ({ existingProperty, onSave }) => {
             />
           </InputGroup>
 
-          {/* Outros campos */}
           <InputGroup>
             <Label>Título</Label>
             <Input
@@ -397,25 +474,6 @@ const PropertyForm = ({ existingProperty, onSave }) => {
             />
           </InputGroup>
 
-          {/* Mídias */}
-          <InputGroup>
-            <Label>Imagens</Label>
-            <FileInput
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handleFileChange}
-            />
-            {previewImages.length > 0 && (
-              <Carousel
-                images={previewImages.map((src) => ({
-                  src,
-                  alt: "Imagem do Imóvel",
-                }))}
-              />
-            )}
-          </InputGroup>
-
           <InputGroup>
             <Label>URLs de Vídeos do YouTube</Label>
             {Array.isArray(formData.videos) &&
@@ -430,6 +488,11 @@ const PropertyForm = ({ existingProperty, onSave }) => {
                     onChange={(e) => handleVideoChange(index, e.target.value)}
                     placeholder="URL do vídeo do YouTube"
                   />
+                  {!isValidUrl(video) && video.length > 0 && (
+                    <p style={{ color: "red", fontSize: "12px" }}>
+                      URL inválida
+                    </p>
+                  )}
                   <Button
                     type="button"
                     onClick={() => handleRemoveVideo(index)}
@@ -445,10 +508,14 @@ const PropertyForm = ({ existingProperty, onSave }) => {
         </FormGrid>
 
         <ButtonGroup>
-          <Button type="submit">
-            {existingProperty ? "Salvar Alterações" : "Cadastrar Imóvel"}
+          <Button type="submit" disabled={isSaving}>
+            {isSaving
+              ? "Salvando..."
+              : existingProperty
+              ? "Salvar Alterações"
+              : "Cadastrar Imóvel"}
           </Button>
-          <CancelButton type="button" onClick={oncancel}>
+          <CancelButton type="button" onClick={handleCancel}>
             Cancelar
           </CancelButton>
         </ButtonGroup>
