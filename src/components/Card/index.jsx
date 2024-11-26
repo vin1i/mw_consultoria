@@ -46,6 +46,7 @@ const Card = ({
         style={{
           flex: 1,
           padding: "8px",
+          paddingBottom: "33px",
           background: "#ffffff",
           borderRadius: "8px",
           overflow: "hidden",

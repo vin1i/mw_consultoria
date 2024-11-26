@@ -72,6 +72,9 @@ export default createGlobalStyle`
         height: 100%;
         width: 100%;
         overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
     }
 
     img {

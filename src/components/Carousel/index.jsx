@@ -22,7 +22,7 @@ const Carousel = ({ images }) => {
     prevArrow: <CustomArrow direction="prev" />,
     autoplay: true,
     autoplaySpeed: 3000,
-    lazyLoad: "progressive", // Alterado para carregamento progressivo
+    lazyLoad: "progressive",
   };
 
   return (
@@ -33,7 +33,7 @@ const Carousel = ({ images }) => {
             <iframe
               width="100%"
               height="400px"
-              src={item.src.replace("watch?v=", "embed/")} // Formata a URL do YouTube
+              src={item.src.replace("watch?v=", "embed/")}
               title="Vídeo do imóvel"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -48,7 +48,6 @@ const Carousel = ({ images }) => {
   );
 };
 
-// Validação de props
 Carousel.propTypes = {
   images: PropTypes.arrayOf(
     PropTypes.shape({
@@ -59,7 +58,6 @@ Carousel.propTypes = {
   ).isRequired,
 };
 
-// Customização das setas
 const CustomArrow = ({ direction, onClick }) => (
   <ArrowButton
     direction={direction}
@@ -70,21 +68,20 @@ const CustomArrow = ({ direction, onClick }) => (
   </ArrowButton>
 );
 
-// Estilos personalizados
 const ArrowButton = styled.button`
   position: absolute;
-  top: 50%; /* Centraliza verticalmente */
-  transform: translateY(-50%); /* Corrige o alinhamento */
-  ${(props) => (props.direction === "next" ? "right: 15px;" : "left: 15px;")} /* Posiciona à esquerda ou direita */
+  top: 50%;
+  transform: translateY(-50%);
+  ${(props) => (props.direction === "next" ? "right: 15px;" : "left: 15px;")}
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
-  width: 40px; /* Tamanho fixo para consistência */
-  height: 40px; /* Tamanho fixo para consistência */
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px; /* Tamanho da seta */
+  font-size: 20px;
   cursor: pointer;
   z-index: 2;
   border-radius: 50%;
@@ -100,14 +97,14 @@ const SlideContainer = styled.div`
 
   img, iframe {
     width: 100%;
-    max-height: 400px; /* Limita a altura do carrossel */
-    object-fit: cover; /* Garante proporção */
+    max-height: 400px;
+    object-fit: cover;
     border-radius: 8px;
   }
 
   @media (max-width: 768px) {
     img, iframe {
-      max-height: 300px; /* Reduz altura para telas menores */
+      max-height: 300px;
     }
   }
 `;

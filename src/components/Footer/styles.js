@@ -105,6 +105,7 @@ export const FooterBar = styled.div`
   text-align: center;
   padding: 10px 0;
   width: 100%;
+  margin-top: auto;
 
   @media (max-width: 768px) {
     font-size: 0.9rem;

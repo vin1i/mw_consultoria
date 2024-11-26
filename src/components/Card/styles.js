@@ -2,6 +2,11 @@ import styled from "styled-components";
 
 export const CardContainer = styled.div`
   display: flex;
+  flex: 1,
+  padding: "8px",
+  background: "#ffffff",
+  borderRadius: "8px",
+  overflow: "hidden",
   flex-direction: row;
   background: #fff;
   border-radius: 8px;
@@ -144,7 +149,6 @@ export const Price = styled.div`
     }
   }
 `;
-
 
 export const Description = styled.p`
   font-size: 13px;
