@@ -63,7 +63,6 @@ const Header = () => {
         </ul>
       </Menu>
 
-      {/* Redes Sociais apenas para desktop */}
       <SocialLinks>
         <a
           href="https://www.instagram.com/example"
@@ -95,7 +94,6 @@ const Header = () => {
         </a>
       </SocialLinks>
 
-      {/* Barra de navegação inferior no mobile */}
       <BottomNav>
         <BottomNavItem onClick={() => scrollToSection("inicio")}>
           <FaHome size={24} />
