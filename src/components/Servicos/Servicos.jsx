@@ -16,24 +16,24 @@ import Servico6 from "../../assets/Serviços06.png";
 import { FaWhatsapp } from "react-icons/fa";
 
 const Servicos = () => {
-  const [isTitleVisible, setIsTitleVisible] = useState(false); // Estado para controlar a visibilidade
-  const titleRef = useRef(null); // Referência ao título
+  const [isTitleVisible, setIsTitleVisible] = useState(false);
+  const titleRef = useRef(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsTitleVisible(entry.isIntersecting); // Atualiza o estado com base na visibilidade
+        setIsTitleVisible(entry.isIntersecting);
       },
-      { threshold: 0.5 } // Define que 50% do título deve estar visível para disparar a animação
+      { threshold: 0.5 }
     );
 
     if (titleRef.current) {
-      observer.observe(titleRef.current); // Observa o título
+      observer.observe(titleRef.current);
     }
 
     return () => {
       if (titleRef.current) {
-        observer.unobserve(titleRef.current); // Remove o observador ao desmontar
+        observer.unobserve(titleRef.current);
       }
     };
   }, []);
@@ -50,8 +50,8 @@ const Servicos = () => {
             <h3>Avaliação de Preço de Imóveis</h3>
             <p>
               Com um profundo conhecimento do mercado, oferecemos avaliações
-              precisas e atualizadas para garantir que você tenha total confiança
-              no valor do seu imóvel, seja para compra ou venda.
+              precisas e atualizadas para garantir que você tenha total
+              confiança no valor do seu imóvel, seja para compra ou venda.
             </p>
           </Text>
         </ServicoCard>
@@ -125,7 +125,11 @@ const Servicos = () => {
             comece a planejar o seu próximo passo com confiança.
           </p>
         </div>
-        <WhatsAppButton href="https://api.whatsapp.com/send?phone=5511999999999&text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20os%20servi%C3%A7os%20da%20MW%20Consultoria.">
+        <WhatsAppButton
+          href="https://api.whatsapp.com/send?phone=5511973738808"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Fale conosco!
           <FaWhatsapp style={{ color: "white", fontSize: "25px" }} />
         </WhatsAppButton>

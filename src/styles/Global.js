@@ -72,9 +72,6 @@ export default createGlobalStyle`
         height: 100%;
         width: 100%;
         overflow-x: hidden;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
     }
 
     img {
@@ -91,43 +88,41 @@ export default createGlobalStyle`
         text-decoration: none;
     }
 
-    /* Estilização do Scrollbar */
     ::-webkit-scrollbar {
-        width: 8px; /* Largura da barra de rolagem */
+        width: 8px;
     }
 
     ::-webkit-scrollbar-track {
-        background: transparent; /* Fundo transparente */
+        background: transparent;
     }
 
     ::-webkit-scrollbar-thumb {
-        background-color: var(--red); /* Cor da barra */
+        background-color: var(--red);
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        background-color: var(--dark-red); /* Cor ao passar o mouse */
+        background-color: var(--dark-red);
     }
 
     ::-webkit-scrollbar-corner {
-        background: transparent; /* Remove canto inferior em telas pequenas */
+        background: transparent;
     }
 
-    /* Media Queries */
     @media (max-width: 768px) {
         ::-webkit-scrollbar {
-            display: none; /* Oculta a barra de rolagem no Chrome, Safari e Edge */
+            display: none;
         }
 
-        -ms-overflow-style: none; /* Oculta a barra no IE e Edge */
-        scrollbar-width: none; /* Oculta a barra no Firefox */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
 
         body {
             font-size: var(--font-size-medium);
-            padding: 0 10px; /* Garante espaçamento lateral em telas pequenas */
+            padding: 0 10px;
         }
 
         h1, h2, h3 {
-            font-size: 1.2em; /* Ajusta o tamanho dos headings */
+            font-size: 1.2em;
         }
 
         p {
@@ -137,11 +132,11 @@ export default createGlobalStyle`
 
     @media (max-width: 480px) {
         ::-webkit-scrollbar {
-            display: none; /* Oculta a barra de rolagem no Chrome, Safari e Edge */
+            display: none;
         }
 
-        -ms-overflow-style: none; /* Oculta a barra no IE e Edge */
-        scrollbar-width: none; /* Oculta a barra no Firefox */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
 
         body {
             font-size: var(--font-size-small);
@@ -159,7 +154,8 @@ export default createGlobalStyle`
 
         button {
             font-size: var(--font-size-small);
-            padding: 10px 15px; /* Reduz tamanho de botões */
+            padding: 10px 15px;
         }
     }
 `;
+

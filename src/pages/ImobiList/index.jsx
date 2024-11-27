@@ -179,11 +179,9 @@ const ImobiList = () => {
         </Sidebar>
         <ListingsSection>
           {imoveis.length === 0 ? (
-            // Exibe mensagem apenas quando não há imóveis
             <p>Nenhum imóvel encontrado com os filtros aplicados.</p>
           ) : (
             currentProperties.length > 0 ? (
-              // Exibe os imóveis se houver resultados
               currentProperties.map((property) => (
                 <Card
                   key={property.id}
@@ -205,7 +203,6 @@ const ImobiList = () => {
                 />
               ))
             ) : (
-              // Exibe mensagem se os filtros não retornarem resultados
               <p>Nenhum imóvel encontrado com os filtros aplicados.</p>
             )
           )}

@@ -12,6 +12,11 @@ export const Wrapper = styled.div`
     flex-direction: row;
     align-items: flex-start;
   }
+
+  @media (max-width: 480px) {
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
 `;
 
 export const Sidebar = styled.div`
@@ -25,6 +30,10 @@ export const Sidebar = styled.div`
     width: 25%;
     margin-right: 2rem;
   }
+
+  @media (max-width: 480px) {
+    padding: 0.5rem;
+  }
 `;
 
 export const ListingsSection = styled.div`
@@ -36,6 +45,10 @@ export const ListingsSection = styled.div`
   @media (min-width: 768px) {
     width: 75%;
   }
+
+  @media (max-width: 480px) {
+    gap: 1rem;
+  }
 `;
 
 export const PaginationWrapper = styled.div`
@@ -45,10 +58,14 @@ export const PaginationWrapper = styled.div`
   padding: 1rem 0;
   width: 100%;
   margin-top: 2rem;
-  background-color: #fff;
 
   @media (max-width: 768px) {
     padding: 0.5rem 0;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.2rem;
+    font-size: 0.9rem;
   }
 `;
-
