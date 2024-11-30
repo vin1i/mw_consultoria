@@ -14,14 +14,10 @@ export const uploadImagesToCloudinary = async (files) => {
     return [];
   }
 
-  console.log("Arquivos para upload:", filesArray);
-
   const uploadPromises = filesArray.map(async (file) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", uploadPreset);
-
-    console.log("Enviando arquivo:", file.name, "Tipo:", file.type);
 
     try {
       const response = await fetch(
@@ -34,7 +30,6 @@ export const uploadImagesToCloudinary = async (files) => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Erro ao fazer upload para o Cloudinary:", errorText);
         throw new Error(errorText);
       }
 
@@ -43,8 +38,6 @@ export const uploadImagesToCloudinary = async (files) => {
         console.error("Public ID não retornado pelo Cloudinary.");
         throw new Error("Public ID não retornado.");
       }
-
-      console.log("Upload bem-sucedido para:", data.public_id);
 
       return data.public_id;
     } catch (error) {

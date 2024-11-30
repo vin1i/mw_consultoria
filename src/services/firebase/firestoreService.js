@@ -85,7 +85,6 @@ export const updateImovel = async (id, updatedData) => {
     // Use o nome correto da coleção: "properties"
     const propertyRef = doc(db, "properties", id);
     await updateDoc(propertyRef, updatedData);
-    console.log("Imóvel atualizado com sucesso!");
   } catch (error) {
     console.error("Erro ao atualizar imóvel:", error.message);
     throw new Error(`Falha ao atualizar o imóvel: ${error.message}`);
@@ -95,7 +94,6 @@ export const updateImovel = async (id, updatedData) => {
 export const deleteImovel = async (id) => {
   const confirmDelete = window.confirm("Você tem certeza que deseja excluir este imóvel?");
   if (!confirmDelete) {
-    console.log("Exclusão cancelada.");
     return;
   }
 
@@ -103,7 +101,6 @@ export const deleteImovel = async (id) => {
     // Use o nome correto da coleção: "properties"
     const propertyRef = doc(db, "properties", id);
     await deleteDoc(propertyRef);
-    console.log("Imóvel deletado com sucesso!");
   } catch (error) {
     console.error("Erro ao deletar imóvel:", error);
     throw error;

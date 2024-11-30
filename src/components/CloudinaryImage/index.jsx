@@ -47,8 +47,6 @@ const CloudinaryImage = ({
     .quality("auto")
     .resize(auto().gravity(autoGravity()).width(width).height(height));
 
-  console.log("URL da imagem gerada pelo Cloudinary:", img.toURL());
-
   return (
     <AdvancedImage
       cldImg={img}

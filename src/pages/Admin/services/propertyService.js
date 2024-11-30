@@ -15,7 +15,6 @@ const propertyCollection = collection(db, "properties");
 
 // Função para adicionar um novo imóvel com imagens e vídeos
 export const addProperty = async (propertyData) => {
-  console.log("Dados recebidos para adicionar imóvel:", propertyData); // Adicione este log
   try {
     const imagePublicIds = propertyData.imagens
       ? await uploadImagesToCloudinary(propertyData.imagens)
@@ -31,7 +30,6 @@ export const addProperty = async (propertyData) => {
       dt_criacao: new Date().toISOString(),
     };
 
-    console.log("Dados formatados para Firestore:", newPropertyData);
     const docRef = await addDoc(propertyCollection, newPropertyData);
     return docRef.id;
   } catch (error) {
@@ -46,7 +44,6 @@ export const getImoveis = async () => {
 
     const imoveis = querySnapshot.docs.map((doc) => {
       const data = doc.data();
-      console.log("Imóvel recebido do Firebase:", JSON.stringify(data, null, 2)); // Adicione este log para inspecionar os dados
       return {
         id: doc.id,
         tipo: data.tipo || "Indefinido",
@@ -62,14 +59,13 @@ export const getImoveis = async () => {
         metrosQuadrados: data.metrosQuadrados || 0,
         descricao: data.descricao || "Não informada",
         disponibilidade: data.disponibilidade || "Não informado",
-        titulo: data.titulo || "Sem título", // Verifique se 'titulo' existe aqui
+        titulo: data.titulo || "Sem título",
         imagens: data.imagens || [],
         videos: data.videos || [],
         dt_criacao: data.dt_criacao || "",
       };
     });
 
-    console.log("Imóveis formatados para uso:", JSON.stringify(imoveis, null, 2));
     return imoveis;
   } catch (error) {
     console.error("Erro ao buscar imóveis:", error.message);
@@ -79,7 +75,6 @@ export const getImoveis = async () => {
 
 // Função para atualizar imóvel
 export const updateImovel = async (id, updatedData) => {
-  console.log("Dados recebidos para atualização:", updatedData); // Adicione este log
   try {
     const propertyRef = doc(db, "properties", id);
     const updatedPropertyData = {
@@ -90,7 +85,6 @@ export const updateImovel = async (id, updatedData) => {
       valorLocacao: updatedData.valorLocacao || 0,
     };
 
-    console.log("Dados formatados para Firestore (update):", updatedPropertyData); // Adicione este log
     await updateDoc(propertyRef, updatedPropertyData);
   } catch (error) {
     console.error("Erro ao atualizar imóvel:", error.message);
@@ -98,16 +92,12 @@ export const updateImovel = async (id, updatedData) => {
   }
 };
 
-
-// Função para deletar imóvel
 export const deleteImovel = async (id) => {
   try {
-    console.log("ID do imóvel a ser deletado:", id);
 
     const propertyRef = doc(db, "properties", id);
     await deleteDoc(propertyRef);
 
-    console.log("Imóvel deletado com sucesso!");
   } catch (error) {
     console.error("Erro ao deletar imóvel:", error.message);
     throw error;

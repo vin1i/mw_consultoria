@@ -21,7 +21,6 @@ const PropertyList = ({ onEdit, onDelete }) => {
           ...property,
           imagens: property.imagens.map((img) => generateCloudinaryURL(img)),
         }));
-        console.log("Imóveis formatados para exibição:", formattedProperties); // Debug
         setProperties(formattedProperties);
       } catch (error) {
         console.error("Erro ao carregar propriedades:", error);
