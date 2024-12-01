@@ -18,12 +18,12 @@ const Imobi = ({ imovel }) => {
   const {
     titulo,
     localizacao,
-    preco,
-    metrosQuadrados,
-    quartos,
-    banheiros,
-    suites,
-    vagas,
+    preco = 0,
+    metrosQuadrados = 0,
+    quartos = 0,
+    suites = 0,
+    banheiros = 0,
+    vagas = 0,
     descricao,
     imagens,
   } = imovel;
@@ -42,7 +42,7 @@ const Imobi = ({ imovel }) => {
         <Description>
           <Location>{localizacao || "Localização não disponível"}</Location>
           <Price>
-            {preco
+            {preco > 0
               ? preco.toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
@@ -50,11 +50,11 @@ const Imobi = ({ imovel }) => {
               : "Preço não disponível"}
           </Price>
           <Details>
-            <div>{metrosQuadrados ? `${metrosQuadrados} m²` : "N/A"}</div>
-            <div>{quartos ? `${quartos} quartos` : "N/A"}</div>
-            <div>{banheiros ? `${banheiros} banheiros` : "N/A"}</div>
-            <div>{suites ? `${suites} suíte(s)` : "N/A"}</div>
-            <div>{vagas ? `${vagas} vaga(s)` : "N/A"}</div>
+            <div>{metrosQuadrados > 0 ? `${metrosQuadrados} m²` : "N/A"}</div>
+            <div>{quartos > 0 ? `${quartos} quartos` : "N/A"}</div>
+            <div>{suites > 0 ? `${suites} suíte(s)` : "N/A"}</div>
+            <div>{banheiros > 0 ? `${banheiros} banheiros` : "N/A"}</div>
+            <div>{vagas > 0 ? `${vagas} vaga(s)` : "N/A"}</div>
           </Details>
           {descricao ? (
             descricao.split("\n").map((paragrafo, index) => (
@@ -76,8 +76,8 @@ Imobi.propTypes = {
     preco: PropTypes.number,
     metrosQuadrados: PropTypes.number,
     quartos: PropTypes.number,
-    banheiros: PropTypes.number,
     suites: PropTypes.number,
+    banheiros: PropTypes.number,
     vagas: PropTypes.number,
     descricao: PropTypes.string,
     imagens: PropTypes.arrayOf(PropTypes.string),

@@ -34,7 +34,13 @@ const ImobiDetails = () => {
       try {
         const propertyData = await getImovelById(id);
         if (propertyData) {
-          setProperty(propertyData);
+          setProperty({
+            ...propertyData,
+            valorVenda: propertyData.valorVenda || 0,
+            valorLocacao: propertyData.valorLocacao || 0,
+            vlCondominio: propertyData.vlCondominio || 0,
+            vlIptu: propertyData.vlIptu || 0,
+          });
         } else {
           console.error("Imóvel não encontrado.");
         }
@@ -72,7 +78,7 @@ const ImobiDetails = () => {
   }
 
   const images = property.imagens?.length
-    ? property.imagens.map((img, index) => {
+    ? property.imagens.map((img) => {
         const imageUrl = img.startsWith("http")
           ? img
           : `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload/${img}`;
@@ -89,8 +95,7 @@ const ImobiDetails = () => {
       ];
 
   if (property.videos?.length > 0) {
-    property.videos.forEach((videoURL, index) => {
-
+    property.videos.forEach((videoURL) => {
       let embedURL = "";
 
       if (videoURL.includes("youtube.com/shorts")) {
@@ -98,7 +103,7 @@ const ImobiDetails = () => {
       } else if (videoURL.includes("youtube.com/watch")) {
         embedURL = videoURL.replace("watch?v=", "embed/");
       } else {
-        console.warn(`URL de vídeo inválida ${index + 1}:`, videoURL);
+        console.warn(`URL de vídeo inválida:`, videoURL);
       }
 
       if (embedURL) {
@@ -109,7 +114,6 @@ const ImobiDetails = () => {
       }
     });
   }
-
 
   return (
     <Wrapper>
@@ -122,45 +126,57 @@ const ImobiDetails = () => {
 
         <Features>
           <p>
-            <FaRulerCombined /> {property.metrosQuadrados} m²
+            <FaRulerCombined /> {property.metrosQuadrados || 0} m²
           </p>
           <p>
-            <FaBed /> {property.quartos} quartos
+            <FaBed /> {property.quartos || 0} quartos
           </p>
           <p>
-            <FaBath /> {property.banheiros} banheiros
+            <FaDoorClosed /> {property.suites || 0} suítes
           </p>
           <p>
-            <FaCar /> {property.vagas} vagas
+            <FaBath /> {property.banheiros || 0} banheiros
           </p>
           <p>
-            <FaDoorClosed /> {property.suites} suítes
+            <FaCar /> {property.vagas || 0} vagas
           </p>
         </Features>
 
         <Price>
-          {property.valorVenda !== undefined && (
+          {property.valorVenda > 0 && (
             <p>
-              <strong>Valor do Imóvel:</strong> R${" "}
-              {property.valorVenda.toLocaleString("pt-BR")}
+              <strong>Valor do Imóvel:</strong>{" "}
+              {property.valorVenda.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
             </p>
           )}
-          {property.valorLocacao !== undefined && (
+          {property.valorLocacao > 0 && (
             <p>
-              <strong>Valor da Locação:</strong> R${" "}
-              {property.valorLocacao.toLocaleString("pt-BR")}
+              <strong>Valor da Locação:</strong>{" "}
+              {property.valorLocacao.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
             </p>
           )}
-          {property.vlCondominio !== undefined && (
+          {property.vlCondominio > 0 && (
             <p>
-              <strong>Condomínio:</strong> R${" "}
-              {property.vlCondominio.toLocaleString("pt-BR")}
+              <strong>Condomínio:</strong>{" "}
+              {property.vlCondominio.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
             </p>
           )}
-          {property.vlIptu !== undefined && (
+          {property.vlIptu > 0 && (
             <p>
-              <strong>IPTU:</strong> R${" "}
-              {property.vlIptu.toLocaleString("pt-BR")}
+              <strong>IPTU:</strong>{" "}
+              {property.vlIptu.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
             </p>
           )}
         </Price>
@@ -175,9 +191,6 @@ const ImobiDetails = () => {
           }%20em%20${property.endereco}.`}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label={`Fale conosco sobre o imóvel ${
-            property.titulo || property.tipo
-          } localizado em ${property.endereco}`}
         >
           Fale conosco!
           <FaWhatsapp />
