@@ -210,6 +210,7 @@ const PropertyForm = ({ existingProperty, onSave }) => {
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     const newPreviews = files.map((file) => URL.createObjectURL(file));
+
     setPreviewImages((prev) => [...prev, ...newPreviews]);
     setFormData((prev) => ({
       ...prev,
@@ -226,13 +227,13 @@ const PropertyForm = ({ existingProperty, onSave }) => {
           "https://res.cloudinary.com/dsioklbbq/image/upload/"
         );
       });
-  
+
       setFormData((prev) => ({
         ...prev,
         ...existingProperty,
         imagens: formattedImages, // URLs corrigidas
       }));
-  
+
       setPreviewImages(formattedImages);
     }
   }, [existingProperty]);
@@ -262,7 +263,7 @@ const PropertyForm = ({ existingProperty, onSave }) => {
   };
 
   const isValidImageUrl = (url) => {
-    return url.startsWith("http") && url.includes("res.cloudinary.com");
+    return url.startsWith("http") || url.startsWith("blob:");
   };
 
   const handleRemoveImage = (index) => {
@@ -284,31 +285,30 @@ const PropertyForm = ({ existingProperty, onSave }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      // Identifica novas imagens que precisam ser enviadas para o Cloudinary
       const newImages = formData.imagens.filter((img) => img instanceof File);
       const uploadedImages = await uploadImagesToCloudinary(newImages);
-  
-      // Filtra e normaliza as URLs válidas
+
       const allImages = [
-        ...formData.imagens
-          .filter((img) => typeof img === "string")
-          .map((img) =>
-            img.replace(
-              /(https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)+/,
-              "https://res.cloudinary.com/dsioklbbq/image/upload/"
-            )
-          ),
+        ...formData.imagens.filter((img) => typeof img === "string"),
         ...uploadedImages,
       ];
-  
+
       const payload = {
         ...formData,
-        imagens: allImages, // Somente URLs válidas
+        imagens: allImages,
       };
-  
+
       await onSave(payload);
+
+      // Revoga URLs temporárias
+      previewImages.forEach((url) => {
+        if (url.startsWith("blob:")) {
+          URL.revokeObjectURL(url);
+        }
+      });
+
       toast.success("Imóvel salvo com sucesso!");
     } catch (error) {
       console.error("Erro ao salvar imóvel:", error);
@@ -370,9 +370,14 @@ const PropertyForm = ({ existingProperty, onSave }) => {
                         : "https://via.placeholder.com/80x80?text=Erro"
                     }
                     alt={`Preview ${index + 1}`}
+                    onError={(e) => {
+                      console.error(`Erro ao carregar a imagem: ${src}`);
+                      e.target.src =
+                        "https://via.placeholder.com/80x80?text=Erro";
+                    }}
                   />
                   <button
-                    type="button" // Evita comportamento de envio do formulário
+                    type="button"
                     style={{
                       position: "absolute",
                       top: 0,
