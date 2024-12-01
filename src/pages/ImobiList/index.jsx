@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useContext } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Card from "../../components/Card";
 import Pagination from "../../components/Pagination";
 import Filters from "../../components/Filters";
@@ -8,6 +8,14 @@ import { useLoading } from "../../context/LoadingContext";
 
 const cloudinaryCloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 const cloudinaryBaseUrl = `https://res.cloudinary.com/${cloudinaryCloudName}`;
+
+const normalizeValues = (value) => {
+  if (!value) return 0;
+  if (typeof value === "string") {
+    return parseFloat(value.replace("R$", "").replace(/\./g, "").replace(",", "."));
+  }
+  return value;
+};
 
 const ImobiList = () => {
   const [imoveis, setImoveis] = useState([]);
@@ -75,7 +83,14 @@ const ImobiList = () => {
       setIsLoading(true);
       try {
         const fetchedImoveis = await getImoveis();
-        setImoveis(fetchedImoveis);
+        const normalizedImoveis = fetchedImoveis.map((property) => ({
+          ...property,
+          valorVenda: normalizeValues(property.valorVenda),
+          valorLocacao: normalizeValues(property.valorLocacao),
+          vlCondominio: normalizeValues(property.vlCondominio),
+          vlIptu: normalizeValues(property.vlIptu),
+        }));
+        setImoveis(normalizedImoveis);
       } catch (error) {
         console.error("Erro ao buscar imóveis:", error);
         setError("Erro ao carregar os imóveis. Tente novamente.");
@@ -171,18 +186,17 @@ const ImobiList = () => {
         <p style={{ color: "red" }}>{error}</p>
       ) : (
         <>
-        <Sidebar>
-          <Filters
-            filters={filters}
-            onFilterChange={setFilters}
-            filterOptions={filterOptions}
-          />
-        </Sidebar>
-        <ListingsSection>
-          {imoveis.length === 0 ? (
-            <p>Nenhum imóvel encontrado com os filtros aplicados.</p>
-          ) : (
-            currentProperties.length > 0 ? (
+          <Sidebar>
+            <Filters
+              filters={filters}
+              onFilterChange={setFilters}
+              filterOptions={filterOptions}
+            />
+          </Sidebar>
+          <ListingsSection>
+            {imoveis.length === 0 ? (
+              <p>Nenhum imóvel encontrado com os filtros aplicados.</p>
+            ) : currentProperties.length > 0 ? (
               currentProperties.map((property) => (
                 <Card
                   key={property.id}
@@ -190,41 +204,40 @@ const ImobiList = () => {
                   titulo={property.titulo}
                   tipo={property.tipo}
                   endereco={property.endereco}
-                  valorVenda={parseFloat(property.valorVenda.replace("R$", "").replace(".", "").replace(",", ".")) || 0}
-                  valorLocacao={parseFloat(property.valorLocacao.replace("R$", "").replace(".", "").replace(",", ".")) || 0}
-                  condominio={parseFloat(property.vlCondominio.replace("R$", "").replace(".", "").replace(",", ".")) || 0}
-                  iptu={parseFloat(property.vlIptu) || 0}
+                  valorVenda={property.valorVenda}
+                  valorLocacao={property.valorLocacao}
+                  condominio={property.vlCondominio}
+                  iptu={property.vlIptu}
                   quartos={Number(property.quartos)}
                   banheiros={Number(property.banheiros)}
                   vagas={Number(property.vagas)}
                   metrosQuadrados={Number(property.metrosQuadrados)}
                   suites={Number(property.suites)}
                   cloudinaryBaseUrl={cloudinaryBaseUrl}
-                  imagens={property.imagens.map((img) => 
+                  imagens={property.imagens.map((img) =>
                     img.startsWith("http")
                       ? img
-                      : `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/${img}`
+                      : `${cloudinaryBaseUrl}/image/upload/${img}`
                   )}
                   descricao={property.descricao}
                 />
               ))
             ) : (
               <p>Nenhum imóvel encontrado com os filtros aplicados.</p>
-            )
-          )}
-          {totalPages > 1 && (
-            <PaginationWrapper>
-              <Pagination
-                totalPages={totalPages}
-                currentPage={currentPage}
-                onPageChange={(page) => setCurrentPage(page)}
-              />
-            </PaginationWrapper>
-          )}
-        </ListingsSection>
-      </>
-    )}
-  </Wrapper>
+            )}
+            {totalPages > 1 && (
+              <PaginationWrapper>
+                <Pagination
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  onPageChange={(page) => setCurrentPage(page)}
+                />
+              </PaginationWrapper>
+            )}
+          </ListingsSection>
+        </>
+      )}
+    </Wrapper>
   );
 };
 
