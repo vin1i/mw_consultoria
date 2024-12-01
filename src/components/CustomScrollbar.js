@@ -9,13 +9,13 @@ const CustomScrollbar = ({ children, style }) => {
       autoHideDuration={200}
       style={{
         ...style,
-        overflow: "hidden", // Garante que o scroll padrão não apareça
+        overflow: "hidden",
       }}
       renderThumbVertical={(props) => (
         <div
           {...props}
           style={{
-            backgroundColor: "#9c192b", // Vermelho para o thumb
+            backgroundColor: "#9c192b",
             borderRadius: "50px",
             width: "8px",
           }}
@@ -29,7 +29,7 @@ const CustomScrollbar = ({ children, style }) => {
             bottom: "2px",
             top: "2px",
             borderRadius: "50px",
-            backgroundColor: "transparent", // Fundo transparente
+            backgroundColor: "transparent",
           }}
         />
       )}

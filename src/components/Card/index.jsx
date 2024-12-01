@@ -29,6 +29,7 @@ const Card = ({
   condominio,
   iptu,
   imagens,
+  videos,
   titulo,
   quartos,
   banheiros,
@@ -39,6 +40,10 @@ const Card = ({
 }) => {
   const navigate = useNavigate();
   const cloudinaryBaseUrl = `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}`;
+  const media = [
+    ...(imagens || []).map((img) => ({ src: img, type: "image" })),
+    ...(videos || []).map((vid) => ({ src: vid, type: "video" })),
+  ];
 
   return (
     <CardContainer>
@@ -53,8 +58,8 @@ const Card = ({
         }}
       >
         <ImageCarousel
-          images={imagens || []}
-          cloudinaryBaseUrl={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}`}
+          media={media}
+          cloudinaryBaseUrl={cloudinaryBaseUrl}
         />
       </div>
       <InfoContainer>
@@ -137,6 +142,7 @@ Card.propTypes = {
   condominio: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   iptu: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   imagens: PropTypes.arrayOf(PropTypes.string),
+  videos: PropTypes.arrayOf(PropTypes.string),
   quartos: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   banheiros: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   vagas: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

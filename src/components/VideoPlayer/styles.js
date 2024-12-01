@@ -5,7 +5,7 @@ export const VideoContainer = styled.div`
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  aspect-ratio: 16/9; /* Mantém proporção do vídeo */
+  aspect-ratio: 16/9;
   overflow: hidden;
 
   iframe {
