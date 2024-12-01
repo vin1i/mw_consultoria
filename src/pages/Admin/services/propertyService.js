@@ -1,4 +1,3 @@
-// Importações do Firebase e Firestore
 import { db } from "../../../services/firebase/firebaseConfig";
 import {
   collection,
@@ -8,12 +7,10 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
-import { uploadImagesToCloudinary } from "../../../services/CloudinaryService"; // Importa a função de upload
+import { uploadImagesToCloudinary } from "../../../services/CloudinaryService";
 
-// Criação da referência à coleção 'properties' no Firestore
 const propertyCollection = collection(db, "properties");
 
-// Função para adicionar um novo imóvel com imagens e vídeos
 export const addProperty = async (propertyData) => {
   try {
     const imagePublicIds = propertyData.imagens
@@ -50,7 +47,7 @@ export const getImoveis = async () => {
         valorVenda: data.valorVenda || 0,
         valorLocacao: data.valorLocacao || 0,
         condominio: data.vlCondominio || 0,
-        vlIptu: doc.data().iptu || 0,
+        vlIptu: data.vlIptu || 0,
         quartos: data.quartos || 0,
         banheiros: data.banheiros || 0,
         vagas: data.vagas || 0,

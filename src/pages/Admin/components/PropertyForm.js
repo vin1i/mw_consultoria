@@ -169,34 +169,29 @@ const PropertyForm = ({ existingProperty, onSave }) => {
 
   useEffect(() => {
     if (existingProperty) {
-      const formattedProperty = {
-        ...existingProperty,
-        valorVenda: existingProperty.valorVenda
-          ? `R$ ${Number(existingProperty.valorVenda).toLocaleString("pt-BR")}`
-          : "",
-        valorLocacao: existingProperty.valorLocacao
-          ? `R$ ${Number(existingProperty.valorLocacao).toLocaleString(
-              "pt-BR"
-            )}`
-          : "",
-        vlCondominio: existingProperty.vlCondominio
-          ? `R$ ${Number(existingProperty.vlCondominio).toLocaleString(
-              "pt-BR"
-            )}`
-          : "",
-        vlIptu: existingProperty.vlIptu
-          ? `R$ ${Number(existingProperty.vlIptu).toLocaleString("pt-BR")}`
-          : "",
-        imagens: existingProperty.imagens || [],
-        videos: existingProperty.videos || [""],
-      };
       setFormData((prev) => ({
         ...prev,
-        imagens: existingProperty.imagens || [],
+        valorVenda: existingProperty.valorVenda
+          ? ` ${existingProperty.valorVenda.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}`
+          : "",
+        valorLocacao: existingProperty.valorLocacao
+          ? ` ${existingProperty.valorLocacao.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}`
+          : "",
+        vlCondominio: existingProperty.vlCondominio
+          ? ` ${existingProperty.vlCondominio.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}`
+          : "",
+        vlIptu: existingProperty.vlIptu
+          ? ` ${existingProperty.vlIptu.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}`
+          : "",
       }));
-      setPreviewImages(existingProperty.imagens || []);
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [existingProperty]);
 
@@ -221,7 +216,6 @@ const PropertyForm = ({ existingProperty, onSave }) => {
   useEffect(() => {
     if (existingProperty) {
       const formattedImages = existingProperty.imagens.map((img) => {
-        // Remove qualquer prefixo duplicado
         return img.replace(
           /(https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)+/,
           "https://res.cloudinary.com/dsioklbbq/image/upload/"
@@ -231,7 +225,7 @@ const PropertyForm = ({ existingProperty, onSave }) => {
       setFormData((prev) => ({
         ...prev,
         ...existingProperty,
-        imagens: formattedImages, // URLs corrigidas
+        imagens: formattedImages,
       }));
 
       setPreviewImages(formattedImages);
@@ -277,7 +271,7 @@ const PropertyForm = ({ existingProperty, onSave }) => {
   const parseCurrency = (value) => {
     if (!value) return 0;
     return parseFloat(
-      value.replace("R$ ", "").replace(".", "").replace(",", ".")
+      value.replace("R$ ", "").replace(/\./g, "").replace(",", ".")
     );
   };
 
@@ -297,12 +291,15 @@ const PropertyForm = ({ existingProperty, onSave }) => {
 
       const payload = {
         ...formData,
+        valorVenda: parseCurrency(formData.valorVenda),
+        valorLocacao: parseCurrency(formData.valorLocacao),
+        vlCondominio: parseCurrency(formData.vlCondominio),
+        vlIptu: parseCurrency(formData.vlIptu),
         imagens: allImages,
       };
 
       await onSave(payload);
 
-      // Revoga URLs temporárias
       previewImages.forEach((url) => {
         if (url.startsWith("blob:")) {
           URL.revokeObjectURL(url);
@@ -345,6 +342,7 @@ const PropertyForm = ({ existingProperty, onSave }) => {
       <FormContainer onSubmit={handleSubmit}>
         <h2>{existingProperty ? "Editar Imóvel" : "Cadastrar Novo Imóvel"}</h2>
         <FormGrid>
+          {/* Imagens */}
           <InputGroup>
             <Label>Imagens</Label>
             <Input
@@ -402,6 +400,18 @@ const PropertyForm = ({ existingProperty, onSave }) => {
             </PreviewContainer>
           </InputGroup>
 
+          {/* Título */}
+          <InputGroup>
+            <Label>Título</Label>
+            <Input
+              type="text"
+              value={formData.titulo}
+              onChange={(e) => handleChange("titulo", e.target.value)}
+              placeholder="Digite o título do imóvel"
+            />
+          </InputGroup>
+
+          {/* Endereço */}
           <InputGroup>
             <Label>Endereço</Label>
             <Input
@@ -413,6 +423,58 @@ const PropertyForm = ({ existingProperty, onSave }) => {
             />
           </InputGroup>
 
+          {/* Características */}
+          <InputGroup>
+            <Label>Metragem (m²)</Label>
+            <Input
+              type="number"
+              value={formData.metrosQuadrados}
+              onChange={(e) => handleChange("metrosQuadrados", e.target.value)}
+              placeholder="Tamanho do imóvel em metros quadrados"
+            />
+          </InputGroup>
+
+          <InputGroup>
+            <Label>Quartos</Label>
+            <Input
+              type="number"
+              value={formData.quartos}
+              onChange={(e) => handleChange("quartos", e.target.value)}
+              placeholder="Quantidade de quartos"
+            />
+          </InputGroup>
+
+          <InputGroup>
+            <Label>Suítes</Label>
+            <Input
+              type="number"
+              value={formData.suites}
+              onChange={(e) => handleChange("suites", e.target.value)}
+              placeholder="Quantidade de suítes"
+            />
+          </InputGroup>
+
+          <InputGroup>
+            <Label>Banheiros</Label>
+            <Input
+              type="number"
+              value={formData.banheiros}
+              onChange={(e) => handleChange("banheiros", e.target.value)}
+              placeholder="Quantidade de banheiros"
+            />
+          </InputGroup>
+
+          <InputGroup>
+            <Label>Vagas de Garagem</Label>
+            <Input
+              type="number"
+              value={formData.vagas}
+              onChange={(e) => handleChange("vagas", e.target.value)}
+              placeholder="Quantidade de vagas de garagem"
+            />
+          </InputGroup>
+
+          {/* Valores financeiros */}
           <InputGroup>
             <Label>Valor de Venda</Label>
             <NumericFormat
@@ -473,66 +535,20 @@ const PropertyForm = ({ existingProperty, onSave }) => {
             />
           </InputGroup>
 
+          {/* Disponibilidade */}
           <InputGroup>
-            <Label>Quartos</Label>
-            <Input
-              type="number"
-              value={formData.quartos}
-              onChange={(e) => handleChange("quartos", e.target.value)}
-              placeholder="Quantidade de quartos"
-            />
+            <Label>Disponibilidade</Label>
+            <Select
+              value={formData.disponibilidade}
+              onChange={(e) => handleChange("disponibilidade", e.target.value)}
+            >
+              <option value="Disponível">Disponível</option>
+              <option value="Indisponível">Indisponível</option>
+              <option value="Reservado">Reservado</option>
+            </Select>
           </InputGroup>
 
-          <InputGroup>
-            <Label>Banheiros</Label>
-            <Input
-              type="number"
-              value={formData.banheiros}
-              onChange={(e) => handleChange("banheiros", e.target.value)}
-              placeholder="Quantidade de banheiros"
-            />
-          </InputGroup>
-
-          <InputGroup>
-            <Label>Vagas de Garagem</Label>
-            <Input
-              type="number"
-              value={formData.vagas}
-              onChange={(e) => handleChange("vagas", e.target.value)}
-              placeholder="Quantidade de vagas de garagem"
-            />
-          </InputGroup>
-
-          <InputGroup>
-            <Label>Suítes</Label>
-            <Input
-              type="number"
-              value={formData.suites}
-              onChange={(e) => handleChange("suites", e.target.value)}
-              placeholder="Quantidade de suítes"
-            />
-          </InputGroup>
-
-          <InputGroup>
-            <Label>Metragem (m²)</Label>
-            <Input
-              type="number"
-              value={formData.metrosQuadrados}
-              onChange={(e) => handleChange("metrosQuadrados", e.target.value)}
-              placeholder="Tamanho do imóvel em metros quadrados"
-            />
-          </InputGroup>
-
-          <InputGroup>
-            <Label>Título</Label>
-            <Input
-              type="text"
-              value={formData.titulo}
-              onChange={(e) => handleChange("titulo", e.target.value)}
-              placeholder="Digite o título do imóvel"
-            />
-          </InputGroup>
-
+          {/* Descrição */}
           <InputGroup>
             <Label>Descrição</Label>
             <Textarea

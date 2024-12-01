@@ -42,6 +42,10 @@ const PropertyList = ({ onEdit, onDelete }) => {
   const formatCurrency = (value) =>
     value ? `R$ ${value.toLocaleString("pt-BR")}` : "Não disponível";
 
+  const availableProperties = properties.filter(
+    (property) => property.disponibilidade !== "Indisponível"
+  );
+
   const confirmDelete = async (id) => {
     const result = await Swal.fire({
       title: "Você tem certeza?",
