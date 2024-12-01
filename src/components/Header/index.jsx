@@ -65,14 +65,14 @@ const Header = () => {
 
       <SocialLinks>
         <a
-          href="https://www.instagram.com/example"
+          href="https://www.instagram.com/consultoramarisawebber?igsh=MThsY29nYmhqbXgybA=="
           target="_blank"
           rel="noopener noreferrer"
         >
           <FaInstagram size={25} />
         </a>
         <a
-          href="https://www.facebook.com/example"
+          href="https://www.facebook.com/Marisa.Webber"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -86,7 +86,7 @@ const Header = () => {
           <FaWhatsapp size={25} />
         </a>
         <a
-          href="https://www.linkedin.com/in/example"
+          href="https://www.linkedin.com/in/marisa-webber-377980329?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
           target="_blank"
           rel="noopener noreferrer"
         >
