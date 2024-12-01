@@ -25,7 +25,6 @@ export const addImovel = async (imovelData) => {
   
   try {
     const docRef = await addDoc(propertyCollection, imovelData);
-    console.log("Imóvel adicionado com ID:", docRef.id);
     return docRef.id;
   } catch (error) {
     console.error("Erro ao adicionar imóvel:", error.message);

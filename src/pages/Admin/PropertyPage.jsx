@@ -133,7 +133,6 @@ function PropertyPage() {
             valorLocacao: property.valorLocacao || 0,
           }))}
           onEdit={(property) => {
-            console.log("Iniciando edição para o imóvel:", property);
             setSelectedProperty(property);
             setShowForm(true);
             

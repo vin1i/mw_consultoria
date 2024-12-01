@@ -1,4 +1,3 @@
-// src/components/ImageCarousel/index.jsx
 import React from "react";
 import PropTypes from "prop-types";
 import Slider from "react-slick";
@@ -23,15 +22,23 @@ const ImageCarousel = ({ images, cloudinaryBaseUrl }) => {
     prevArrow: <CustomArrow direction="prev" />,
     autoplay: true,
     autoplaySpeed: 3000,
-    lazyLoad: "progressive",
+    lazyLoad: "ondemand",
   };
 
   return (
-    <StyledSlider {...settings}>
+    <StyledSlider
+      {...settings}
+      role="region"
+      aria-label="Carrossel de imagens do imóvel"
+    >
       {images.map((image, index) => (
         <SlideContainer key={index}>
           <img
-            src={`${cloudinaryBaseUrl}/image/upload/${image}`}
+            src={
+              image.startsWith("http")
+                ? image
+                : `${cloudinaryBaseUrl}/image/upload/${image}`
+            }
             alt={`Imagem ${index + 1}`}
             onError={(e) =>
               (e.target.src =
@@ -49,7 +56,21 @@ ImageCarousel.propTypes = {
   cloudinaryBaseUrl: PropTypes.string.isRequired,
 };
 
-// Estilos para o componente
+const CustomArrow = ({ direction, onClick }) => (
+  <ArrowButton
+    direction={direction}
+    onClick={onClick || (() => {})} // Garante que `onClick` sempre terá uma função
+    aria-label={direction === "next" ? "Próxima imagem" : "Imagem anterior"}
+  >
+    {direction === "next" ? <FaArrowRight /> : <FaArrowLeft />}
+  </ArrowButton>
+);
+
+CustomArrow.propTypes = {
+  direction: PropTypes.string.isRequired,
+  onClick: PropTypes.func, // Torna `onClick` opcional
+};
+
 const StyledSlider = styled(Slider)`
   .slick-arrow {
     z-index: 2;
@@ -76,36 +97,23 @@ const StyledSlider = styled(Slider)`
   }
 `;
 
-// Custom Arrow Component
-const CustomArrow = ({ direction, onClick }) => (
-  <ArrowButton
-    direction={direction}
-    onClick={onClick}
-    aria-label={direction === "next" ? "Próxima imagem" : "Imagem anterior"}
-  >
-    {direction === "next" ? <FaArrowRight /> : <FaArrowLeft />}
-  </ArrowButton>
-);
-
-CustomArrow.propTypes = {
-  direction: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-};
-
 const ArrowButton = styled.button`
   position: absolute;
-  top: 50%; /* Centraliza verticalmente */
-  transform: translateY(-50%); /* Corrige o alinhamento */
-  ${(props) => (props.direction === "next" ? "right: 15px;" : "left: 15px;")} /* Posiciona à esquerda ou direita */
+  top: 50%;
+  transform: translateY(-50%);
+  ${(props) =>
+    props.direction === "next"
+      ? "right: 15px;"
+      : "left: 15px;"}
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
-  width: 40px; /* Tamanho fixo para consistência */
-  height: 40px; /* Tamanho fixo para consistência */
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px; /* Tamanho da seta */
+  font-size: 20px;
   cursor: pointer;
   z-index: 2;
   border-radius: 50%;

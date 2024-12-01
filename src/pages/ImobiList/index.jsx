@@ -7,6 +7,7 @@ import { getImoveis } from "../Admin/services/propertyService";
 import { useLoading } from "../../context/LoadingContext";
 
 const cloudinaryCloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+const cloudinaryBaseUrl = `https://res.cloudinary.com/${cloudinaryCloudName}`;
 
 const ImobiList = () => {
   const [imoveis, setImoveis] = useState([]);
@@ -189,16 +190,21 @@ const ImobiList = () => {
                   titulo={property.titulo}
                   tipo={property.tipo}
                   endereco={property.endereco}
-                  valorVenda={property.valorVenda}
-                  valorLocacao={property.valorLocacao}
-                  condominio={Number(property.condominio) || 0}
-                  iptu={Number(property.vlIptu) || 0}
+                  valorVenda={parseFloat(property.valorVenda.replace("R$", "").replace(".", "").replace(",", ".")) || 0}
+                  valorLocacao={parseFloat(property.valorLocacao.replace("R$", "").replace(".", "").replace(",", ".")) || 0}
+                  condominio={parseFloat(property.vlCondominio.replace("R$", "").replace(".", "").replace(",", ".")) || 0}
+                  iptu={parseFloat(property.vlIptu) || 0}
                   quartos={Number(property.quartos)}
                   banheiros={Number(property.banheiros)}
                   vagas={Number(property.vagas)}
                   metrosQuadrados={Number(property.metrosQuadrados)}
                   suites={Number(property.suites)}
-                  imagens={property.imagens || []}
+                  cloudinaryBaseUrl={cloudinaryBaseUrl}
+                  imagens={property.imagens.map((img) => 
+                    img.startsWith("http")
+                      ? img
+                      : `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/${img}`
+                  )}
                   descricao={property.descricao}
                 />
               ))

@@ -52,7 +52,10 @@ const Card = ({
           overflow: "hidden",
         }}
       >
-        <ImageCarousel images={imagens} cloudinaryBaseUrl={cloudinaryBaseUrl} />
+        <ImageCarousel
+          images={imagens || []}
+          cloudinaryBaseUrl={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}`}
+        />
       </div>
       <InfoContainer>
         <Title>{titulo || "Sem título"}</Title>
@@ -81,7 +84,6 @@ const Card = ({
             <FaDoorClosed /> {suites || 0} Suítes
           </span>
         </Features>
-        {/* Seção de preços */}
         <Price>
           {valorVenda > 0 && (
             <p>
@@ -129,17 +131,17 @@ const Card = ({
 Card.propTypes = {
   id: PropTypes.string.isRequired,
   titulo: PropTypes.string,
-  endereco: PropTypes.string.isRequired,
+  endereco: PropTypes.string,
   valorVenda: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   valorLocacao: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   condominio: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   iptu: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  imagens: PropTypes.arrayOf(PropTypes.string).isRequired,
-  quartos: PropTypes.number,
-  banheiros: PropTypes.number,
-  vagas: PropTypes.number,
-  metrosQuadrados: PropTypes.number,
-  suites: PropTypes.number,
+  imagens: PropTypes.arrayOf(PropTypes.string),
+  quartos: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  banheiros: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  vagas: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  metrosQuadrados: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  suites: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   descricao: PropTypes.string,
 };
 

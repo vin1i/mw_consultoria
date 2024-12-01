@@ -22,7 +22,6 @@ const PropertyList = ({ onEdit, onDelete }) => {
       setIsLoading(true);
       try {
         const data = await getImoveis();
-        console.log("Propriedades carregadas:", data);
 
         const formattedProperties = data.map((property) => ({
           ...property,
@@ -164,10 +163,6 @@ const PropertyList = ({ onEdit, onDelete }) => {
               <ButtonContainer>
                 <ActionButton
                   onClick={() => {
-                    console.log(
-                      "Clicado em Editar para propriedade:",
-                      property
-                    );
                     onEdit(property);
                   }}
                 >

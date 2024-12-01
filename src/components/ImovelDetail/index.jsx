@@ -33,7 +33,6 @@ const ImobiDetails = () => {
       setIsLoading(true);
       try {
         const propertyData = await getImovelById(id);
-        console.log(propertyData);
         if (propertyData) {
           setProperty(propertyData);
         } else {

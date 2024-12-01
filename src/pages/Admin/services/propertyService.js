@@ -65,7 +65,6 @@ export const getImoveis = async () => {
         vlCondominio: doc.data().vlCondominio || 0,
       };
     });
-    console.log("Imóveis carregados no serviço:", imoveis);
     return imoveis;
   } catch (error) {
     console.error("Erro ao buscar imóveis:", error.message);
