@@ -25,11 +25,13 @@ export const RedLine = styled.div`
 export const Section = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  align-items: center;
+  text-align: center;
 
-  @media (max-width: 768px) {
-    align-items: center;
-    gap: 10px;
+  .footer-social-logo {
+    margin-top: 35px;
+    width: 150px;
+    height: auto;
   }
 `;
 

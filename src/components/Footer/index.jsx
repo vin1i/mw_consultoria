@@ -79,6 +79,11 @@ const Footer = ({ id }) => {
               <FaLinkedin />
             </a>
           </SocialMedia>
+          <img
+            src={require("../../assets/LOGOKW_LETREIRO.png")}
+            alt="Logo no footer"
+            className="footer-social-logo"
+          />
         </Section>
 
         <Section>
