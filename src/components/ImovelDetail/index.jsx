@@ -170,10 +170,13 @@ const ImobiDetails = () => {
               })}
             </p>
           )}
-          {property.vlIptu !== undefined && (
+          {property.vlIptu > 0 && (
             <p>
-              <strong>IPTU:</strong> R${" "}
-              {property.vlIptu.toLocaleString("pt-BR")}
+              <strong>IPTU:</strong>{" "}
+              {property.vlIptu.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
             </p>
           )}
         </Price>
