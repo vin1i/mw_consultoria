@@ -6,9 +6,9 @@ import styled from "styled-components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const ImageCarousel = ({ images, cloudinaryBaseUrl }) => {
-  if (!images || images.length === 0) {
-    return <FallbackMessage>Nenhuma imagem disponível</FallbackMessage>;
+const ImageCarousel = ({ media, cloudinaryBaseUrl }) => {
+  if (!media || media.length === 0) {
+    return <FallbackMessage>Nenhuma mídia disponível</FallbackMessage>;
   }
 
   const settings = {
@@ -29,22 +29,34 @@ const ImageCarousel = ({ images, cloudinaryBaseUrl }) => {
     <StyledSlider
       {...settings}
       role="region"
-      aria-label="Carrossel de imagens do imóvel"
+      aria-label="Carrossel de mídia do imóvel"
     >
-      {images.map((image, index) => (
+      {media.map((item, index) => (
         <SlideContainer key={index}>
-          <img
-            src={
-              image.startsWith("http")
-                ? image
-                : `${cloudinaryBaseUrl}/image/upload/${image}`
-            }
-            alt={`Imagem ${index + 1}`}
-            onError={(e) =>
-              (e.target.src =
-                "https://via.placeholder.com/800x400?text=Imagem+Indisponível")
-            }
-          />
+          {item.type === "video" ? (
+            <iframe
+              width="100%"
+              height="400px"
+              src={item.src.replace("watch?v=", "embed/")}
+              title={`Vídeo ${index + 1}`}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          ) : (
+            <img
+              src={
+                item.src.startsWith("http")
+                  ? item.src
+                  : `${cloudinaryBaseUrl}/image/upload/${item.src}`
+              }
+              alt={`Imagem ${index + 1}`}
+              onError={(e) =>
+                (e.target.src =
+                  "https://via.placeholder.com/800x400?text=Imagem+Indisponível")
+              }
+            />
+          )}
         </SlideContainer>
       ))}
     </StyledSlider>
@@ -52,15 +64,20 @@ const ImageCarousel = ({ images, cloudinaryBaseUrl }) => {
 };
 
 ImageCarousel.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+  media: PropTypes.arrayOf(
+    PropTypes.shape({
+      src: PropTypes.string.isRequired,
+      type: PropTypes.oneOf(["image", "video"]).isRequired,
+    })
+  ).isRequired,
   cloudinaryBaseUrl: PropTypes.string.isRequired,
 };
 
 const CustomArrow = ({ direction, onClick }) => (
   <ArrowButton
     direction={direction}
-    onClick={onClick || (() => {})} // Garante que `onClick` sempre terá uma função
-    aria-label={direction === "next" ? "Próxima imagem" : "Imagem anterior"}
+    onClick={onClick || (() => {})}
+    aria-label={direction === "next" ? "Próxima mídia" : "Mídia anterior"}
   >
     {direction === "next" ? <FaArrowRight /> : <FaArrowLeft />}
   </ArrowButton>
@@ -68,7 +85,7 @@ const CustomArrow = ({ direction, onClick }) => (
 
 CustomArrow.propTypes = {
   direction: PropTypes.string.isRequired,
-  onClick: PropTypes.func, // Torna `onClick` opcional
+  onClick: PropTypes.func,
 };
 
 const StyledSlider = styled(Slider)`
@@ -127,6 +144,12 @@ const SlideContainer = styled.div`
   img {
     width: 100%;
     height: auto;
+    border-radius: 8px;
+  }
+
+  iframe {
+    width: 100%;
+    height: 400px;
     border-radius: 8px;
   }
 `;

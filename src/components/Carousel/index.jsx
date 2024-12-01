@@ -20,30 +20,36 @@ const Carousel = ({ images }) => {
     arrows: true,
     nextArrow: <CustomArrow direction="next" />,
     prevArrow: <CustomArrow direction="prev" />,
-    autoplay: true,
-    autoplaySpeed: 3000,
+    autoplay: false,
     lazyLoad: "progressive",
   };
 
   return (
     <Slider {...settings}>
-      {images.map((item, index) => (
-        <SlideContainer key={index}>
-          {item.type === "video" ? (
-            <iframe
-              width="100%"
-              height="400px"
-              src={item.src.replace("watch?v=", "embed/")}
-              title="Vídeo do imóvel"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          ) : (
-            <img src={item.src} alt={item.alt} />
-          )}
-        </SlideContainer>
-      ))}
+      {images.map((item, index) => {
+
+        return (
+          <div key={index}>
+            {item.type === "video" ? (
+              <iframe
+                width="100%"
+                height="400px"
+                src={item.src}
+                title={`Vídeo ${index + 1}`}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            ) : (
+              <img
+                src={item.src}
+                alt={`Imagem ${index + 1}`}
+                style={{ width: "100%", borderRadius: "8px" }}
+              />
+            )}
+          </div>
+        );
+      })}
     </Slider>
   );
 };
@@ -52,8 +58,8 @@ Carousel.propTypes = {
   images: PropTypes.arrayOf(
     PropTypes.shape({
       src: PropTypes.string.isRequired,
-      alt: PropTypes.string.isRequired,
-      caption: PropTypes.string,
+      alt: PropTypes.string,
+      type: PropTypes.oneOf(["image", "video"]),
     })
   ).isRequired,
 };
@@ -95,7 +101,8 @@ const SlideContainer = styled.div`
   position: relative;
   text-align: center;
 
-  img, iframe {
+  img,
+  iframe {
     width: 100%;
     max-height: 400px;
     object-fit: cover;
@@ -103,9 +110,20 @@ const SlideContainer = styled.div`
   }
 
   @media (max-width: 768px) {
-    img, iframe {
+    img,
+    iframe {
       max-height: 300px;
     }
+  }
+`;
+
+const VideoContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 400px;
+
+  iframe {
+    border-radius: 8px;
   }
 `;
 

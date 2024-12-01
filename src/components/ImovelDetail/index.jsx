@@ -72,26 +72,44 @@ const ImobiDetails = () => {
   }
 
   const images = property.imagens?.length
-    ? property.imagens.map((img) => ({
-        src: img.startsWith("http")
+    ? property.imagens.map((img, index) => {
+        const imageUrl = img.startsWith("http")
           ? img
-          : `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload/${img}`,
-        alt: property.titulo || "Imagem do imóvel",
-      }))
+          : `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload/${img}`;
+        return {
+          src: imageUrl,
+          type: "image",
+        };
+      })
     : [
         {
           src: "https://via.placeholder.com/300x200?text=Sem+Imagem",
-          alt: "Sem Imagem",
+          type: "image",
         },
       ];
 
   if (property.videos?.length > 0) {
-    const videoURL = property.videos[0];
-    images.push({
-      src: videoURL,
-      type: "video",
+    property.videos.forEach((videoURL, index) => {
+
+      let embedURL = "";
+
+      if (videoURL.includes("youtube.com/shorts")) {
+        embedURL = videoURL.replace("youtube.com/shorts", "youtube.com/embed");
+      } else if (videoURL.includes("youtube.com/watch")) {
+        embedURL = videoURL.replace("watch?v=", "embed/");
+      } else {
+        console.warn(`URL de vídeo inválida ${index + 1}:`, videoURL);
+      }
+
+      if (embedURL) {
+        images.push({
+          src: embedURL,
+          type: "video",
+        });
+      }
     });
   }
+
 
   return (
     <Wrapper>
