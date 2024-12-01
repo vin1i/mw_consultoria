@@ -9,7 +9,6 @@ import {
   getDoc,
 } from "firebase/firestore";
 
-// Use o nome correto da coleção no Firebase: "properties"
 const propertyCollection = collection(db, "properties");
 
 export const addImovel = async (imovelData) => {
@@ -68,7 +67,6 @@ export const getImovelById = async (id) => {
       return {
         id: docSnap.id,
         ...data,
-        vlIptu: data.iptu || 0,
       };
     } else {
       console.error("Imóvel não encontrado.");
@@ -87,7 +85,6 @@ export const updateImovel = async (id, updatedData) => {
   }
 
   try {
-    // Use o nome correto da coleção: "properties"
     const propertyRef = doc(db, "properties", id);
     await updateDoc(propertyRef, updatedData);
   } catch (error) {
@@ -103,7 +100,6 @@ export const deleteImovel = async (id) => {
   }
 
   try {
-    // Use o nome correto da coleção: "properties"
     const propertyRef = doc(db, "properties", id);
     await deleteDoc(propertyRef);
   } catch (error) {
