@@ -70,21 +70,23 @@ function PropertyPage() {
     try {
       await addProperty(newProperty);
       toast.success("Imóvel cadastrado com sucesso!", { autoClose: 8000 });
-      
+
       setTimeout(() => {
-        fetchProperties(); // Atualiza a lista após 3 segundos
+        fetchProperties();
         setShowForm(false);
-      }, 3000); // 3 segundos para o *toast* ser exibido
+      }, 3000);
     } catch (error) {
       console.error("Erro ao adicionar imóvel:", error);
-      toast.error("Erro ao cadastrar o imóvel. Tente novamente.", { autoClose: 10000 });
+      toast.error("Erro ao cadastrar o imóvel. Tente novamente.", {
+        autoClose: 10000,
+      });
     }
   };
 
   const handleEdit = async (updatedProperty) => {
     try {
       await updateImovel(selectedProperty.id, updatedProperty);
-      fetchProperties(); // Atualizar lista
+      fetchProperties();
       setSelectedProperty(null);
       setShowForm(false);
     } catch (error) {
@@ -95,7 +97,7 @@ function PropertyPage() {
   const handleDelete = async (id) => {
     try {
       await deleteImovel(id);
-      fetchProperties(); // Atualizar lista
+      fetchProperties();
     } catch (error) {
       console.error("Erro ao excluir imóvel:", error);
     }
@@ -114,8 +116,8 @@ function PropertyPage() {
               : handleAdd(updatedProperty);
           }}
           onCancel={() => {
-            setShowForm(false); // Fecha o formulário
-            setSelectedProperty(null); // Limpa o imóvel selecionado
+            setShowForm(false);
+            setSelectedProperty(null);
           }}
         />
       )}
@@ -125,14 +127,24 @@ function PropertyPage() {
         <PropertyList
           properties={imoveis.map((property) => ({
             ...property,
-            vlCondominio: property.vlCondominio || 0, // Valor padrão
-            vlIptu: property.vlIptu || 0, // Valor padrão
-            valorVenda: property.valorVenda || 0, // Valor padrão
-            valorLocacao: property.valorLocacao || 0, // Valor padrão
+            vlCondominio: property.vlCondominio || 0,
+            vlIptu: property.vlIptu || 0,
+            valorVenda: property.valorVenda || 0,
+            valorLocacao: property.valorLocacao || 0,
           }))}
           onEdit={(property) => {
+            console.log("Iniciando edição para o imóvel:", property);
             setSelectedProperty(property);
             setShowForm(true);
+            
+            setTimeout(() => {
+              const formElement = document.querySelector("form");
+              if (formElement) {
+                formElement.scrollIntoView({ behavior: "smooth" });
+              } else {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }, 100);
           }}
           onDelete={handleDelete}
         />

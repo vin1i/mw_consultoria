@@ -190,8 +190,13 @@ const PropertyForm = ({ existingProperty, onSave }) => {
         imagens: existingProperty.imagens || [],
         videos: existingProperty.videos || [""],
       };
-      setFormData(formattedProperty);
+      setFormData((prev) => ({
+        ...prev,
+        imagens: existingProperty.imagens || [],
+      }));
       setPreviewImages(existingProperty.imagens || []);
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [existingProperty]);
 
@@ -204,24 +209,30 @@ const PropertyForm = ({ existingProperty, onSave }) => {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    const newImageUrls = files.map((file) => URL.createObjectURL(file));
-    setPreviewImages((prev) => [...prev, ...newImageUrls]);
-    handleChange("imagens", [...(formData.imagens || []), ...files]);
+    const newPreviews = files.map((file) => URL.createObjectURL(file));
+    setPreviewImages((prev) => [...prev, ...newPreviews]);
+    setFormData((prev) => ({
+      ...prev,
+      imagens: [...prev.imagens, ...files],
+    }));
   };
 
   useEffect(() => {
     if (existingProperty) {
-      const formattedImages = existingProperty.imagens.map((img) =>
-        img.startsWith("http")
-          ? img
-          : `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload/${img}`
-      );
-
+      const formattedImages = existingProperty.imagens.map((img) => {
+        // Remove qualquer prefixo duplicado
+        return img.replace(
+          /(https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)+/,
+          "https://res.cloudinary.com/dsioklbbq/image/upload/"
+        );
+      });
+  
       setFormData((prev) => ({
         ...prev,
         ...existingProperty,
-        imagens: formattedImages,
+        imagens: formattedImages, // URLs corrigidas
       }));
+  
       setPreviewImages(formattedImages);
     }
   }, [existingProperty]);
@@ -250,6 +261,18 @@ const PropertyForm = ({ existingProperty, onSave }) => {
     handleChange("videos", updatedVideos);
   };
 
+  const isValidImageUrl = (url) => {
+    return url.startsWith("http") && url.includes("res.cloudinary.com");
+  };
+
+  const handleRemoveImage = (index) => {
+    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+    setFormData((prev) => ({
+      ...prev,
+      imagens: prev.imagens.filter((_, i) => i !== index),
+    }));
+  };
+
   const parseCurrency = (value) => {
     if (!value) return 0;
     return parseFloat(
@@ -261,26 +284,35 @@ const PropertyForm = ({ existingProperty, onSave }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSaving(true);
+  
     try {
-      const fotos = await uploadImagesToCloudinary(formData.imagens);
+      // Identifica novas imagens que precisam ser enviadas para o Cloudinary
+      const newImages = formData.imagens.filter((img) => img instanceof File);
+      const uploadedImages = await uploadImagesToCloudinary(newImages);
+  
+      // Filtra e normaliza as URLs válidas
+      const allImages = [
+        ...formData.imagens
+          .filter((img) => typeof img === "string")
+          .map((img) =>
+            img.replace(
+              /(https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)+/,
+              "https://res.cloudinary.com/dsioklbbq/image/upload/"
+            )
+          ),
+        ...uploadedImages,
+      ];
+  
       const payload = {
         ...formData,
-        imagens: fotos,
-        valorVenda: parseCurrency(formData.valorVenda),
-        valorLocacao: parseCurrency(formData.valorLocacao),
-        vlCondominio: parseCurrency(formData.vlCondominio),
-        vlIptu: parseCurrency(formData.vlIptu),
+        imagens: allImages, // Somente URLs válidas
       };
+  
       await onSave(payload);
       toast.success("Imóvel salvo com sucesso!");
-    } catch (err) {
-      console.error("Erro ao salvar imóvel:", err);
-      setError(
-        "Erro ao salvar as imagens. Verifique sua conexão ou tente novamente."
-      );
-    } finally {
-      setIsSaving(false);
+    } catch (error) {
+      console.error("Erro ao salvar imóvel:", error);
+      toast.error("Erro ao salvar as imagens. Tente novamente.");
     }
   };
 
@@ -309,29 +341,60 @@ const PropertyForm = ({ existingProperty, onSave }) => {
 
   return (
     <>
-      <ToastContainer autoClose={10000} position="top-center" />
+      <ToastContainer autoClose={3000} position="top-center" />
       <FormContainer onSubmit={handleSubmit}>
         <h2>{existingProperty ? "Editar Imóvel" : "Cadastrar Novo Imóvel"}</h2>
         <FormGrid>
           <InputGroup>
             <Label>Imagens</Label>
-            <FileInput
+            <Input
               type="file"
               multiple
               accept="image/*"
               onChange={handleFileChange}
             />
-            {previewImages.length > 0 && (
-              <PreviewContainer>
-                {previewImages.map((src, index) => (
+            <PreviewContainer>
+              {previewImages.map((src, index) => (
+                <div
+                  key={index}
+                  style={{
+                    position: "relative",
+                    display: "inline-block",
+                    marginBottom: "10px",
+                  }}
+                >
                   <PreviewImage
-                    key={index}
-                    src={src}
+                    src={
+                      isValidImageUrl(src)
+                        ? src
+                        : "https://via.placeholder.com/80x80?text=Erro"
+                    }
                     alt={`Preview ${index + 1}`}
                   />
-                ))}
-              </PreviewContainer>
-            )}
+                  <button
+                    type="button" // Evita comportamento de envio do formulário
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      backgroundColor: "red",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "50%",
+                      cursor: "pointer",
+                      width: "20px",
+                      height: "20px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    onClick={() => handleRemoveImage(index)}
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))}
+            </PreviewContainer>
           </InputGroup>
 
           <InputGroup>

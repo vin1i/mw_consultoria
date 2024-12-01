@@ -192,7 +192,7 @@ const ImobiList = () => {
                   valorVenda={property.valorVenda}
                   valorLocacao={property.valorLocacao}
                   condominio={Number(property.condominio) || 0}
-                  iptu={Number(property.iptu) || 0}
+                  iptu={Number(property.vlIptu) || 0}
                   quartos={Number(property.quartos)}
                   banheiros={Number(property.banheiros)}
                   vagas={Number(property.vagas)}

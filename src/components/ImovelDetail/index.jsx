@@ -33,6 +33,7 @@ const ImobiDetails = () => {
       setIsLoading(true);
       try {
         const propertyData = await getImovelById(id);
+        console.log(propertyData);
         if (propertyData) {
           setProperty(propertyData);
         } else {
@@ -71,7 +72,6 @@ const ImobiDetails = () => {
     );
   }
 
-  // Formata as imagens
   const images = property.imagens?.length
     ? property.imagens.map((img) => ({
         src: img.startsWith("http")
@@ -128,6 +128,12 @@ const ImobiDetails = () => {
               {property.valorVenda.toLocaleString("pt-BR")}
             </p>
           )}
+          {property.valorLocacao !== undefined && (
+            <p>
+              <strong>Valor da Locação:</strong> R${" "}
+              {property.valorLocacao.toLocaleString("pt-BR")}
+            </p>
+          )}
           {property.vlCondominio !== undefined && (
             <p>
               <strong>Condomínio:</strong> R${" "}
@@ -147,7 +153,7 @@ const ImobiDetails = () => {
         </Description>
 
         <WhatsAppButton
-          href={`https://api.whatsapp.com/send?phone=5511999999999&text=Ol%C3%A1,%20gostaria%20de%20saber%20mais%20sobre%20o%20im%C3%B3vel%20${
+          href={`https://api.whatsapp.com/send?phone=5511973738808&text=Ol%C3%A1,%20gostaria%20de%20saber%20mais%20sobre%20o%20im%C3%B3vel%20${
             property.titulo || property.tipo
           }%20em%20${property.endereco}.`}
           target="_blank"

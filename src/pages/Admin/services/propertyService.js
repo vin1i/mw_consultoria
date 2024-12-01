@@ -41,7 +41,6 @@ export const addProperty = async (propertyData) => {
 export const getImoveis = async () => {
   try {
     const querySnapshot = await getDocs(propertyCollection);
-
     const imoveis = querySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
@@ -51,7 +50,7 @@ export const getImoveis = async () => {
         valorVenda: data.valorVenda || 0,
         valorLocacao: data.valorLocacao || 0,
         condominio: data.vlCondominio || 0,
-        iptu: data.vlIptu || 0,
+        vlIptu: doc.data().iptu || 0,
         quartos: data.quartos || 0,
         banheiros: data.banheiros || 0,
         vagas: data.vagas || 0,
@@ -63,9 +62,10 @@ export const getImoveis = async () => {
         imagens: data.imagens || [],
         videos: data.videos || [],
         dt_criacao: data.dt_criacao || "",
+        vlCondominio: doc.data().vlCondominio || 0,
       };
     });
-
+    console.log("Imóveis carregados no serviço:", imoveis);
     return imoveis;
   } catch (error) {
     console.error("Erro ao buscar imóveis:", error.message);
@@ -73,7 +73,6 @@ export const getImoveis = async () => {
   }
 };
 
-// Função para atualizar imóvel
 export const updateImovel = async (id, updatedData) => {
   try {
     const propertyRef = doc(db, "properties", id);
@@ -100,6 +99,31 @@ export const deleteImovel = async (id) => {
 
   } catch (error) {
     console.error("Erro ao deletar imóvel:", error.message);
+    throw error;
+  }
+};
+
+const normalizeImageUrls = (images) => {
+  return images.map((img) =>
+    img.replace(
+      /(https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)+/,
+      "https://res.cloudinary.com/dsioklbbq/image/upload/"
+    )
+  );
+};
+
+export const loadProperties = async () => {
+  try {
+    const response = await fetch("/api/properties");
+    const properties = await response.json();
+
+    // Normaliza as imagens de todas as propriedades
+    return properties.map((property) => ({
+      ...property,
+      imagens: normalizeImageUrls(property.imagens || []),
+    }));
+  } catch (error) {
+    console.error("Erro ao carregar propriedades:", error);
     throw error;
   }
 };

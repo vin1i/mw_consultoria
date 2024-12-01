@@ -26,7 +26,7 @@ export const addImovel = async (imovelData) => {
   try {
     const docRef = await addDoc(propertyCollection, imovelData);
     console.log("Imóvel adicionado com ID:", docRef.id);
-    return docRef.id;  // Retorna o ID do documento para possíveis usos
+    return docRef.id;
   } catch (error) {
     console.error("Erro ao adicionar imóvel:", error.message);
     throw new Error("Falha ao adicionar o imóvel. Verifique os dados e tente novamente.");
@@ -38,19 +38,21 @@ export const getImoveis = async () => {
     const querySnapshot = await getDocs(propertyCollection);
     return querySnapshot.docs.map((doc) => ({
       id: doc.id,
-      tipo: doc.data().tp_imovel || 'Desconhecido',  // Adicionando valor default
-      endereco: doc.data().ds_localizacao || 'Não informado', // Valor default para endereço
-      valor: doc.data().vl_preco || 0,  // Valor default para preço
-      quartos: doc.data().nr_quartos || 0,  // Garantindo valores default
-      banheiros: doc.data().nr_banheiros || 0, 
-      vagas: doc.data().nr_vagas_garagem || 0, 
-      suites: doc.data().nr_suites || 0, 
+      tipo: doc.data().tp_imovel || 'Desconhecido',
+      endereco: doc.data().ds_localizacao || 'Não informado',
+      valor: doc.data().vl_preco || 0,
+      vlCondominio: doc.data().vlCondominio || 0,
+      vlIptu: doc.data().vlIptu || 0,
+      quartos: doc.data().nr_quartos || 0,
+      banheiros: doc.data().nr_banheiros || 0,
+      vagas: doc.data().nr_vagas_garagem || 0,
+      suites: doc.data().nr_suites || 0,
       metrosQuadrados: doc.data().nr_tamanho || 0,
-      descricao: doc.data().ds_descricao || 'Sem descrição', // Garantindo que tenha sempre um valor
-      disponibilidade: doc.data().st_disponibilidade || 'Indefinido', 
+      descricao: doc.data().ds_descricao || 'Sem descrição',
+      disponibilidade: doc.data().st_disponibilidade || 'Indefinido',
       titulo: doc.data().nm_titulo || 'Sem título',
-      imagens: doc.data().imagens || [], 
-      videos: doc.data().videos || [],   
+      imagens: doc.data().imagens || [],
+      videos: doc.data().videos || [],
     }));
   } catch (error) {
     console.error("Erro ao buscar imóveis:", error);
@@ -60,11 +62,15 @@ export const getImoveis = async () => {
 
 export const getImovelById = async (id) => {
   try {
-    // Certifique-se de usar o nome correto da coleção: "properties"
     const docRef = doc(db, "properties", id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() };
+      const data = docSnap.data();
+      return {
+        id: docSnap.id,
+        ...data,
+        vlIptu: data.iptu || 0,
+      };
     } else {
       console.error("Imóvel não encontrado.");
       return null;

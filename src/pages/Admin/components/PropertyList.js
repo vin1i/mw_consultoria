@@ -5,6 +5,11 @@ import styled from "styled-components";
 import Swal from "sweetalert2";
 
 const generateCloudinaryURL = (imageId) => {
+  // Verifica se a URL já está completa
+  if (imageId.startsWith("http") && imageId.includes("res.cloudinary.com")) {
+    return imageId;
+  }
+
   const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
   return `https://res.cloudinary.com/${cloudName}/image/upload/${imageId}`;
 };
@@ -17,10 +22,13 @@ const PropertyList = ({ onEdit, onDelete }) => {
       setIsLoading(true);
       try {
         const data = await getImoveis();
+        console.log("Propriedades carregadas:", data);
+
         const formattedProperties = data.map((property) => ({
           ...property,
-          imagens: property.imagens.map((img) => generateCloudinaryURL(img)),
+          imagens: property.imagens.map((img) => generateCloudinaryURL(img)), // Normaliza as URLs
         }));
+
         setProperties(formattedProperties);
       } catch (error) {
         console.error("Erro ao carregar propriedades:", error);
@@ -28,6 +36,7 @@ const PropertyList = ({ onEdit, onDelete }) => {
         setIsLoading(false);
       }
     }
+
     fetchProperties();
   }, [setIsLoading]);
 
@@ -70,7 +79,7 @@ const PropertyList = ({ onEdit, onDelete }) => {
     }
   };
 
- const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
   const paginatedProperties = useMemo(() => {
@@ -79,7 +88,7 @@ const PropertyList = ({ onEdit, onDelete }) => {
   }, [properties, currentPage]);
 
   const totalPages = Math.ceil(properties.length / itemsPerPage);
-  
+
   return (
     <Container>
       {isLoading ? (
@@ -95,7 +104,7 @@ const PropertyList = ({ onEdit, onDelete }) => {
             <Card key={property.id}>
               {property.imagens && property.imagens.length > 0 ? (
                 <img
-                  src={property.imagens[0]}
+                  src={property.imagens[0]} // Mostra a primeira imagem do array normalizado
                   alt={`Imagem do imóvel: ${property.titulo}`}
                 />
               ) : (
@@ -153,7 +162,15 @@ const PropertyList = ({ onEdit, onDelete }) => {
                 </p>
               </Details>
               <ButtonContainer>
-                <ActionButton onClick={() => onEdit(property)}>
+                <ActionButton
+                  onClick={() => {
+                    console.log(
+                      "Clicado em Editar para propriedade:",
+                      property
+                    );
+                    onEdit(property);
+                  }}
+                >
                   Editar
                 </ActionButton>
                 <ActionButton onClick={() => confirmDelete(property.id)}>
