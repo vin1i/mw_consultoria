@@ -6,29 +6,38 @@ import { NumericFormat } from "react-number-format";
 import styled from "styled-components";
 
 const FormContainer = styled.form`
-  max-width: 700px;
+  max-width: 1200px;
   margin: 20px auto;
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
+  @media (max-width: 1024px) {
+    max-width: 900px;
+    padding: 15px;
+  }
+
   @media (max-width: 768px) {
+    max-width: 100%;
     padding: 15px;
   }
 `;
 
 const FormGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr 1fr;
+  }
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 10px;
   }
 `;
-
 const InputGroup = styled.div`
   margin-bottom: 20px;
 `;
@@ -143,6 +152,15 @@ const PreviewImage = styled.img`
     height: 60px;
   }
 `;
+
+const InputGroupFullWidth = styled(InputGroup)`
+  grid-column: span 3;
+`;
+
+const TextareaFullWidth = styled(Textarea)`
+  grid-column: span 3;
+`;
+
 const PropertyForm = ({ existingProperty, onSave }) => {
   const [formData, setFormData] = useState({
     tipo: "venda",
@@ -343,7 +361,7 @@ const PropertyForm = ({ existingProperty, onSave }) => {
         <h2>{existingProperty ? "Editar Imóvel" : "Cadastrar Novo Imóvel"}</h2>
         <FormGrid>
           {/* Imagens */}
-          <InputGroup>
+          <InputGroupFullWidth>
             <Label>Imagens</Label>
             <Input
               type="file"
@@ -398,7 +416,7 @@ const PropertyForm = ({ existingProperty, onSave }) => {
                 </div>
               ))}
             </PreviewContainer>
-          </InputGroup>
+          </InputGroupFullWidth>
 
           {/* Título */}
           <InputGroup>
@@ -549,14 +567,14 @@ const PropertyForm = ({ existingProperty, onSave }) => {
           </InputGroup>
 
           {/* Descrição */}
-          <InputGroup>
+          <InputGroupFullWidth>
             <Label>Descrição</Label>
-            <Textarea
+            <TextareaFullWidth
               value={formData.descricao}
               onChange={(e) => handleChange("descricao", e.target.value)}
               placeholder="Descreva o imóvel"
             />
-          </InputGroup>
+          </InputGroupFullWidth>
 
           <InputGroup>
             <Label>URLs de Vídeos do YouTube</Label>
