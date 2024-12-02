@@ -28,10 +28,33 @@ export const Section = styled.div`
   align-items: center;
   text-align: center;
 
+  .footer-logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .footer-logo-text {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--black);
+    text-transform: uppercase;
+  }
+
   .footer-social-logo {
-    margin-top: 35px;
-    width: 150px;
+    width: 120px;
     height: auto;
+  }
+
+  @media (max-width: 768px) {
+    .footer-logo-text {
+      font-size: 1rem;
+    }
+
+    .footer-social-logo {
+      width: 80px;
+    }
   }
 `;
 
