@@ -3,6 +3,7 @@ import { uploadImagesToCloudinary } from "../../../services/CloudinaryService";
 import { toast, ToastContainer } from "react-toastify";
 import Carousel from "../../../components/Carousel";
 import { NumericFormat } from "react-number-format";
+import ImageReorder from "../../../components/ImageReorder/ImageReorder.jsx";
 import styled from "styled-components";
 
 const FormContainer = styled.form`
@@ -220,6 +221,8 @@ const PropertyForm = ({ existingProperty, onSave }) => {
     }));
   };
 
+  const fileInputRef = React.useRef(null);
+
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     const newPreviews = files.map((file) => URL.createObjectURL(file));
@@ -278,12 +281,17 @@ const PropertyForm = ({ existingProperty, onSave }) => {
     return url.startsWith("http") || url.startsWith("blob:");
   };
 
-  const handleRemoveImage = (index) => {
-    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+  const handleRemoveImage = (imageToDelete) => {
+    setPreviewImages((prev) => prev.filter((img) => img !== imageToDelete));
     setFormData((prev) => ({
       ...prev,
-      imagens: prev.imagens.filter((_, i) => i !== index),
+      imagens: prev.imagens.filter((img) => img !== imageToDelete),
     }));
+
+    // Limpa o campo de arquivo para sincronizar com o estado
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const parseCurrency = (value) => {
@@ -331,6 +339,14 @@ const PropertyForm = ({ existingProperty, onSave }) => {
     }
   };
 
+  const handleDeleteImage = (imageToDelete) => {
+    setPreviewImages((prev) => prev.filter((img) => img !== imageToDelete));
+    setFormData((prev) => ({
+      ...prev,
+      imagens: prev.imagens.filter((img) => img !== imageToDelete),
+    }));
+  };
+
   const handleCancel = () => {
     setFormData({
       tipo: "venda",
@@ -367,55 +383,20 @@ const PropertyForm = ({ existingProperty, onSave }) => {
               type="file"
               multiple
               accept="image/*"
+              ref={fileInputRef}
               onChange={handleFileChange}
             />
-            <PreviewContainer>
-              {previewImages.map((src, index) => (
-                <div
-                  key={index}
-                  style={{
-                    position: "relative",
-                    display: "inline-block",
-                    marginBottom: "10px",
-                  }}
-                >
-                  <PreviewImage
-                    src={
-                      isValidImageUrl(src)
-                        ? src
-                        : "https://via.placeholder.com/80x80?text=Erro"
-                    }
-                    alt={`Preview ${index + 1}`}
-                    onError={(e) => {
-                      console.error(`Erro ao carregar a imagem: ${src}`);
-                      e.target.src =
-                        "https://via.placeholder.com/80x80?text=Erro";
-                    }}
-                  />
-                  <button
-                    type="button"
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                      backgroundColor: "red",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "50%",
-                      cursor: "pointer",
-                      width: "20px",
-                      height: "20px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                    onClick={() => handleRemoveImage(index)}
-                  >
-                    &times;
-                  </button>
-                </div>
-              ))}
-            </PreviewContainer>
+            <ImageReorder
+              images={previewImages}
+              onReorder={(newOrder) => {
+                setPreviewImages(newOrder);
+                setFormData((prev) => ({
+                  ...prev,
+                  imagens: newOrder,
+                }));
+              }}
+              onDelete={handleRemoveImage}
+            />
           </InputGroupFullWidth>
 
           {/* Título */}
