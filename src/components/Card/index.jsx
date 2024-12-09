@@ -57,10 +57,7 @@ const Card = ({
           overflow: "hidden",
         }}
       >
-        <ImageCarousel
-          media={media}
-          cloudinaryBaseUrl={cloudinaryBaseUrl}
-        />
+        <ImageCarousel media={media} cloudinaryBaseUrl={cloudinaryBaseUrl} showDots={false} />
       </div>
       <InfoContainer>
         <Title>{titulo || "Sem título"}</Title>
@@ -83,10 +80,10 @@ const Card = ({
             <FaBath /> {banheiros || 0} Banheiros
           </span>
           <span>
-            <FaCar /> {vagas || 0} Vagas
+            <FaDoorClosed /> {suites || 0} Suítes
           </span>
           <span>
-            <FaDoorClosed /> {suites || 0} Suítes
+            <FaCar /> {vagas || 0} Vagas
           </span>
         </Features>
         <Price>
