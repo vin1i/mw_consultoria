@@ -10,11 +10,15 @@ import ImobiList from "../pages/ImobiList";
 import ImobiDetails from "../components/ImovelDetail";
 import PropertyPage from "../pages/Admin/PropertyPage";
 import Error from "../pages/Error";
+import Login from "../pages/Admin/components/Login";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import ScrollToTop from "../components/ScrollToTop"; 
+import ScrollToTop from "../components/ScrollToTop";
+import { useAppContext } from "../context/AppContext";
 
 const RouterApp = () => {
+  const { isAuthenticated } = useAppContext();
+
   return (
     <Router>
       <ScrollToTop />
@@ -23,7 +27,17 @@ const RouterApp = () => {
         <Route path="/" element={<Home />} />
         <Route path="/imoveis" element={<ImobiList />} />
         <Route path="/imoveis/:id" element={<ImobiDetails />} />
-        <Route path="/admin/imoveis" element={<PropertyPage />} />
+        <Route path="/admin/login" element={<Login />} />
+        <Route
+          path="/admin/imoveis"
+          element={
+            isAuthenticated ? (
+              <PropertyPage />
+            ) : (
+              <Navigate to="/admin/login" replace />
+            )
+          }
+        />
         <Route path="/erro" element={<Error />} />
         <Route path="*" element={<Navigate to="/erro" />} />
       </Routes>
