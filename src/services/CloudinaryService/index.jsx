@@ -36,7 +36,7 @@ export const uploadImagesToCloudinary = async (files) => {
 };
 
 const applyWatermark = (url) => {
-  const transformation = `l_opreb9q06mnwbxsqkkey,g_north_east,x_20,y_20,w_200`;
+  const transformation = `l_opreb9q06mnwbxsqkkey,g_north_east,x_20,y_20,w_150`;
   const parts = url.split("/upload/");
   return `${parts[0]}/upload/${transformation}/${parts[1]}`;
 };
