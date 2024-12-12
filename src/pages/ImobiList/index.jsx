@@ -25,6 +25,8 @@ const ImobiList = () => {
     quartos: "",
     banheiros: "",
     vagas: "",
+    precoMinimo: 100000, 
+    precoMaximo: 1000000,
   });
   const { setIsLoading, isLoading } = useLoading();
   const [currentPage, setCurrentPage] = useState(1);
@@ -164,6 +166,14 @@ const ImobiList = () => {
           return false;
         }
       }
+
+      if ( 
+        (filters.precoMinimo && property.valorVenda < filters.precoMinimo) ||
+        (filters.precoMaximo && property.valorVenda > filters.precoMaximo)
+      ) {
+        return false; 
+      }
+      
 
       return true;
     });
