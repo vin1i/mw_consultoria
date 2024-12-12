@@ -33,6 +33,7 @@ export const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
+  
 `;
 
 export const Title = styled.h1`
@@ -107,6 +108,8 @@ export const Description = styled.p`
   font-size: 16px;
   color: #555;
 `;
+
+
 
 export const WhatsAppButton = styled.a`
   display: flex;

@@ -20,6 +20,7 @@ import {
   Button,
 } from "./styles";
 import ImageCarousel from "../ImageCarousel";
+import ShareIcon from "../ImovelDetail/shareIcon";
 
 const Card = ({
   id,
@@ -124,7 +125,12 @@ const Card = ({
             </p>
           )}
         </Price>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Button onClick={() => navigate(`/imoveis/${id}`)}>VER MAIS</Button>
+            
+        <ShareIcon link={ `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`}/>   {/* Adição do botão de Compartilhamento, a função dele é copiar o link específico do imóvel */}
+
+        </div>
       </InfoContainer>
     </CardContainer>
   );

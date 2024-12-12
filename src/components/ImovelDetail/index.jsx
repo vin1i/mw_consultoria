@@ -22,6 +22,7 @@ import {
 import Carousel from "../Carousel";
 import { getImovelById } from "../../services/firebase/firestoreService";
 import { useLoading } from "../../context/LoadingContext";
+import ShareIcon from "./shareIcon";
 
 const ImobiDetails = () => {
   const { id } = useParams();
@@ -184,7 +185,7 @@ const ImobiDetails = () => {
         <Description style={{ whiteSpace: "pre-wrap" }}>
           {property.descricao || "Descrição não disponível."}
         </Description>
-
+        <div  style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <WhatsAppButton
           href={`https://api.whatsapp.com/send?phone=5511973738808&text=Ol%C3%A1,%20gostaria%20de%20saber%20mais%20sobre%20o%20im%C3%B3vel%20${
             property.titulo || property.tipo
@@ -195,6 +196,11 @@ const ImobiDetails = () => {
           Fale conosco!
           <FaWhatsapp />
         </WhatsAppButton>
+
+
+        <ShareIcon link={`https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`}/>{/* Adição do botão de Compartilhamento, a função dele é copiar o link específico do imóvel */}
+        
+        </div>
       </ContentContainer>
     </Wrapper>
   );
