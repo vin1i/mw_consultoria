@@ -138,27 +138,30 @@ const PropertyList = ({ onEdit, onDelete }) => {
                   <strong>IPTU:</strong> {formatCurrency(property.vlIptu)}
                 </p>
                 <p>
-                  <strong>Quartos:</strong>{" "}
-                  {property.quartos || "Não informado"}
-                </p>
-                <p>
-                  <strong>Banheiros:</strong>{" "}
-                  {property.banheiros || "Não informado"}
-                </p>
-                <p>
-                  <strong>Suítes:</strong> {property.suites || "Não informado"}
-                </p>
-                <p>
-                  <strong>Vagas:</strong> {property.vagas || "Não informado"}
+                  <strong>Disponibilidade:</strong>{" "}
+                  {property.disponibilidade || "Não informado"}
                 </p>
                 <p>
                   <strong>Metragem:</strong>{" "}
                   {property.metrosQuadrados || "Não informado"} m²
                 </p>
                 <p>
-                  <strong>Disponibilidade:</strong>{" "}
-                  {property.disponibilidade || "Não informado"}
+                  <strong>Quartos:</strong>{" "}
+                  {property.quartos || "Não informado"}
                 </p>
+                <p>
+                  <strong>Suítes:</strong> {property.suites || "Não informado"}
+                </p>
+                <p>
+                  <strong>Banheiros:</strong>{" "}
+                  {property.banheiros || "Não informado"}
+                </p>
+               
+                <p>
+                  <strong>Vagas:</strong> {property.vagas || "Não informado"}
+                </p>
+            
+               
                 <p>
                   <strong>Descrição:</strong>{" "}
                   {property.descricao || "Não informada"}

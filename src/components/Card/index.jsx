@@ -78,11 +78,12 @@ const Card = ({
             <FaBed /> {quartos || 0} Quartos
           </span>
           <span>
-            <FaBath /> {banheiros || 0} Banheiros
-          </span>
-          <span>
             <FaDoorClosed /> {suites || 0} Suítes
           </span>
+          <span>
+            <FaBath /> {banheiros || 0} Banheiros
+          </span>
+      
           <span>
             <FaCar /> {vagas || 0} Vagas
           </span>

@@ -132,11 +132,13 @@ const ImobiDetails = () => {
           <p>
             <FaBed /> {property.quartos || 0} quartos
           </p>
-          <p>
-            <FaBath /> {property.banheiros || 0} banheiros
-          </p>
+          
           <p>
             <FaDoorClosed /> {property.suites || 0} suítes
+          </p>
+       
+          <p>
+            <FaBath /> {property.banheiros || 0} banheiros
           </p>
           <p>
             <FaCar /> {property.vagas || 0} vagas
