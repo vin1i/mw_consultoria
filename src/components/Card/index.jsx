@@ -38,6 +38,7 @@ const Card = ({
   metrosQuadrados,
   suites,
   descricao,
+  disponibilidade,  
 }) => {
   const navigate = useNavigate();
   const cloudinaryBaseUrl = `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}`;
@@ -70,6 +71,7 @@ const Card = ({
             ? `${descricao.substring(0, 100)}...`
             : "Descrição não disponível."}
         </Description>
+
         <Features>
           <span>
             <FaRulerCombined /> {metrosQuadrados || 0} m²
@@ -88,6 +90,8 @@ const Card = ({
             <FaCar /> {vagas || 0} Vagas
           </span>
         </Features>
+
+
         <Price>
           {valorVenda > 0 && (
             <p>
@@ -125,6 +129,20 @@ const Card = ({
               })}
             </p>
           )}
+
+
+          {/* Implementação de Disponibilidade na listagem do Card, o mesmo é importado de onde o Card é renderizado */}
+        {disponibilidade && (
+  <p
+    style={{
+      color: disponibilidade === "Disponível" ? "green" : disponibilidade === "Indisponível" ? "red" : "gray",
+    }}
+  >
+    <strong>Status: </strong>
+    {disponibilidade}
+  </p>
+)}
+
         </Price>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Button onClick={() => navigate(`/imoveis/${id}`)}>VER MAIS</Button>
@@ -153,6 +171,7 @@ Card.propTypes = {
   metrosQuadrados: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   suites: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   descricao: PropTypes.string,
+  disponibilidade: PropTypes.string,
 };
 
 export default Card;

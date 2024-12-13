@@ -224,12 +224,15 @@ const ImobiList = () => {
                   metrosQuadrados={Number(property.metrosQuadrados)}
                   suites={Number(property.suites)}
                   cloudinaryBaseUrl={cloudinaryBaseUrl}
+                  
                   imagens={property.imagens.map((img) =>
                     img.startsWith("http")
                       ? img
                       : `${cloudinaryBaseUrl}/image/upload/${img}`
                   )}
                   descricao={property.descricao}
+                  disponibilidade={property.disponibilidade}
+             
                 />
               ))
             ) : (
