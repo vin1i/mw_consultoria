@@ -11,6 +11,7 @@ export const FiltersContainer = styled.div`
   max-width: 300px;
 
   @media (max-width: 768px) {
+  
     max-width: 100%;
     padding: 0.5rem;
     gap: 0.8rem;

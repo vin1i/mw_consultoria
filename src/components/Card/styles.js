@@ -10,8 +10,8 @@ export const CardContainer = styled.div`
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
+  @media  (max-width: 768px) {
+    flex-direction: column; 
     margin-bottom: 8px;
 
     &:hover {
@@ -39,7 +39,7 @@ export const ImageContainer = styled.div`
     transform: scale(1.1);
   }
 
-  @media (max-width: 768px) {
+  @media  (max-width: 768px) {
     border-right: none;
     height: 140px;
     flex: 1;
@@ -53,7 +53,7 @@ export const InfoContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
-  @media (max-width: 768px) {
+  @media  (max-width: 768px) {
     padding: 10px 20px 20px 20px;
   }
 `;
@@ -67,7 +67,7 @@ export const Title = styled.h3`
   border-bottom: 2px solid var(--red);
   padding-bottom: 3px;
 
-  @media (max-width: 768px) {
+  @media  (max-width: 768px) {
     font-size: 14px;
   }
 `;
@@ -84,7 +84,7 @@ export const Address = styled.p`
     color: var(--red);
   }
 
-  @media (max-width: 768px) {
+  @media  (max-width: 768px) {
     font-size: 12px;
   }
 `;
@@ -107,7 +107,7 @@ export const Features = styled.div`
     }
   }
 
-  @media (max-width: 768px) {
+  @media  (max-width: 768px) {
     font-size: 12px;
 
     span {
@@ -136,7 +136,7 @@ export const Price = styled.div`
     gap: 4px;
   }
 
-  @media (max-width: 768px) {
+  @media  (max-width: 768px) {
     font-size: 16px;
 
     p {
@@ -152,7 +152,7 @@ export const Description = styled.p`
   margin-bottom: 12px;
   line-height: 1.4;
 
-  @media (max-width: 768px) {
+  @media  (max-width: 768px) {
     font-size: 12px;
   }
 `;
@@ -174,7 +174,7 @@ export const Button = styled.button`
     transform: translateY(-2px);
   }
 
-  @media (max-width: 768px) {
+  @media  (max-width: 768px) {
     font-size: 12px;
     width: 100%;
     padding: 8px;

@@ -23,6 +23,8 @@ const ShareIcon = ({link}) => {
             color: "#555",
             fontSize: "20px",
             marginLeft: "10px", //Ajuste para dar espaço entre o ícone e o botao
+            marginTop: "5px",
+            marginBottom: "10px",
         }}
         aria-label="Compartilhar"
         title="Compartilhar">
