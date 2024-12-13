@@ -41,6 +41,7 @@ const ImobiDetails = () => {
             valorLocacao: propertyData.valorLocacao || 0,
             vlCondominio: propertyData.vlCondominio || 0,
             vlIptu: propertyData.vlIptu || 0,
+
           });
         } else {
           console.error("Imóvel não encontrado.");
@@ -124,6 +125,10 @@ const ImobiDetails = () => {
       <ContentContainer>
         <Title>{property.titulo || property.tipo || "Sem Título"}</Title>
         <Address>{property.endereco || "Endereço não informado"}</Address>
+     
+
+
+
 
         <Features>
           <p>
@@ -182,6 +187,19 @@ const ImobiDetails = () => {
               })}
             </p>
           )}
+
+          
+      {/* Implementação de Disponibilidade na listagem do Card */}
+        <p
+  style={{
+  
+    color: property.disponibilidade === "Disponível" ? "green" : property.disponibilidade === "Indisponível" ? "red" : "gray",
+  }}
+>
+  Status: {property.disponibilidade || "Status não disponível"}
+</p>
+
+
         </Price>
 
         <Description style={{ whiteSpace: "pre-wrap" }}>
@@ -209,3 +227,4 @@ const ImobiDetails = () => {
 };
 
 export default ImobiDetails;
+	
