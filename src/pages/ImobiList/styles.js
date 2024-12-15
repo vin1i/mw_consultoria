@@ -27,8 +27,8 @@ export const Sidebar = styled.div`
   border-radius: 8px;
 
   @media (min-width: 768px) {
-    width: 25%;
-    margin-right: 2rem;
+    width: 28%;
+    margin-right: 1rem;
   }
 
   @media (max-width: 480px) {
