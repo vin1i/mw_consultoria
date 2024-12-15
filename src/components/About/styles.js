@@ -36,9 +36,8 @@ export const Image = styled.img`
   @media (max-width: 768px) {
     max-width: 100%;
     margin-bottom: 20px;
-    border-radius: 10px; /* Adiciona cantos arredondados */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Adiciona um leve sombreado */
-  }
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 `;
 
 export const Text = styled.div`

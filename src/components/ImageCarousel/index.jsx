@@ -14,7 +14,7 @@ const ImageCarousel = ({ media, cloudinaryBaseUrl, showDots = true }) => {
   }
 
   const settings = {
-    dots: showDots, // Exibir ou não os círculos
+    dots: showDots,
     infinite: true,
     speed: 300,
     slidesToShow: 1,
@@ -126,11 +126,19 @@ CustomArrow.propTypes = {
 const CarouselContainer = styled.div`
   position: relative;
   margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
 `;
 
 const StyledSlider = styled(Slider)`
   .slick-arrow {
-    z-index: 2;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .slick-slide > div {
+    display: flex;
+    justify-content: center;
   }
 
   .slick-prev,
