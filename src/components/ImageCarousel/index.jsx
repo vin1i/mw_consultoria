@@ -31,16 +31,16 @@ const ImageCarousel = ({ media, cloudinaryBaseUrl, showDots = true }) => {
       const maxVisibleDots = 7;
       const halfVisibleDots = Math.floor(maxVisibleDots / 2);
       const totalDots = dots.length;
-    
+
       let start = Math.max(0, currentDot - halfVisibleDots);
       let end = Math.min(totalDots, start + maxVisibleDots);
-    
+
       if (end - start < maxVisibleDots) {
         start = Math.max(0, end - maxVisibleDots);
       }
-    
+
       const visibleDots = dots.slice(start, end);
-    
+
       return (
         <DotWrapper>
           <DotScroll currentDot={currentDot}>
@@ -71,7 +71,6 @@ const ImageCarousel = ({ media, cloudinaryBaseUrl, showDots = true }) => {
               <iframe
                 width="100%"
                 height="100%"
-                objectFit="cover"
                 src={item.src.replace("watch?v=", "embed/")}
                 title={`Vídeo ${index + 1}`}
                 frameBorder="0"
@@ -131,6 +130,8 @@ const CarouselContainer = styled.div`
 `;
 
 const StyledSlider = styled(Slider)`
+  width: 100%;
+
   .slick-arrow {
     border-radius: 8px;
     overflow: hidden;
@@ -139,6 +140,7 @@ const StyledSlider = styled(Slider)`
   .slick-slide > div {
     display: flex;
     justify-content: center;
+    align-items: center;
   }
 
   .slick-prev,
@@ -153,10 +155,11 @@ const StyledSlider = styled(Slider)`
   }
 
   .slick-dots {
-    display: ${({ showDots }) => (showDots ? "flex" : "none")} !important; /* Controla exibição */
+    display: ${({ showDots }) => (showDots ? "flex" : "none")};
     justify-content: center;
     margin-top: 10px;
     gap: 8px;
+  }
 
     li {
       width: 10px;
@@ -198,9 +201,10 @@ const DotScroll = styled.div`
     const dotWidth = 16;
     const halfVisibleDots = Math.floor(maxVisibleDots / 2);
 
-    const offset = currentDot > halfVisibleDots
-      ? (currentDot - halfVisibleDots) * dotWidth
-      : 0;
+    const offset =
+      currentDot > halfVisibleDots
+        ? (currentDot - halfVisibleDots) * dotWidth
+        : 0;
 
     return `translateX(calc(50% - ${offset}px))`;
   }};
@@ -227,8 +231,7 @@ const ArrowButton = styled.button`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  ${(props) =>
-    props.direction === "next" ? "right: 15px;" : "left: 15px;"}
+  ${(props) => (props.direction === "next" ? "right: 15px;" : "left: 15px;")}
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
@@ -252,19 +255,23 @@ const SlideContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  height: 300px; /* Defina uma altura fixa para mobile */
 
   img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    border-radius: 8px;
   }
 
   iframe {
     width: 100%;
-    height: auto;
+    height: 100%;
     border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    height: 200px; /* Reduz a altura no mobile */
   }
 `;
 

@@ -11,16 +11,9 @@ export const CardContainer = styled.div`
   height: auto;
   align-items: stretch;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: auto;
-
-    &:hover {
-      transform: scale(1.02);
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    }
+  @media  (max-width: 768px) {
+    flex-direction: column; 
+    margin-bottom: 8px;
   }
 `;
 
@@ -93,6 +86,13 @@ export const SecondaryPrice = styled.div`
   @media (max-width: 768px) {
     flex-wrap: wrap;
     gap: 6px;
+
+    img,
+    iframe {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
   }
 `;
 

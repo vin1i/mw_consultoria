@@ -115,7 +115,9 @@ const SlideContainer = styled.div`
   @media (max-width: 768px) {
     img,
     iframe {
-      max-height: 300px;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
     }
   }
 `;

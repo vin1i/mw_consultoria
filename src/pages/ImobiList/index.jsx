@@ -12,7 +12,9 @@ const cloudinaryBaseUrl = `https://res.cloudinary.com/${cloudinaryCloudName}`;
 const normalizeValues = (value) => {
   if (!value) return 0;
   if (typeof value === "string") {
-    return parseFloat(value.replace("R$", "").replace(/\./g, "").replace(",", "."));
+    return parseFloat(
+      value.replace("R$", "").replace(/\./g, "").replace(",", ".")
+    );
   }
   return value;
 };
@@ -25,7 +27,7 @@ const ImobiList = () => {
     quartos: "",
     banheiros: "",
     vagas: "",
-    precoMinimo: 100000, 
+    precoMinimo: 100000,
     precoMaximo: 1000000,
   });
   const { setIsLoading, isLoading } = useLoading();
@@ -167,13 +169,12 @@ const ImobiList = () => {
         }
       }
 
-      if ( 
+      if (
         (filters.precoMinimo && property.valorVenda < filters.precoMinimo) ||
         (filters.precoMaximo && property.valorVenda > filters.precoMaximo)
       ) {
-        return false; 
+        return false;
       }
-      
 
       return true;
     });
@@ -224,15 +225,19 @@ const ImobiList = () => {
                   metrosQuadrados={Number(property.metrosQuadrados)}
                   suites={Number(property.suites)}
                   cloudinaryBaseUrl={cloudinaryBaseUrl}
-                  
-                  imagens={property.imagens.map((img) =>
-                    img.startsWith("http")
-                      ? img
-                      : `${cloudinaryBaseUrl}/image/upload/${img}`
-                  )}
+                  imagens={
+                    property.imagens?.length > 0
+                      ? property.imagens.map((img) =>
+                          img.startsWith("http")
+                            ? img
+                            : `${cloudinaryBaseUrl}/image/upload/${img}`
+                        )
+                      : [
+                          "https://via.placeholder.com/300x200?text=Imagem+Indisponível",
+                        ]
+                  }
                   descricao={property.descricao}
                   disponibilidade={property.disponibilidade}
-             
                 />
               ))
             ) : (
