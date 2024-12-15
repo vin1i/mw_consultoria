@@ -15,7 +15,10 @@ import {
   Title,
   Address,
   Features,
-  Price,
+  PriceContainer,
+  MainPrice,
+  SecondaryPrice,
+  StatusBadge,
   Description,
   Button,
 } from "./styles";
@@ -38,7 +41,7 @@ const Card = ({
   metrosQuadrados,
   suites,
   descricao,
-  disponibilidade,  
+  disponibilidade,
 }) => {
   const navigate = useNavigate();
   const cloudinaryBaseUrl = `https://res.cloudinary.com/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}`;
@@ -53,12 +56,15 @@ const Card = ({
         style={{
           flex: 1,
           padding: "8px",
-          paddingBottom: "33px",
           background: "#ffffff",
           overflow: "hidden",
         }}
       >
-        <ImageCarousel media={media} cloudinaryBaseUrl={cloudinaryBaseUrl} showDots={false} />
+        <ImageCarousel
+          media={media}
+          cloudinaryBaseUrl={cloudinaryBaseUrl}
+          showDots={false}
+        />
       </div>
       <InfoContainer>
         <Title>{titulo || "Sem título"}</Title>
@@ -70,7 +76,6 @@ const Card = ({
             ? `${descricao.substring(0, 100)}...`
             : "Descrição não disponível."}
         </Description>
-
         <Features>
           <span>
             <FaRulerCombined /> {metrosQuadrados || 0} m²
@@ -84,70 +89,62 @@ const Card = ({
           <span>
             <FaBath /> {banheiros || 0} Banheiros
           </span>
-      
           <span>
             <FaCar /> {vagas || 0} Vagas
           </span>
         </Features>
-
-
-        <Price>
+        <PriceContainer>
           {valorVenda > 0 && (
-            <p>
-              <strong>Venda: </strong>
+            <MainPrice>
               {parseFloat(valorVenda).toLocaleString("pt-BR", {
                 style: "currency",
                 currency: "BRL",
               })}
-            </p>
+            </MainPrice>
           )}
           {valorLocacao > 0 && (
-            <p>
-              <strong>Locação: </strong>
+            <MainPrice>
               {parseFloat(valorLocacao).toLocaleString("pt-BR", {
                 style: "currency",
                 currency: "BRL",
               })}
-            </p>
+            </MainPrice>
           )}
-          {condominio > 0 && (
-            <p>
-              <strong>Condomínio: </strong>
-              {parseFloat(condominio).toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
-          )}
-          {iptu > 0 && (
-            <p>
-              <strong>IPTU: </strong>
-              {parseFloat(iptu).toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
-          )}
-
-
-          {/* Implementação de Disponibilidade na listagem do Card, o mesmo é importado de onde o Card é renderizado */}
-        {disponibilidade && (
-  <p
-    style={{
-      color: disponibilidade === "Disponível" ? "green" : disponibilidade === "Indisponível" ? "red" : "gray",
-    }}
-  >
-    <strong>Status: </strong>
-    {disponibilidade}
-  </p>
-)}
-
-        </Price>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Button onClick={() => navigate(`/imoveis/${id}`)}>VER MAIS</Button>
-            
-        <ShareIcon link={ `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`}/>   {/* Adição do botão de Compartilhamento, a função dele é copiar o link específico do imóvel */}
-
+          <SecondaryPrice>
+            {condominio > 0 && (
+              <p>
+                <strong>Condomínio:</strong>{" "}
+                {parseFloat(condominio).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </p>
+            )}
+            {iptu > 0 && (
+              <p>
+                <strong>IPTU:</strong>{" "}
+                {parseFloat(iptu).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </p>
+            )}
+            <StatusBadge status={disponibilidade}>
+              {disponibilidade || "Status não informado"}
+            </StatusBadge>
+          </SecondaryPrice>
+        </PriceContainer>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Button onClick={() => navigate(`/imoveis/${id}`)}>VER MAIS</Button>
+          <ShareIcon
+            link={`https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`}
+          />
         </div>
       </InfoContainer>
     </CardContainer>

@@ -27,7 +27,7 @@ const ImageCarousel = ({ media, cloudinaryBaseUrl, showDots = true }) => {
     lazyLoad: "ondemand",
     beforeChange: (_, next) => setCurrentDot(next),
     appendDots: (dots) => {
-      if (!showDots) return null; // Garante que os dots não são renderizados
+      if (!showDots) return null;
       const maxVisibleDots = 7;
       const halfVisibleDots = Math.floor(maxVisibleDots / 2);
       const totalDots = dots.length;
@@ -70,7 +70,8 @@ const ImageCarousel = ({ media, cloudinaryBaseUrl, showDots = true }) => {
             {item.type === "video" ? (
               <iframe
                 width="100%"
-                height="400px"
+                height="100%"
+                objectFit="cover"
                 src={item.src.replace("watch?v=", "embed/")}
                 title={`Vídeo ${index + 1}`}
                 frameBorder="0"
@@ -125,7 +126,6 @@ CustomArrow.propTypes = {
 
 const CarouselContainer = styled.div`
   position: relative;
-  margin-bottom: 20px;
   border-radius: 8px;
   overflow: hidden;
 `;
@@ -169,7 +169,7 @@ const StyledSlider = styled(Slider)`
       align-items: center;
 
       button {
-        opacity: 0; /* Esconder botão interno */
+        opacity: 0;
         cursor: pointer;
       }
 
@@ -186,7 +186,7 @@ const DotWrapper = styled.div`
   justify-content: center;
   overflow: hidden;
   align-items: center;
-  width: 120px; /* Ajuste o tamanho para comportar dots visíveis */
+  width: 120px;
 `;
 
 const DotScroll = styled.div`
@@ -194,18 +194,17 @@ const DotScroll = styled.div`
   gap: 8px;
   transition: transform 0.5s ease-in-out;
   transform: ${({ currentDot }) => {
-    const maxVisibleDots = 7; // Máximo de pontos visíveis
-    const dotWidth = 16; // Largura de cada ponto (incluindo o espaçamento)
+    const maxVisibleDots = 7;
+    const dotWidth = 16;
     const halfVisibleDots = Math.floor(maxVisibleDots / 2);
 
-    // Ajustar o deslocamento para centralizar o grupo visível
     const offset = currentDot > halfVisibleDots
       ? (currentDot - halfVisibleDots) * dotWidth
       : 0;
 
     return `translateX(calc(50% - ${offset}px))`;
   }};
-  justify-content: center; /* Garantir centralização do grupo */
+  justify-content: center;
   align-items: center;
 `;
 
@@ -249,15 +248,22 @@ const ArrowButton = styled.button`
 `;
 
 const SlideContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
   img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
   }
 
   iframe {
     width: 100%;
-    height: 400px;
+    height: auto;
     border-radius: 8px;
   }
 `;
