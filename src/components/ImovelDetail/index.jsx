@@ -10,6 +10,7 @@ import {
   Description,
   WhatsAppButton,
   CarouselWrapper,
+  StatusBadge,
 } from "./styles";
 import {
   FaBath,
@@ -41,7 +42,6 @@ const ImobiDetails = () => {
             valorLocacao: propertyData.valorLocacao || 0,
             vlCondominio: propertyData.vlCondominio || 0,
             vlIptu: propertyData.vlIptu || 0,
-
           });
         } else {
           console.error("Imóvel não encontrado.");
@@ -125,10 +125,10 @@ const ImobiDetails = () => {
       <ContentContainer>
         <Title>{property.titulo || property.tipo || "Sem Título"}</Title>
         <Address>{property.endereco || "Endereço não informado"}</Address>
-     
 
-
-
+        <StatusBadge status={property.disponibilidade}>
+          {property.disponibilidade || "Status não informado"}
+        </StatusBadge>
 
         <Features>
           <p>
@@ -137,11 +137,11 @@ const ImobiDetails = () => {
           <p>
             <FaBed /> {property.quartos || 0} quartos
           </p>
-          
+
           <p>
             <FaDoorClosed /> {property.suites || 0} suítes
           </p>
-       
+
           <p>
             <FaBath /> {property.banheiros || 0} banheiros
           </p>
@@ -151,75 +151,79 @@ const ImobiDetails = () => {
         </Features>
 
         <Price>
-          {property.valorVenda > 0 && (
-            <p>
-              <strong>Valor do Imóvel:</strong>{" "}
-              {property.valorVenda.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
-          )}
-          {property.valorLocacao > 0 && (
-            <p>
-              <strong>Valor da Locação:</strong>{" "}
-              {property.valorLocacao.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
-          )}
-          {property.vlCondominio > 0 && (
-            <p>
-              <strong>Condomínio:</strong>{" "}
-              {property.vlCondominio.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
-          )}
-          {property.vlIptu > 0 && (
-            <p>
-              <strong>IPTU:</strong>{" "}
-              {property.vlIptu.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
-          )}
-
-          
-      {/* Implementação de Disponibilidade na listagem do Card */}
-        <p
-  style={{
-  
-    color: property.disponibilidade === "Disponível" ? "green" : property.disponibilidade === "Indisponível" ? "red" : "gray",
-  }}
->
-  Status: {property.disponibilidade || "Status não disponível"}
-</p>
-
-
+          <div className="price-container">
+            {property.valorVenda > 0 && (
+              <div className="price-item highlight">
+                <span className="label">Venda</span>
+                <span className="value">
+                  {property.valorVenda.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </span>
+              </div>
+            )}
+            {property.valorLocacao > 0 && (
+              <div className="price-item highlight">
+                <span className="label">Locação</span>
+                <span className="value">
+                  {property.valorLocacao.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </span>
+              </div>
+            )}
+            {property.vlCondominio > 0 && (
+              <div className="price-item">
+                <span className="label">Condomínio</span>
+                <span className="value">
+                  {property.vlCondominio.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </span>
+              </div>
+            )}
+            <div className="price-item">
+              <span className="label">IPTU</span>
+              <span className="value">
+                {property.vlIptu > 0
+                  ? property.vlIptu.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    })
+                  : "não informado"}
+              </span>
+            </div>
+          </div>
         </Price>
 
         <Description style={{ whiteSpace: "pre-wrap" }}>
           {property.descricao || "Descrição não disponível."}
         </Description>
-        <div  style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <WhatsAppButton
-          href={`https://api.whatsapp.com/send?phone=5511973738808&text=Ol%C3%A1,%20gostaria%20de%20saber%20mais%20sobre%20o%20im%C3%B3vel%20${
-            property.titulo || property.tipo
-          }%20em%20${property.endereco}.`}
-          target="_blank"
-          rel="noopener noreferrer"
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
         >
-          Fale conosco!
-          <FaWhatsapp />
-        </WhatsAppButton>
+          <WhatsAppButton
+            href={`https://api.whatsapp.com/send?phone=5511973738808&text=Ol%C3%A1,%20gostaria%20de%20saber%20mais%20sobre%20o%20im%C3%B3vel%20${
+              property.titulo || property.tipo
+            }%20em%20${property.endereco}.`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Fale conosco!
+            <FaWhatsapp />
+          </WhatsAppButton>
 
-
-        <ShareIcon link={`https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`}/>{/* Adição do botão de Compartilhamento, a função dele é copiar o link específico do imóvel */}
-        
+          <ShareIcon
+            link={`https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`}
+          />
+          {/* Adição do botão de Compartilhamento, a função dele é copiar o link específico do imóvel */}
         </div>
       </ContentContainer>
     </Wrapper>
@@ -227,4 +231,3 @@ const ImobiDetails = () => {
 };
 
 export default ImobiDetails;
-	

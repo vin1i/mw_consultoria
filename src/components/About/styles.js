@@ -112,8 +112,8 @@ export const Arrow = styled.img`
   }
 
   @media (max-width: 768px) {
-    display: block; /* Mostra a seta no mobile */
-    width: 50px; /* Reduz o tamanho */
-    margin: 20px auto; /* Centraliza */
+    display: block;
+    width: 50px;
+    margin: 20px auto;
   }
 `;

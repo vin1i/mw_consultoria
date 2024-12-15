@@ -27,7 +27,6 @@ const Carousel = ({ images }) => {
   return (
     <Slider {...settings}>
       {images.map((item, index) => {
-
         return (
           <div key={index}>
             {item.type === "video" ? (
@@ -44,7 +43,11 @@ const Carousel = ({ images }) => {
               <img
                 src={item.src}
                 alt={`Imagem ${index + 1}`}
-                style={{ width: "100%", borderRadius: "8px" }}
+                style={{
+                  width: "100%",
+                  objectFit: "cover",
+                  borderRadius: "8px",
+                }}
               />
             )}
           </div>
