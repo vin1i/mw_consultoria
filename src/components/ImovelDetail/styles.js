@@ -113,7 +113,7 @@ export const Price = styled.div`
   .price-container {
     display: flex;
     align-items: flex-end;
-    gap: 10px;
+    gap: 30px;
   }
 
   .price-item {
@@ -162,6 +162,7 @@ export const Price = styled.div`
     .price-container {
       flex-direction: column;
       align-items: flex-start;
+      gap: 10px;
     }
 
     .price-item {
