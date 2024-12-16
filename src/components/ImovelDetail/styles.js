@@ -9,12 +9,12 @@ export const Wrapper = styled.div`
   background: var(--white);
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  gap: 15px;
+  gap: 20px; /* Aumenta o espaçamento entre os elementos principais */
 
   @media (max-width: 768px) {
     padding: 15px;
     margin: 10px;
-    gap: 10px;
+    gap: 1px; /* Espaçamento menor no mobile */
   }
 `;
 
@@ -34,12 +34,18 @@ export const Image = styled.img`
 export const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 20px; /* Adiciona um espaçamento consistente entre os elementos */
   align-items: flex-start;
-  justify-content: flex-start;
+
+  h1,
+  p,
+  div {
+    margin: 0; /* Remove margens padrão */
+  }
 
   @media (max-width: 768px) {
-    gap: 8px;
+    gap: 12px; /* Reduz o espaçamento no mobile */
+    padding-top: 10px; /* Garante espaço acima do título */
   }
 `;
 
@@ -51,6 +57,7 @@ export const Title = styled.h1`
 
   @media (max-width: 768px) {
     font-size: 18px;
+    margin-bottom: 5px; /* Menor espaçamento no mobile */
   }
 `;
 
@@ -162,28 +169,43 @@ export const Price = styled.div`
 `;
 
 export const CarouselWrapper = styled.div`
+  width: 100%;
   border-radius: 15px;
   position: relative;
+  margin-bottom: 15px;
 
   .slick-list {
     border-radius: 15px;
     overflow: hidden;
   }
 
+  img {
+    width: 100%;
+    max-height: 400px; /* Garante que a imagem tenha uma altura máxima */
+    object-fit: cover; /* Corta a imagem mantendo a proporção */
+  }
+
+  iframe {
+    width: 100%;
+    height: 400px;
+    border-radius: 15px;
+  }
+
   .slick-dots {
     position: absolute;
-    bottom: 3px;
+    bottom: 8px;
     width: 100%;
     display: flex;
     justify-content: center;
+    overflow-x: auto;
     gap: 8px;
     list-style: none;
-    padding: 0;
-    margin: 0;
+    padding: 0 10px;
   }
 
   .slick-dots li {
     margin: 0;
+    flex-shrink: 0;
   }
 
   .slick-dots li button {
@@ -197,6 +219,10 @@ export const CarouselWrapper = styled.div`
     line-height: 0;
   }
 
+  .slick-dots::-webkit-scrollbar {
+    display: none; /* Esconde a barra de rolagem no Chrome */
+  }
+
   .slick-dots li button::before {
     content: none;
   }
@@ -207,6 +233,19 @@ export const CarouselWrapper = styled.div`
 
   .slick-dots li button:hover {
     background-color: var(--red);
+  }
+
+  @media (max-width: 768px) {
+    img {
+      max-height: 250px; /* Ajusta altura da imagem no mobile */
+    }
+    iframe {
+      height: 250px;
+    }
+    .slick-dots {
+      bottom: 5px; /* Ajusta posição dos dots no mobile */
+      padding: 0 5px;
+    }
   }
 `;
 
