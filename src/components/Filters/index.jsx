@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import {
@@ -11,12 +11,28 @@ import {
 } from "./styles";
 
 const Filters = ({ filters, onFilterChange, filterOptions }) => {
-  const [priceRange, setPriceRange] = useState([
-    filters.precoMinimo || 0,
-    filters.precoMaximo || 20000000,
-  ]);
+  const [priceRange, setPriceRange] = useState([0, 20000000]);
+  const [tempPriceRange, setTempPriceRange] = useState([0, 20000000]);
 
-  const [tempPriceRange, setTempPriceRange] = useState(priceRange);
+  // Reset inicial dos valores
+  useEffect(() => {
+    setPriceRange([0, 20000000]);
+    setTempPriceRange([0, 20000000]);
+    onFilterChange({
+      ...filters,
+      precoMinimo: 0,
+      precoMaximo: 20000000,
+    });
+  }, []);
+
+  // Formata valores como reais
+  const formatToReais = (value) => {
+    return value.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      minimumFractionDigits: 0,
+    });
+  };
 
   const handleRangeChange = (range) => {
     setPriceRange(range);
@@ -64,21 +80,27 @@ const Filters = ({ filters, onFilterChange, filterOptions }) => {
         <Label>Preço (R$)</Label>
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           <PriceInput
-            type="number"
-            min={0}
-            max={20000000}
-            value={tempPriceRange[0]}
-            onChange={(e) => handleTempInputChange(0, e.target.value)}
+            type="text"
+            value={formatToReais(tempPriceRange[0])}
+            onChange={(e) =>
+              handleTempInputChange(
+                0,
+                e.target.value.replace(/[^\d]/g, "") // Remove não numéricos
+              )
+            }
             onBlur={() => applyInputChange(0)}
-            onKeyDown={(e) =>   e.key === "Enter" && applyInputChange(0)}
+            onKeyDown={(e) => e.key === "Enter" && applyInputChange(0)}
           />
           <span style={{ fontWeight: "bold", color: "#333" }}>até</span>
           <PriceInput
-            type="number"
-            min={0}
-            max={20000000}
-            value={tempPriceRange[1]}
-            onChange={(e) => handleTempInputChange(1, e.target.value)}
+            type="text"
+            value={formatToReais(tempPriceRange[1])}
+            onChange={(e) =>
+              handleTempInputChange(
+                1,
+                e.target.value.replace(/[^\d]/g, "") // Remove não numéricos
+              )
+            }
             onBlur={() => applyInputChange(1)}
             onKeyDown={(e) => e.key === "Enter" && applyInputChange(1)}
           />
@@ -97,9 +119,8 @@ const Filters = ({ filters, onFilterChange, filterOptions }) => {
               backgroundColor: "#fff",
               height: 20,
               width: 20,
-              marginTop: -6 /* Centraliza verticalmente os handles */,
-              boxShadow:
-                "0 0 5px rgba(0,0,0,0.2)" /* Adiciona um efeito leve */,
+              marginTop: -6,
+              boxShadow: "0 0 5px rgba(0,0,0,0.2)",
             }}
             railStyle={{ backgroundColor: "#ddd", height: 8 }}
           />
