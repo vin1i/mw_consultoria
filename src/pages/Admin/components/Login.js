@@ -118,8 +118,7 @@ const Login = () => {
       toast.success("Login realizado com sucesso!");
       navigate("/admin/imoveis");
     } else {
-      setError("Erro ao realizar login. Verifique as credenciais.");
-      toast.error("Erro ao realizar login.");
+      toast.error("Erro ao realizar login. Verifique Email/Senha");
     }
 
     setIsSubmitting(false);
