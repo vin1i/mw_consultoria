@@ -23,7 +23,7 @@ const Carousel = ({ images }) => {
   }
 
   const settings = {
-    dots: !isMobile, // Desativa os dots no mobile
+    dots: !isMobile,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -99,12 +99,28 @@ const CarouselWrapper = styled.div`
 `;
 
 const SlideContainer = styled.div`
-  img,
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+  }
+
   iframe {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    aspect-ratio: 16 / 9;
     border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    max-height: 300px;
   }
 `;
 

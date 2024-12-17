@@ -255,23 +255,28 @@ const SlideContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 300px; /* Defina uma altura fixa para mobile */
+  height: auto;
+  overflow: hidden;
 
   img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
     border-radius: 8px;
   }
 
   iframe {
     width: 100%;
-    height: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
     border-radius: 8px;
   }
 
   @media (max-width: 768px) {
-    height: 200px; /* Reduz a altura no mobile */
+    img,
+    iframe {
+      height: auto;
+      max-height: 300px;
   }
 `;
 

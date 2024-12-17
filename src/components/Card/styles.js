@@ -11,8 +11,8 @@ export const CardContainer = styled.div`
   height: auto;
   align-items: stretch;
 
-  @media  (max-width: 768px) {
-    flex-direction: column; 
+  @media (max-width: 768px) {
+    flex-direction: column;
     margin-bottom: 8px;
   }
 `;
