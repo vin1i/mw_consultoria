@@ -126,9 +126,7 @@ const ImobiDetails = () => {
         <Title>{property.titulo || property.tipo || "Sem Título"}</Title>
         <Address>{property.endereco || "Endereço não informado"}</Address>
 
-        <StatusBadge status={property.disponibilidade}>
-          {property.disponibilidade || "Status não informado"}
-        </StatusBadge>
+     
 
         <Features>
           <p>
@@ -174,6 +172,7 @@ const ImobiDetails = () => {
                 </span>
               </div>
             )}
+            
             {property.vlCondominio > 0 && (
               <div className="price-item">
                 <span className="label">Condomínio</span>
@@ -185,6 +184,7 @@ const ImobiDetails = () => {
                 </span>
               </div>
             )}
+            
             <div className="price-item">
               <span className="label">IPTU</span>
               <span className="value">
@@ -196,8 +196,14 @@ const ImobiDetails = () => {
                   : "não informado"}
               </span>
             </div>
+
+            <StatusBadge status={property.disponibilidade}>
+          {property.disponibilidade || "Status não informado"}
+        </StatusBadge>
           </div>
+          
         </Price>
+        
 
         <Description style={{ whiteSpace: "pre-wrap" }}>
           {property.descricao || "Descrição não disponível."}
@@ -220,7 +226,7 @@ const ImobiDetails = () => {
             <FaWhatsapp />
           </WhatsAppButton>
 
-          <ShareIcon
+          <ShareIcon 
             link={`https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`}
           />
           {/* Adição do botão de Compartilhamento, a função dele é copiar o link específico do imóvel */}
