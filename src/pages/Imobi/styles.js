@@ -13,27 +13,35 @@ export const Container = styled.div`
 `;
 
 export const Card = styled.div`
-    display: flex; /* Usar flexbox para organizar a imagem e texto */
-    flex-direction: column; /* Organiza os filhos em coluna */
-    align-items: center; /* Centraliza horizontalmente os itens */
-    justify-content: flex-start; /* Ajusta para que os itens comecem do topo */
-    width: 100%; /* Agora ocupa toda a largura do Container */
-    max-width: 1100px; /* Define uma largura máxima para o Card */
-    padding: 20px; /* Adiciona padding ao Card */
-    margin: 0 auto; /* Centraliza o container horizontalmente */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 1100px;
+    padding: 20px;
+    margin: 0 auto;
     color: var(--black);
-    z-index: 2;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra opcional */
-    border-radius: 8px; /* Bordas arredondadas opcional */
-    background-color: #fff; /* Cor de fundo opcional */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #fff;
+
+    /* Garante que os elementos se ajustem dinamicamente */
+    > * {
+        flex: 0 0 auto;
+    }
 `;
 
 export const Thumb = styled.div`
-    width: 100%; /* Garante que a imagem ocupe toda a largura do contêiner */
+    width: 100%;
+    max-height: 400px; /* Define uma altura máxima para o container da imagem */
+    overflow: hidden; /* Esconde qualquer parte que ultrapasse o container */
+
     img {
-        width: 100%; /* Garante que a imagem ocupe toda a largura do contêiner */
-        height: auto;
-        border-radius: 8px; /* Adiciona bordas arredondadas à imagem */
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* Garante que a imagem seja exibida inteira */
+        display: block;
     }
 `;
 

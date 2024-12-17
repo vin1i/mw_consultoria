@@ -15,11 +15,11 @@ export const Container = styled.div`
   }
 
   @media (max-width: 768px) {
-    flex-direction: column; /* Empilha os elementos */
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 20px;
-    gap: 20px; /* Reduz o espaçamento entre os elementos */
+    gap: 20px;
   }
 `;
 
@@ -47,7 +47,7 @@ export const Text = styled.div`
   h1 {
     font-size: 2.5rem;
     margin-bottom: 20px;
-    color: var(--red); /* Adiciona destaque com a cor vermelha */
+    color: var(--red);
   }
 
   h3 {
@@ -55,14 +55,14 @@ export const Text = styled.div`
     margin-top: 10px;
     margin-bottom: 25px;
     font-weight: 500;
-    color: var(--black); /* Mantém um contraste forte */
+    color: var(--black);
   }
 
   p {
     font-size: 1.6rem;
     margin-bottom: 20px;
     line-height: 1.5;
-    color: var(--black); /* Garante legibilidade */
+    color: var(--black);
   }
 
   @media (max-width: 1024px) {

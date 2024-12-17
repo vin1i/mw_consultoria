@@ -3,18 +3,22 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 1200px;
+  max-width: 800px;
   margin: 20px auto;
   padding: 20px;
   background: var(--white);
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
+
+  /* Garante que os filhos respeitem o fluxo */
+  > * {
+    flex-shrink: 0;
+  }
 
   @media (max-width: 768px) {
     padding: 15px;
     margin: 10px;
+    gap: 0;
   }
 `;
 
@@ -33,10 +37,11 @@ export const Image = styled.img`
 
 export const ContentContainer = styled.div`
   display: flex;
-  margin: 0 20px 20px 20px;
   flex-direction: column;
   gap: 20px;
   align-items: flex-start;
+
+  flex: 1;
 
   h1,
   p,
@@ -72,35 +77,27 @@ export const Address = styled.p`
 `;
 
 export const Features = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--black);
+  margin: 6px 0;
 
   p {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
     margin: 0;
-    font-size: 16px;
   }
 
   svg {
     color: var(--red);
-    flex-shrink: 0;
-  }
-
-  p:nth-child(odd) {
-    grid-column: 1;
-  }
-
-  p:nth-child(even) {
-    grid-column: 2;
   }
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    font-size: 13px;
+    gap: 8px;
   }
 `;
 
@@ -162,7 +159,6 @@ export const Price = styled.div`
     .price-container {
       flex-direction: column;
       align-items: flex-start;
-      gap: 10px;
     }
 
     .price-item {
@@ -179,10 +175,13 @@ export const Price = styled.div`
 `;
 
 export const CarouselWrapper = styled.div`
-  width: 100%;
   border-radius: 15px;
+  width: 100%;
   position: relative;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   .slick-list {
     border-radius: 15px;
@@ -191,13 +190,14 @@ export const CarouselWrapper = styled.div`
 
   img {
     width: 100%;
-    max-height: 400px;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
+    display: block;
   }
 
   iframe {
     width: 100%;
-    height: 400px;
+    height: auto;
     border-radius: 15px;
   }
 
@@ -230,7 +230,7 @@ export const CarouselWrapper = styled.div`
   }
 
   .slick-dots::-webkit-scrollbar {
-    display: none;
+    display: none; /* Esconde a barra de rolagem no Chrome */
   }
 
   .slick-dots li button::before {
@@ -247,14 +247,24 @@ export const CarouselWrapper = styled.div`
 
   @media (max-width: 768px) {
     img {
-      max-height: 250px;
+      max-width: 100%; /* Garante que a imagem se ajuste à largura da tela */
+      height: auto; /* Mantém a proporção original */
+      object-fit: contain;
     }
+
     iframe {
-      height: 250px;
+      max-width: 100%;
+      height: auto;
     }
-    .slick-dots {
-      bottom: 5px;
-      padding: 0 5px;
+  }
+
+  @media (max-width: 480px) {
+    aspect-ratio: 16 / 9; /* Mantém uma proporção 16:9 para telas pequenas */
+    img,
+    iframe {
+      width: 100%;
+      height: 100%; /* Ajusta à proporção definida */
+      object-fit: contain;
     }
   }
 `;
