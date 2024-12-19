@@ -32,7 +32,7 @@ const ImobiList = () => {
   });
   const { setIsLoading, isLoading } = useLoading();
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 5;
 
   const filterOptions = [
     {
