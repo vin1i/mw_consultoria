@@ -8,7 +8,9 @@ import "slick-carousel/slick/slick-theme.css";
 
 const Carousel = ({ images }) => {
   const [currentSlide, setCurrentSlide] = useState(1);
+  const [currentDotGroup, setCurrentDotGroup] = useState(0); // Grupo das bolas 🌚
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const dotsPerPage = 10; // Número das bolas 🌚
 
   useEffect(() => {
     const handleResize = () => {
@@ -23,7 +25,7 @@ const Carousel = ({ images }) => {
   }
 
   const settings = {
-    dots: !isMobile,
+    dots: false, 
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -33,7 +35,36 @@ const Carousel = ({ images }) => {
     prevArrow: <CustomArrow direction="prev" />,
     autoplay: false,
     lazyLoad: "ondemand",
-    beforeChange: (_, next) => setCurrentSlide(next + 1),
+    beforeChange: (_, next) => {
+      setCurrentSlide(next + 1);
+
+      // Atualizar grupo de bolinhas quando atingir um novo conjunto
+      const nextGroup = Math.floor(next / dotsPerPage);
+      if (nextGroup !== currentDotGroup) {
+        setCurrentDotGroup(nextGroup);
+      }
+    },
+  };
+
+  const renderDots = () => {
+    const start = currentDotGroup * dotsPerPage;
+    const end = Math.min(start + dotsPerPage, images.length);
+    const visibleDots = images.slice(start, end);
+
+    return (
+      <DotContainer>
+        {visibleDots.map((_, index) => {
+          const dotIndex = start + index;
+          return (
+            <Dot
+              key={dotIndex}
+              active={dotIndex + 1 === currentSlide}
+              onClick={() => setCurrentSlide(dotIndex + 1)}
+            />
+          );
+        })}
+      </DotContainer>
+    );
   };
 
   return (
@@ -61,11 +92,16 @@ const Carousel = ({ images }) => {
           </SlideContainer>
         ))}
       </Slider>
+
+      {/* Para dispositivos móveis, renderizar o contador */}
       {isMobile && (
-        <SlideIndicator>
+        <SlideCounter>
           {currentSlide} / {images.length}
-        </SlideIndicator>
+        </SlideCounter>
       )}
+
+      {/* Para desktop, renderizar a navegação com bolinhas */}
+      {!isMobile && renderDots()}
     </CarouselWrapper>
   );
 };
@@ -92,10 +128,6 @@ const CustomArrow = ({ direction, onClick }) => (
 const CarouselWrapper = styled.div`
   position: relative;
   width: 100%;
-
-  @media (max-width: 768px) {
-    height: 250px;
-  }
 `;
 
 const SlideContainer = styled.div`
@@ -118,21 +150,35 @@ const SlideContainer = styled.div`
     aspect-ratio: 16 / 9;
     border-radius: 8px;
   }
-
-  @media (max-width: 768px) {
-    max-height: 300px;
-  }
 `;
 
-const SlideIndicator = styled.div`
+const DotContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  gap: 8px;
+`;
+
+const Dot = styled.button`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+   background-color: ${(props) => (props.active ? "#9c192b" : "#ccc")};
+  border: none;
+  cursor: pointer;
+`;
+
+const SlideCounter = styled.div`
   position: absolute;
   bottom: 10px;
-  right: 10px;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: white;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
   padding: 5px 10px;
   border-radius: 5px;
-  font-size: 14px;
 `;
 
 const ArrowButton = styled.button`
@@ -162,4 +208,3 @@ const FallbackMessage = styled.p`
 `;
 
 export default Carousel;
-  
