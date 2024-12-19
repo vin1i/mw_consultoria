@@ -23,6 +23,7 @@ import {
 import Carousel from "../Carousel";
 import { getImovelById } from "../../services/firebase/firestoreService";
 import { useLoading } from "../../context/LoadingContext";
+import { Helmet } from "react-helmet";
 import ShareIcon from "./shareIcon";
 
 const ImobiDetails = () => {
@@ -119,6 +120,26 @@ const ImobiDetails = () => {
 
   return (
     <Wrapper>
+        <Helmet>
+        <title>{property.titulo || "Detalhes do Imóvel"}</title>
+        <meta
+          name="description"
+          content={property.descricao || "Descrição não disponível."}
+        />
+        <meta
+          property="og:title"
+          content={property.titulo || "Detalhes do Imóvel"}
+        />
+        <meta
+          property="og:description"
+          content={property.descricao || "Descrição não disponível."}
+        />
+        <meta
+          property="og:image"
+          content={images.length > 0 ? images[0].src : "https://via.placeholder.com/300x200?text=Sem+Imagem"}
+        />
+        <meta property="og:url" content={`https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`} />
+      </Helmet>
       <CarouselWrapper>
         <Carousel images={images} />
       </CarouselWrapper>
