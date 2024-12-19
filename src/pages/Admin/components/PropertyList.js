@@ -25,7 +25,10 @@ const PropertyList = ({ onEdit, onDelete }) => {
 
         const formattedProperties = data.map((property) => ({
           ...property,
-          imagens: property.imagens.map((img) => generateCloudinaryURL(img)), // Normaliza as URLs
+          valorVenda: parseFloat(property.valorVenda) || null,
+          valorLocacao: parseFloat(property.valorLocacao) || null,
+          vlCondominio: parseFloat(property.vlCondominio) || null,
+          vlIptu: parseFloat(property.vlIptu) || null,
         }));
 
         setProperties(formattedProperties);
@@ -40,7 +43,12 @@ const PropertyList = ({ onEdit, onDelete }) => {
   }, [setIsLoading]);
 
   const formatCurrency = (value) =>
-    value ? `R$ ${value.toLocaleString("pt-BR")}` : "Não disponível";
+    value !== null && value !== undefined
+      ? `R$ ${parseFloat(value).toLocaleString("pt-BR", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`
+      : "Não disponível";
 
   const availableProperties = properties.filter(
     (property) => property.disponibilidade !== "Indisponível"
@@ -83,7 +91,7 @@ const PropertyList = ({ onEdit, onDelete }) => {
   };
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 6;
 
   const paginatedProperties = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -156,12 +164,11 @@ const PropertyList = ({ onEdit, onDelete }) => {
                   <strong>Banheiros:</strong>{" "}
                   {property.banheiros || "Não informado"}
                 </p>
-               
+
                 <p>
                   <strong>Vagas:</strong> {property.vagas || "Não informado"}
                 </p>
-            
-               
+
                 <p>
                   <strong>Descrição:</strong>{" "}
                   {property.descricao || "Não informada"}
@@ -257,6 +264,7 @@ const Details = styled.div`
 
   p {
     margin-bottom: 8px;
+    color: #333;
   }
 `;
 
