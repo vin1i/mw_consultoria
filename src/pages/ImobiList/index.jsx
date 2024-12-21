@@ -55,7 +55,21 @@ const ImobiList = () => {
         { value: "1", label: "1" },
         { value: "2", label: "2" },
         { value: "3", label: "3" },
-        { value: "4+", label: "4+" },
+        { value: "4", label: "4" },
+        { value: "5+", label: "5+" }, // Adiciona opção para 5 ou mais
+      ],
+    },
+    {
+      id: "suites",
+      label: "Suítes",
+      key: "suites",
+      options: [
+        { value: "", label: "Qualquer" },
+        { value: "1", label: "1" },
+        { value: "2", label: "2" },
+        { value: "3", label: "3" },
+        { value: "4", label: "4" },
+        { value: "5+", label: "5+" }, // Para 5 ou mais suítes
       ],
     },
     {
@@ -66,7 +80,9 @@ const ImobiList = () => {
         { value: "", label: "Qualquer" },
         { value: "1", label: "1" },
         { value: "2", label: "2" },
-        { value: "3", label: "3+" },
+        { value: "3", label: "3" },
+        { value: "4", label: "4" },
+        { value: "5+", label: "5+" }, // Adiciona opção para 5 ou mais
       ],
     },
     {
@@ -77,7 +93,9 @@ const ImobiList = () => {
         { value: "", label: "Qualquer" },
         { value: "1", label: "1" },
         { value: "2", label: "2" },
-        { value: "3", label: "3+" },
+        { value: "3", label: "3" },
+        { value: "4", label: "4" },
+        { value: "5+", label: "5+" }, // Adiciona opção para 5 ou mais
       ],
     },
   ];
@@ -107,7 +125,8 @@ const ImobiList = () => {
   }, [setIsLoading]);
 
   const filteredProperties = useMemo(() => {
-    return imoveis.filter((property) => {
+    const sortedProperties = imoveis.filter((property) => {
+      // Tipo de negócio
       if (filters.tipo) {
         if (
           filters.tipo === "venda" &&
@@ -116,7 +135,6 @@ const ImobiList = () => {
         ) {
           return false;
         }
-
         if (
           filters.tipo === "locacao" &&
           property.tipo !== "locacao" &&
@@ -124,7 +142,6 @@ const ImobiList = () => {
         ) {
           return false;
         }
-
         if (
           filters.tipo !== "venda" &&
           filters.tipo !== "locacao" &&
@@ -133,52 +150,93 @@ const ImobiList = () => {
           return false;
         }
       }
-
-      if (filters.quartos) {
-        const quartosFilter = Number(filters.quartos.replace("+", ""));
-        const quartosProperty = Number(property.quartos);
-        if (
-          (filters.quartos.includes("+") && quartosProperty < quartosFilter) ||
-          (!filters.quartos.includes("+") && quartosProperty !== quartosFilter)
-        ) {
-          return false;
-        }
-      }
-
-      if (filters.banheiros) {
-        const banheirosFilter = Number(filters.banheiros.replace("+", ""));
-        const banheirosProperty = Number(property.banheiros);
-        if (
-          (filters.banheiros.includes("+") &&
-            banheirosProperty < banheirosFilter) ||
-          (!filters.banheiros.includes("+") &&
-            banheirosProperty !== banheirosFilter)
-        ) {
-          return false;
-        }
-      }
-
-      if (filters.vagas) {
-        const vagasFilter = Number(filters.vagas.replace("+", ""));
-        const vagasProperty = Number(property.vagas);
-        if (
-          (filters.vagas.includes("+") && vagasProperty < vagasFilter) ||
-          (!filters.vagas.includes("+") && vagasProperty !== vagasFilter)
-        ) {
-          return false;
-        }
-      }
-
+  
+      // Filtro de preço
       if (
         (filters.precoMinimo && property.valorVenda < filters.precoMinimo) ||
         (filters.precoMaximo && property.valorVenda > filters.precoMaximo)
       ) {
         return false;
       }
-
+  
+      // Filtro de quartos
+      if (filters.quartos) {
+        const quartosFilter = Number(filters.quartos.replace("+", ""));
+        const quartosProperty = Number(property.quartos);
+        if (
+          filters.quartos.includes("+")
+            ? quartosProperty < quartosFilter
+            : quartosProperty !== quartosFilter
+        ) {
+          return false;
+        }
+      }
+  
+      // Filtro de suítes
+      if (filters.suites) {
+        const suitesFilter = Number(filters.suites.replace("+", ""));
+        const suitesProperty = Number(property.suites);
+        if (
+          filters.suites.includes("+")
+            ? suitesProperty < suitesFilter
+            : suitesProperty !== suitesFilter
+        ) {
+          return false;
+        }
+      }
+  
+      // Filtro de banheiros
+      if (filters.banheiros) {
+        const banheirosFilter = Number(filters.banheiros.replace("+", ""));
+        const banheirosProperty = Number(property.banheiros);
+        if (
+          filters.banheiros.includes("+")
+            ? banheirosProperty < banheirosFilter
+            : banheirosProperty !== banheirosFilter
+        ) {
+          return false;
+        }
+      }
+  
+      // Filtro de vagas
+      if (filters.vagas) {
+        const vagasFilter = Number(filters.vagas.replace("+", ""));
+        const vagasProperty = Number(property.vagas);
+        if (
+          filters.vagas.includes("+")
+            ? vagasProperty < vagasFilter
+            : vagasProperty !== vagasFilter
+        ) {
+          return false;
+        }
+      }
+  
       return true;
     });
+  
+    // Ordenação por filtros
+    if (filters.ordenacaoVenda === "asc") {
+      return sortedProperties.sort((a, b) => a.valorVenda - b.valorVenda);
+    }
+    if (filters.ordenacaoVenda === "desc") {
+      return sortedProperties.sort((a, b) => b.valorVenda - a.valorVenda);
+    }
+    if (filters.ordenacaoLocacao === "asc") {
+      return sortedProperties.sort((a, b) => a.valorLocacao - b.valorLocacao);
+    }
+    if (filters.ordenacaoLocacao === "desc") {
+      return sortedProperties.sort((a, b) => b.valorLocacao - a.valorLocacao);
+    }
+    if (filters.ordenacaoOutros === "asc") {
+      return sortedProperties.sort((a, b) => a.vlCondominio - b.vlCondominio);
+    }
+    if (filters.ordenacaoOutros === "desc") {
+      return sortedProperties.sort((a, b) => b.vlCondominio - a.vlCondominio);
+    }
+  
+    return sortedProperties; // Retorna sem ordenação se nenhum filtro for aplicado
   }, [imoveis, filters]);
+  
 
   const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
 
@@ -188,8 +246,30 @@ const ImobiList = () => {
   }, [filteredProperties, currentPage, itemsPerPage]);
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [filters]);
+    const fetchImoveis = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedImoveis = await getImoveis();
+        const normalizedImoveis = fetchedImoveis
+          .map((property) => ({
+            ...property,
+            valorVenda: normalizeValues(property.valorVenda),
+            valorLocacao: normalizeValues(property.valorLocacao),
+            vlCondominio: normalizeValues(property.vlCondominio),
+            vlIptu: normalizeValues(property.vlIptu),
+          }))
+          .sort((a, b) => a.valorVenda - b.valorVenda); // Ordena do menor para o maior valorVenda
+        setImoveis(normalizedImoveis);
+      } catch (error) {
+        console.error("Erro ao buscar imóveis:", error);
+        setError("Erro ao carregar os imóveis. Tente novamente.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchImoveis();
+  }, [setIsLoading]);
 
   return (
     <Wrapper>

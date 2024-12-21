@@ -14,7 +14,6 @@ const Filters = ({ filters, onFilterChange, filterOptions }) => {
   const [priceRange, setPriceRange] = useState([0, 20000000]);
   const [tempPriceRange, setTempPriceRange] = useState([0, 20000000]);
 
-  // Reset inicial dos valores
   useEffect(() => {
     setPriceRange([0, 20000000]);
     setTempPriceRange([0, 20000000]);
@@ -22,10 +21,12 @@ const Filters = ({ filters, onFilterChange, filterOptions }) => {
       ...filters,
       precoMinimo: 0,
       precoMaximo: 20000000,
+      ordenacaoVenda: "",
+      ordenacaoLocacao: "",
+      ordenacaoOutros: "",
     });
   }, []);
 
-  // Formata valores como reais
   const formatToReais = (value) => {
     return value.toLocaleString("pt-BR", {
       style: "currency",
@@ -74,8 +75,17 @@ const Filters = ({ filters, onFilterChange, filterOptions }) => {
     });
   };
 
+  const handleSortChange = (e, type) => {
+    const key = `ordenacao${type}`;
+    onFilterChange({
+      ...filters,
+      [key]: e.target.value,
+    });
+  };
+
   return (
     <FiltersContainer>
+      {/* Filtro de Preço */}
       <FieldContainer>
         <Label>Preço (R$)</Label>
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
@@ -85,7 +95,7 @@ const Filters = ({ filters, onFilterChange, filterOptions }) => {
             onChange={(e) =>
               handleTempInputChange(
                 0,
-                e.target.value.replace(/[^\d]/g, "") // Remove não numéricos
+                e.target.value.replace(/[^\d]/g, "")
               )
             }
             onBlur={() => applyInputChange(0)}
@@ -98,7 +108,7 @@ const Filters = ({ filters, onFilterChange, filterOptions }) => {
             onChange={(e) =>
               handleTempInputChange(
                 1,
-                e.target.value.replace(/[^\d]/g, "") // Remove não numéricos
+                e.target.value.replace(/[^\d]/g, "")
               )
             }
             onBlur={() => applyInputChange(1)}
@@ -127,6 +137,46 @@ const Filters = ({ filters, onFilterChange, filterOptions }) => {
         </SliderWrapper>
       </FieldContainer>
 
+      {/* Filtro de Ordenação */}
+      <FieldContainer>
+        <Label>Ordenar por Venda</Label>
+        <StyledSelect
+          value={filters.ordenacaoVenda || ""}
+          onChange={(e) => handleSortChange(e, "Venda")}
+        >
+          <option value="">Selecione</option>
+          <option value="asc">Menor para Maior</option>
+          <option value="desc">Maior para Menor</option>
+        </StyledSelect>
+      </FieldContainer>
+
+      {/* Filtro de Ordenação por Locação */}
+      <FieldContainer>
+        <Label>Ordenar por Locação</Label>
+        <StyledSelect
+          value={filters.ordenacaoLocacao || ""}
+          onChange={(e) => handleSortChange(e, "Locacao")}
+        >
+          <option value="">Selecione</option>
+          <option value="asc">Menor para Maior</option>
+          <option value="desc">Maior para Menor</option>
+        </StyledSelect>
+      </FieldContainer>
+
+      {/* Filtro de Ordenação por Condomínio */}
+      <FieldContainer>
+        <Label>Ordenar por Condomínio</Label>
+        <StyledSelect
+          value={filters.ordenacaoOutros || ""}
+          onChange={(e) => handleSortChange(e, "Outros")}
+        >
+          <option value="">Selecione</option>
+          <option value="asc">Menor para Maior</option>
+          <option value="desc">Maior para Menor</option>
+        </StyledSelect>
+      </FieldContainer>
+
+      {/* Outros filtros */}
       {filterOptions.map(({ id, label, key, options }) => (
         <FieldContainer key={id}>
           <Label htmlFor={id}>{label}</Label>
