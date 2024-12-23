@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet"; // Importa React Helmet
 import {
   Wrapper,
   ContentContainer,
@@ -117,16 +118,33 @@ const ImobiDetails = () => {
     });
   }
 
+  // Open Graph Meta Tags
+  const metaTitle =
+    property.titulo || "Imóvel disponível | MW Consultoria Imobiliária";
+  const metaDescription =
+    property.descricao?.substring(0, 150) ||
+    "Confira este imóvel disponível na MW Consultoria Imobiliária.";
+  const metaImage =
+    images[0]?.src || "https://via.placeholder.com/300x200?text=Sem+Imagem";
+  const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
+
   return (
     <Wrapper>
+      <Helmet>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:image" content={metaImage} />
+        <meta property="og:url" content={metaUrl} />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <CarouselWrapper>
         <Carousel images={images} />
       </CarouselWrapper>
       <ContentContainer>
         <Title>{property.titulo || property.tipo || "Sem Título"}</Title>
         <Address>{property.endereco || "Endereço não informado"}</Address>
-
-     
 
         <Features>
           <p>
@@ -172,7 +190,7 @@ const ImobiDetails = () => {
                 </span>
               </div>
             )}
-            
+
             {property.vlCondominio > 0 && (
               <div className="price-item">
                 <span className="label">Condomínio</span>
@@ -184,7 +202,7 @@ const ImobiDetails = () => {
                 </span>
               </div>
             )}
-            
+
             <div className="price-item">
               <span className="label">IPTU</span>
               <span className="value">
@@ -198,12 +216,10 @@ const ImobiDetails = () => {
             </div>
 
             <StatusBadge status={property.disponibilidade}>
-          {property.disponibilidade || "Status não informado"}
-        </StatusBadge>
+              {property.disponibilidade || "Status não informado"}
+            </StatusBadge>
           </div>
-          
         </Price>
-        
 
         <Description style={{ whiteSpace: "pre-wrap" }}>
           {property.descricao || "Descrição não disponível."}
@@ -226,10 +242,7 @@ const ImobiDetails = () => {
             <FaWhatsapp />
           </WhatsAppButton>
 
-          <ShareIcon 
-            link={`https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`}
-          />
-          {/* Adição do botão de Compartilhamento, a função dele é copiar o link específico do imóvel */}
+          <ShareIcon link={metaUrl} />
         </div>
       </ContentContainer>
     </Wrapper>
