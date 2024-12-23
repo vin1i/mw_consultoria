@@ -261,14 +261,15 @@ const SlideContainer = styled.div`
   img {
     width: 100%;
     height: auto;
-    object-fit: contain;
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
     border-radius: 8px;
   }
 
   iframe {
     width: 100%;
     height: auto;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
     border-radius: 8px;
   }
 

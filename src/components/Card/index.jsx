@@ -58,6 +58,7 @@ const Card = ({
           padding: "8px",
           background: "#ffffff",
           overflow: "hidden",
+          aspectRatio: 4 / 3
         }}
       >
         <ImageCarousel
