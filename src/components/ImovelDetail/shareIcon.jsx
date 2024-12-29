@@ -1,4 +1,4 @@
-import react from "react"
+import React from "react"
 import { toast } from "react-toastify";
 import { FaShareAlt } from "react-icons/fa"
 
