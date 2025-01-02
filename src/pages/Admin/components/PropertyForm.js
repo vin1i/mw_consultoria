@@ -474,65 +474,79 @@ const PropertyForm = ({ existingProperty, onSave }) => {
           </InputGroup>
 
           {/* Valores financeiros */}
-          <InputGroup>
-            <Label>Valor de Venda</Label>
-            <NumericFormat
-              value={formData.valorVenda}
-              onValueChange={(values) =>
-                handleChange("valorVenda", values.formattedValue)
-              }
-              thousandSeparator="."
-              decimalSeparator=","
-              prefix="R$ "
-              placeholder="Preço para venda do imóvel"
-              customInput={Input}
-            />
-          </InputGroup>
+   {/* Valores financeiros */}
+<InputGroup>
+  <Label>Valor de Venda</Label>
+  <NumericFormat
+    value={formData.valorVenda}
+    onValueChange={(values) =>
+      handleChange("valorVenda", values.formattedValue)
+    }
+    thousandSeparator="."
+    decimalSeparator=","
+    prefix="R$ "
+    placeholder="Preço para venda do imóvel"
+    customInput={Input}
+  />
+  <p style={{ fontSize: "12px", color: "#888", marginTop: "5px" }}>
+    Digite apenas números. O campo será formatado automaticamente.
+  </p>
+</InputGroup>
 
-          <InputGroup>
-            <Label>Valor de Locação</Label>
-            <NumericFormat
-              value={formData.valorLocacao}
-              onValueChange={(values) =>
-                handleChange("valorLocacao", values.formattedValue)
-              }
-              thousandSeparator="."
-              decimalSeparator=","
-              prefix="R$ "
-              placeholder="Preço para locação do imóvel"
-              customInput={Input}
-            />
-          </InputGroup>
+<InputGroup>
+  <Label>Valor de Locação</Label>
+  <NumericFormat
+    value={formData.valorLocacao}
+    onValueChange={(values) =>
+      handleChange("valorLocacao", values.formattedValue)
+    }
+    thousandSeparator="."
+    decimalSeparator=","
+    prefix="R$ "
+    placeholder="Preço para locação do imóvel"
+    customInput={Input}
+  />
+  <p style={{ fontSize: "12px", color: "#888", marginTop: "5px" }}>
+    Digite apenas números. O campo será formatado automaticamente.
+  </p>
+</InputGroup>
 
-          <InputGroup>
-            <Label>Valor do Condomínio</Label>
-            <NumericFormat
-              value={formData.vlCondominio}
-              onValueChange={(values) =>
-                handleChange("vlCondominio", values.formattedValue)
-              }
-              thousandSeparator="."
-              decimalSeparator=","
-              prefix="R$ "
-              placeholder="Preço do condomínio do imóvel"
-              customInput={Input}
-            />
-          </InputGroup>
+<InputGroup>
+  <Label>Valor do Condomínio</Label>
+  <NumericFormat
+    value={formData.vlCondominio}
+    onValueChange={(values) =>
+      handleChange("vlCondominio", values.formattedValue)
+    }
+    thousandSeparator="."
+    decimalSeparator=","
+    prefix="R$ "
+    placeholder="Preço do condomínio do imóvel"
+    customInput={Input}
+  />
+  <p style={{ fontSize: "12px", color: "#888", marginTop: "5px" }}>
+    Digite apenas números. O campo será formatado automaticamente.
+  </p>
+</InputGroup>
 
-          <InputGroup>
-            <Label>Valor do IPTU</Label>
-            <NumericFormat
-              value={formData.vlIptu}
-              onValueChange={(values) =>
-                handleChange("vlIptu", values.formattedValue)
-              }
-              thousandSeparator="."
-              decimalSeparator=","
-              prefix="R$ "
-              placeholder="Preço do IPTU do imóvel"
-              customInput={Input}
-            />
-          </InputGroup>
+<InputGroup>
+  <Label>Valor do IPTU</Label>
+  <NumericFormat
+    value={formData.vlIptu}
+    onValueChange={(values) =>
+      handleChange("vlIptu", values.formattedValue)
+    }
+    thousandSeparator="."
+    decimalSeparator=","
+    prefix="R$ "
+    placeholder="Preço do IPTU do imóvel"
+    customInput={Input}
+  />
+  <p style={{ fontSize: "12px", color: "#888", marginTop: "5px" }}>
+    Digite apenas números. O campo será formatado automaticamente.
+  </p>
+</InputGroup>
+
 
           {/* Disponibilidade */}
           <InputGroup>
