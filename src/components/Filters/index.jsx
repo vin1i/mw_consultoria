@@ -25,7 +25,7 @@ const Filters = ({ filters, onFilterChange, filterOptions }) => {
       ordenacaoLocacao: "",
       ordenacaoOutros: "",
     });
-  }, [filters, onFilterChange]);
+  }, []);
 
   const formatToReais = (value) => {
     return value.toLocaleString("pt-BR", {
