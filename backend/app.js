@@ -4,16 +4,10 @@ require('dotenv').config();
 const express = require("express");
 const admin = require("firebase-admin");
 const cors = require('cors');
-const prerender = require('prerender-node');
 
 // Inicializa o app Express
 const app = express();
 app.use(cors());
-
-// Configura o serviço Prerender
-prerender.set('prerenderServiceUrl', process.env.PRERENDER_SERVICE_URL || 'https://service.prerender.io');
-prerender.set('prerenderToken', process.env.PRERENDER_TOKEN); // Token do Prerender configurado
-app.use(prerender);
 
 // Obtendo a chave do Firebase a partir da variável de ambiente
 const firebaseCredentials = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
@@ -65,20 +59,26 @@ app.get("/imoveis/:id", async (req, res) => {
     const metaDescription = property.descricao.substring(0, 150);
     const metaImage = property.imagens[0] || "https://via.placeholder.com/300x200?text=Sem+Imagem";
     const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
-
+    const metaDetailedDescription = `
+      ${property.titulo ? property.titulo + " | " : ""}
+      ${property.endereco || "Endereço não informado"} - 
+      ${property.quartos || 0} quartos, 
+      ${property.banheiros || 0} banheiros, 
+      ${property.metrosQuadrados || 0} m²
+    `;
 
     // Renderizar as meta tags no HTML
-    const html = `
-      <!DOCTYPE html>
+    const html = `<!DOCTYPE html>
       <html lang="pt-BR">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="${metaDescription}">
         <meta property="og:title" content="${metaTitle}">
-        <meta property="og:description" content="${metaDescription}">
+        <meta property="og:description" content="${metaDetailedDescription}">
         <meta property="og:image" content="${metaImage}">
         <meta property="og:url" content="${metaUrl}">
+        <meta property="og:type" content="website">
         <title>${metaTitle}</title>
       </head>
       <body>
@@ -104,7 +104,7 @@ app.use((req, res) => {
 });
 
 // Porta de execução
-const port = process.env.PORT || 5000;  // Usando a variável de ambiente PORT ou 5000 como fallback
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Backend rodando na porta ${port}`);
 });
