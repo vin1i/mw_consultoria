@@ -1,11 +1,8 @@
-// Carrega variáveis de ambiente do .env
 require('dotenv').config();
-
 const express = require("express");
 const admin = require("firebase-admin");
 const cors = require('cors');
 
-// Inicializa o app Express
 const app = express();
 app.use(cors());
 
@@ -19,8 +16,6 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
-
-// Definindo a coleção de imóveis
 const propertyCollection = db.collection("properties");
 
 // Endpoint para pegar as informações do imóvel por ID
@@ -57,7 +52,7 @@ app.get("/imoveis/:id", async (req, res) => {
     // Formatação de meta tags para o Open Graph (link preview)
     const metaTitle = property.titulo;
     const metaDescription = property.descricao.substring(0, 150);
-    const metaImage = property.imagens[0] || "https://via.placeholder.com/300x200?text=Sem+Imagem";
+    const metaImage = property.imagens[0] || "https://via.placeholder.com/300x200?text=Sem+Imagem"; // URL da imagem (verifique se está pública)
     const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
     const metaDetailedDescription = `
       ${property.titulo ? property.titulo + " | " : ""}
