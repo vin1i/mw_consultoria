@@ -9,10 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.2",
+    "firebase-admin": "^13.0.2",
     "prerender-node": "^3.8.0",
     "request": "^2.88.2"
   },
-  "devDependencies": {},
   "description": ""
 }

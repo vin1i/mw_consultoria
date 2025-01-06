@@ -1,0 +1,6 @@
+
+
+# Outros arquivos/diretórios a serem ignorados
+node_modules/
+.env
+*.log
