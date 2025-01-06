@@ -14,7 +14,7 @@ const ImageCarousel = ({ media, cloudinaryBaseUrl, showDots = true }) => {
   }
 
   const settings = {
-    dots: showDots, // Exibir ou não os círculos
+    dots: showDots,
     infinite: true,
     speed: 300,
     slidesToShow: 1,
@@ -27,20 +27,20 @@ const ImageCarousel = ({ media, cloudinaryBaseUrl, showDots = true }) => {
     lazyLoad: "ondemand",
     beforeChange: (_, next) => setCurrentDot(next),
     appendDots: (dots) => {
-      if (!showDots) return null; // Garante que os dots não são renderizados
+      if (!showDots) return null;
       const maxVisibleDots = 7;
       const halfVisibleDots = Math.floor(maxVisibleDots / 2);
       const totalDots = dots.length;
-    
+
       let start = Math.max(0, currentDot - halfVisibleDots);
       let end = Math.min(totalDots, start + maxVisibleDots);
-    
+
       if (end - start < maxVisibleDots) {
         start = Math.max(0, end - maxVisibleDots);
       }
-    
+
       const visibleDots = dots.slice(start, end);
-    
+
       return (
         <DotWrapper>
           <DotScroll currentDot={currentDot}>
@@ -70,7 +70,7 @@ const ImageCarousel = ({ media, cloudinaryBaseUrl, showDots = true }) => {
             {item.type === "video" ? (
               <iframe
                 width="100%"
-                height="400px"
+                height="100%"
                 src={item.src.replace("watch?v=", "embed/")}
                 title={`Vídeo ${index + 1}`}
                 frameBorder="0"
@@ -125,12 +125,22 @@ CustomArrow.propTypes = {
 
 const CarouselContainer = styled.div`
   position: relative;
-  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
 `;
 
 const StyledSlider = styled(Slider)`
+  width: 100%;
+
   .slick-arrow {
-    z-index: 2;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .slick-slide > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .slick-prev,
@@ -145,10 +155,11 @@ const StyledSlider = styled(Slider)`
   }
 
   .slick-dots {
-    display: ${({ showDots }) => (showDots ? "flex" : "none")} !important; /* Controla exibição */
+    display: ${({ showDots }) => (showDots ? "flex" : "none")};
     justify-content: center;
     margin-top: 10px;
     gap: 8px;
+  }
 
     li {
       width: 10px;
@@ -161,7 +172,7 @@ const StyledSlider = styled(Slider)`
       align-items: center;
 
       button {
-        opacity: 0; /* Esconder botão interno */
+        opacity: 0;
         cursor: pointer;
       }
 
@@ -178,7 +189,7 @@ const DotWrapper = styled.div`
   justify-content: center;
   overflow: hidden;
   align-items: center;
-  width: 120px; /* Ajuste o tamanho para comportar dots visíveis */
+  width: 120px;
 `;
 
 const DotScroll = styled.div`
@@ -186,18 +197,18 @@ const DotScroll = styled.div`
   gap: 8px;
   transition: transform 0.5s ease-in-out;
   transform: ${({ currentDot }) => {
-    const maxVisibleDots = 7; // Máximo de pontos visíveis
-    const dotWidth = 16; // Largura de cada ponto (incluindo o espaçamento)
+    const maxVisibleDots = 7;
+    const dotWidth = 16;
     const halfVisibleDots = Math.floor(maxVisibleDots / 2);
 
-    // Ajustar o deslocamento para centralizar o grupo visível
-    const offset = currentDot > halfVisibleDots
-      ? (currentDot - halfVisibleDots) * dotWidth
-      : 0;
+    const offset =
+      currentDot > halfVisibleDots
+        ? (currentDot - halfVisibleDots) * dotWidth
+        : 0;
 
     return `translateX(calc(50% - ${offset}px))`;
   }};
-  justify-content: center; /* Garantir centralização do grupo */
+  justify-content: center;
   align-items: center;
 `;
 
@@ -220,8 +231,7 @@ const ArrowButton = styled.button`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  ${(props) =>
-    props.direction === "next" ? "right: 15px;" : "left: 15px;"}
+  ${(props) => (props.direction === "next" ? "right: 15px;" : "left: 15px;")}
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
@@ -241,16 +251,33 @@ const ArrowButton = styled.button`
 `;
 
 const SlideContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+
   img {
     width: 100%;
     height: auto;
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
     border-radius: 8px;
   }
 
   iframe {
     width: 100%;
-    height: 400px;
+    height: auto;
+    aspect-ratio: 4 / 3;
     border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    img,
+    iframe {
+      height: auto;
+      max-height: 300px;
   }
 `;
 

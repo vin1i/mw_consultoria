@@ -49,7 +49,7 @@ export default VideoFrame;
 
 const Iframe = styled.iframe`
   width: 100%;
-  height: 200px; // Ajuste conforme necessário
+  height: 200px;
   border-radius: 8px;
   margin-top: 10px;
 `;

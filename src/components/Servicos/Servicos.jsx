@@ -36,7 +36,7 @@ const Servicos = () => {
         observer.unobserve(titleRef.current);
       }
     };
-  }, []);
+  }, [titleRef]);
 
   return (
     <div style={{ backgroundColor: "var(--grey)" }}>

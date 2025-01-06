@@ -15,11 +15,11 @@ export const Container = styled.div`
   }
 
   @media (max-width: 768px) {
-    flex-direction: column; /* Empilha os elementos */
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 20px;
-    gap: 20px; /* Reduz o espaçamento entre os elementos */
+    gap: 20px;
   }
 `;
 
@@ -36,9 +36,8 @@ export const Image = styled.img`
   @media (max-width: 768px) {
     max-width: 100%;
     margin-bottom: 20px;
-    border-radius: 10px; /* Adiciona cantos arredondados */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Adiciona um leve sombreado */
-  }
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 `;
 
 export const Text = styled.div`
@@ -48,7 +47,7 @@ export const Text = styled.div`
   h1 {
     font-size: 2.5rem;
     margin-bottom: 20px;
-    color: var(--red); /* Adiciona destaque com a cor vermelha */
+    color: var(--red);
   }
 
   h3 {
@@ -56,14 +55,14 @@ export const Text = styled.div`
     margin-top: 10px;
     margin-bottom: 25px;
     font-weight: 500;
-    color: var(--black); /* Mantém um contraste forte */
+    color: var(--black);
   }
 
   p {
     font-size: 1.6rem;
     margin-bottom: 20px;
     line-height: 1.5;
-    color: var(--black); /* Garante legibilidade */
+    color: var(--black);
   }
 
   @media (max-width: 1024px) {
@@ -113,8 +112,8 @@ export const Arrow = styled.img`
   }
 
   @media (max-width: 768px) {
-    display: block; /* Mostra a seta no mobile */
-    width: 50px; /* Reduz o tamanho */
-    margin: 20px auto; /* Centraliza */
+    display: block;
+    width: 50px;
+    margin: 20px auto;
   }
 `;

@@ -6,25 +6,22 @@ export const CardContainer = styled.div`
   background: #fff;
   border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 10px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
+  height: auto;
+  align-items: stretch;
 
   @media (max-width: 768px) {
     flex-direction: column;
     margin-bottom: 8px;
-
-    &:hover {
-      transform: scale(1.02);
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    }
   }
-
 `;
 
 export const ImageContainer = styled.div`
   flex: 1.5;
-  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   border-right: 1px solid #ddd;
 
@@ -41,27 +38,86 @@ export const ImageContainer = styled.div`
 
   @media (max-width: 768px) {
     border-right: none;
-    height: 140px;
-    flex: 1;
+    height: auto;
   }
 `;
 
 export const InfoContainer = styled.div`
   flex: 1;
-  padding: 10px 5px 10px 5px;
+  padding: 8px 5px;
   display: flex;
   flex-direction: column;
+  gap: 5px;
   justify-content: space-between;
 
   @media (max-width: 768px) {
-    padding: 10px 20px 20px 20px;
+    padding: 8px 15px;
+    gap: 8px;
   }
+`;
+
+export const PriceContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
+export const MainPrice = styled.div`
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--red);
+`;
+
+export const SecondaryPrice = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.75rem;
+  color: var(--black);
+
+  p {
+    margin: 0;
+  }
+
+  strong {
+    font-weight: bold;
+  }
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    gap: 6px;
+
+    img,
+    iframe {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+  }
+`;
+
+export const StatusBadge = styled.span`
+  padding: 4px 8px;
+  border-radius: 12px;
+  background-color: ${({ status }) =>
+    status === "Disponível"
+      ? "rgba(76, 175, 80, 0.2)"
+      : status === "Indisponível"
+      ? "rgba(244, 67, 54, 0.2)"
+      : "rgba(158, 158, 158, 0.2)"};
+  color: ${({ status }) =>
+    status === "Disponível"
+      ? "green"
+      : status === "Indisponível"
+      ? "red"
+      : "gray"};
+  font-weight: bold;
+  font-size: 0.8rem;
 `;
 
 export const Title = styled.h3`
   font-size: 16px;
   font-weight: bold;
-  margin-bottom: 10px;
   color: var(--black);
   text-transform: uppercase;
   border-bottom: 2px solid var(--red);
@@ -77,7 +133,6 @@ export const Address = styled.p`
   align-items: center;
   font-size: 13px;
   color: var(--black);
-  margin-bottom: 10px;
 
   svg {
     margin-right: 6px;
@@ -92,15 +147,14 @@ export const Address = styled.p`
 export const Features = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   font-size: 13px;
   color: var(--black);
-  margin: 6px 0;
 
   span {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
 
     svg {
       color: var(--red);
@@ -109,15 +163,6 @@ export const Features = styled.div`
 
   @media (max-width: 768px) {
     font-size: 12px;
-
-    span {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    svg {
-      color: var(--red);
-    }
   }
 `;
 
@@ -145,15 +190,19 @@ export const Price = styled.div`
   }
 `;
 
-
 export const Description = styled.p`
   font-size: 13px;
   color: var(--black);
-  margin-bottom: 12px;
-  line-height: 1.4;
+  line-height: 1.2;
+  margin-bottom: 6px;
+  height: 3.6em;
+  max-height: 2.4em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   @media (max-width: 768px) {
     font-size: 12px;
+    height: 2.8em;
   }
 `;
 
@@ -162,7 +211,7 @@ export const Button = styled.button`
   color: #fff;
   font-size: 13px;
   font-weight: bold;
-  padding: 8px 14px;
+  padding: 6px 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -177,6 +226,6 @@ export const Button = styled.button`
   @media (max-width: 768px) {
     font-size: 12px;
     width: 100%;
-    padding: 8px;
+    padding: 6px;
   }
 `;

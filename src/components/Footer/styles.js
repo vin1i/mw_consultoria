@@ -9,9 +9,9 @@ export const Container = styled.div`
   align-items: flex-start;
 
   @media (max-width: 768px) {
-    flex-direction: column; /* Empilha os elementos no mobile */
+    flex-direction: column;
     align-items: center;
-    gap: 20px; /* Espaçamento entre as seções */
+    gap: 20px;
     text-align: center;
   }
 `;
@@ -84,10 +84,10 @@ export const LinkList = styled.div`
     color: var(--black);
     text-decoration: none;
     font-size: 1.3rem;
-    cursor: pointer; /* Garante que o cursor seja de clique */
+    cursor: pointer;
 
     &:hover {
-      color: var(--red); /* Cor muda no hover */
+      color: var(--red);
     }
   }
 

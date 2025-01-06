@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet"; // Importa React Helmet
 import {
   Wrapper,
   ContentContainer,
@@ -10,6 +11,7 @@ import {
   Description,
   WhatsAppButton,
   CarouselWrapper,
+  StatusBadge,
 } from "./styles";
 import {
   FaBath,
@@ -22,6 +24,7 @@ import {
 import Carousel from "../Carousel";
 import { getImovelById } from "../../services/firebase/firestoreService";
 import { useLoading } from "../../context/LoadingContext";
+import ShareIcon from "./shareIcon";
 
 const ImobiDetails = () => {
   const { id } = useParams();
@@ -115,8 +118,30 @@ const ImobiDetails = () => {
     });
   }
 
+  // Open Graph Meta Tags
+  const metaTitle =
+    property.titulo || "Imóvel disponível | MW Consultoria Imobiliária";
+  const metaDescription =
+    property.descricao?.substring(0, 150) ||
+    "Confira este imóvel disponível na MW Consultoria Imobiliária.";
+  const metaImage =
+    images[0]?.src || "https://via.placeholder.com/300x200?text=Sem+Imagem";
+
+    const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
+
+
+
   return (
     <Wrapper>
+      <Helmet>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:image" content={metaImage} />
+        <meta property="og:url" content={metaUrl} />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <CarouselWrapper>
         <Carousel images={images} />
       </CarouselWrapper>
@@ -131,11 +156,13 @@ const ImobiDetails = () => {
           <p>
             <FaBed /> {property.quartos || 0} quartos
           </p>
-          <p>
-            <FaBath /> {property.banheiros || 0} banheiros
-          </p>
+
           <p>
             <FaDoorClosed /> {property.suites || 0} suítes
+          </p>
+
+          <p>
+            <FaBath /> {property.banheiros || 0} banheiros
           </p>
           <p>
             <FaCar /> {property.vagas || 0} vagas
@@ -143,58 +170,83 @@ const ImobiDetails = () => {
         </Features>
 
         <Price>
-          {property.valorVenda > 0 && (
-            <p>
-              <strong>Valor do Imóvel:</strong>{" "}
-              {property.valorVenda.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
-          )}
-          {property.valorLocacao > 0 && (
-            <p>
-              <strong>Valor da Locação:</strong>{" "}
-              {property.valorLocacao.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
-          )}
-          {property.vlCondominio > 0 && (
-            <p>
-              <strong>Condomínio:</strong>{" "}
-              {property.vlCondominio.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
-          )}
-          {property.vlIptu > 0 && (
-            <p>
-              <strong>IPTU:</strong>{" "}
-              {property.vlIptu.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
-          )}
+          <div className="price-container">
+            {property.valorVenda > 0 && (
+              <div className="price-item highlight">
+                <span className="label">Venda</span>
+                <span className="value">
+                  {property.valorVenda.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </span>
+              </div>
+            )}
+            {property.valorLocacao > 0 && (
+              <div className="price-item highlight">
+                <span className="label">Locação</span>
+                <span className="value">
+                  {property.valorLocacao.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </span>
+              </div>
+            )}
+
+            {property.vlCondominio > 0 && (
+              <div className="price-item">
+                <span className="label">Condomínio</span>
+                <span className="value">
+                  {property.vlCondominio.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </span>
+              </div>
+            )}
+
+            <div className="price-item">
+              <span className="label">IPTU</span>
+              <span className="value">
+                {property.vlIptu > 0
+                  ? property.vlIptu.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    })
+                  : "não informado"}
+              </span>
+            </div>
+
+            <StatusBadge status={property.disponibilidade}>
+              {property.disponibilidade || "Status não informado"}
+            </StatusBadge>
+          </div>
         </Price>
 
         <Description style={{ whiteSpace: "pre-wrap" }}>
           {property.descricao || "Descrição não disponível."}
         </Description>
-
-        <WhatsAppButton
-          href={`https://api.whatsapp.com/send?phone=5511973738808&text=Ol%C3%A1,%20gostaria%20de%20saber%20mais%20sobre%20o%20im%C3%B3vel%20${
-            property.titulo || property.tipo
-          }%20em%20${property.endereco}.`}
-          target="_blank"
-          rel="noopener noreferrer"
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
         >
-          Fale conosco!
-          <FaWhatsapp />
-        </WhatsAppButton>
+          <WhatsAppButton
+            href={`https://api.whatsapp.com/send?phone=5511973738808&text=Ol%C3%A1,%20gostaria%20de%20saber%20mais%20sobre%20o%20im%C3%B3vel%20${
+              property.titulo || property.tipo
+            }%20em%20${property.endereco}.`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Fale conosco!
+            <FaWhatsapp />
+          </WhatsAppButton>
+
+          <ShareIcon link={metaUrl} />
+        </div>
       </ContentContainer>
     </Wrapper>
   );

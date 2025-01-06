@@ -111,7 +111,7 @@ const Header = () => {
           <FaBuilding size={24} />
           <span>Imóveis</span>
         </BottomNavItem>
-        <BottomNavItem onClick={() => scrollToSection("contato")}>
+        <BottomNavItem onClick={() => scrollToSection("footer")}>
           <FaPhoneAlt size={24} />
           <span>Contato</span>
         </BottomNavItem>
