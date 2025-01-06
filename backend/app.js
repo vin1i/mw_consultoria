@@ -23,7 +23,7 @@ const db = admin.firestore();
 const propertyCollection = db.collection("properties");
 
 // Endpoint para pegar as informações do imóvel por ID
-app.get("/api/imoveis/:id", async (req, res) => {
+app.get("/imoveis/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
