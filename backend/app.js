@@ -1,3 +1,5 @@
+require('dotenv').config();  // Carrega as variáveis de ambiente do arquivo .env
+
 const express = require("express");
 const admin = require("firebase-admin");
 const cors = require('cors');
@@ -9,7 +11,7 @@ app.use(cors());
 // Obtendo a chave do Firebase a partir da variável de ambiente
 const firebaseCredentials = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
-// Inicializando Firebase Admin com as credenciais do ambiente
+// Inicializando o Firebase Admin com as credenciais do ambiente
 admin.initializeApp({
   credential: admin.credential.cert(firebaseCredentials),
   databaseURL: "https://mwconsultoria-e14e4.firebaseio.com",
