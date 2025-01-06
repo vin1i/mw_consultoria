@@ -22,21 +22,20 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import Carousel from "../Carousel";
-import { getImovelById } from "../../services/firebase/firestoreService"; // Função para pegar dados do imóvel no backend
-import { useLoading } from "../../context/LoadingContext"; // Contexto de loading
+import { getImovelById } from "../../services/firebase/firestoreService";
+import { useLoading } from "../../context/LoadingContext";
 import ShareIcon from "./shareIcon";
 
 const ImobiDetails = () => {
-  const { id } = useParams(); // Pega o id do imóvel da URL
+  const { id } = useParams();
   const [property, setProperty] = useState(null);
   const { setIsLoading, isLoading } = useLoading();
 
-  // Carrega os dados do imóvel a partir do backend usando o ID
   useEffect(() => {
     const fetchProperty = async () => {
       setIsLoading(true);
       try {
-        const propertyData = await getImovelById(id); // Chama a função para buscar os dados do imóvel no backend
+        const propertyData = await getImovelById(id);
         if (propertyData) {
           setProperty({
             ...propertyData,
@@ -58,7 +57,6 @@ const ImobiDetails = () => {
     fetchProperty();
   }, [id, setIsLoading]);
 
-  // Mostra o carregamento enquanto os dados são recuperados
   if (isLoading) {
     return (
       <Wrapper>
@@ -72,7 +70,6 @@ const ImobiDetails = () => {
     );
   }
 
-  // Exibe mensagem caso o imóvel não seja encontrado
   if (!property) {
     return (
       <Wrapper>
@@ -83,7 +80,6 @@ const ImobiDetails = () => {
     );
   }
 
-  // Processa as imagens, caso existam
   const images = property.imagens?.length
     ? property.imagens.map((img) => {
         const imageUrl = img.startsWith("http")
@@ -101,7 +97,6 @@ const ImobiDetails = () => {
         },
       ];
 
-  // Adiciona vídeos ao array de imagens, se existirem
   if (property.videos?.length > 0) {
     property.videos.forEach((videoURL) => {
       let embedURL = "";
@@ -122,44 +117,32 @@ const ImobiDetails = () => {
       }
     });
   }
-// Open Graph Meta Tags - configurando as informações para o link preview
-const metaTitle =
-  property.titulo || property.tipo || "Imóvel disponível | MW Consultoria Imobiliária";
-const metaDescription =
-  (property.descricao && property.descricao.substring(0, 150)) ||
-  "Confira este imóvel disponível na MW Consultoria Imobiliária.";
-const metaImage =
-  (property.imagens && property.imagens.length > 0)
-    ? property.imagens[0] // Pega a primeira imagem da lista de imagens do imóvel
-    : "https://via.placeholder.com/300x200?text=Sem+Imagem"; // Imagem padrão
 
-// Agora, configurando a URL do link preview
-const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
+  // Open Graph Meta Tags
+  const metaTitle =
+    property.titulo || "Imóvel disponível | MW Consultoria Imobiliária";
+  const metaDescription =
+    property.descricao?.substring(0, 150) ||
+    "Confira este imóvel disponível na MW Consultoria Imobiliária.";
+  const metaImage =
+    images[0]?.src || "https://via.placeholder.com/300x200?text=Sem+Imagem";
 
-// Criando a descrição personalizada para as metatags Open Graph
-const metaDetailedDescription = `
-  ${property.titulo ? property.titulo + " | " : ""}
-  ${property.endereco || "Endereço não informado"} - 
-  ${property.quartos || 0} quartos, 
-  ${property.banheiros || 0} banheiros, 
-  ${property.metrosQuadrados || 0} m²
-`;
+    const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
 
-// Atualizando o retorno com Helmet e as metatags dinâmicas
-return (
-  <Wrapper>
-    <Helmet>
-      {/* Meta tags para Link Preview */}
-      <title>{metaTitle}</title>
-      <meta name="description" content={metaDescription} />
-      <meta property="og:title" content={metaTitle} />
-      <meta property="og:description" content={metaDetailedDescription} />
-      <meta property="og:image" content={metaImage} />
-      <meta property="og:url" content={metaUrl} />
-      <meta property="og:type" content="website" />
-    </Helmet>
+
+
+  return (
+    <Wrapper>
+      <Helmet>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:image" content={metaImage} />
+        <meta property="og:url" content={metaUrl} />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <CarouselWrapper>
-        {/* Carousel de Imagens e Vídeos */}
         <Carousel images={images} />
       </CarouselWrapper>
       <ContentContainer>
@@ -173,9 +156,11 @@ return (
           <p>
             <FaBed /> {property.quartos || 0} quartos
           </p>
+
           <p>
             <FaDoorClosed /> {property.suites || 0} suítes
           </p>
+
           <p>
             <FaBath /> {property.banheiros || 0} banheiros
           </p>
