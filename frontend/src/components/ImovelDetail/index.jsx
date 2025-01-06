@@ -22,20 +22,21 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import Carousel from "../Carousel";
-import { getImovelById } from "../../services/firebase/firestoreService";
-import { useLoading } from "../../context/LoadingContext";
+import { getImovelById } from "../../services/firebase/firestoreService"; // Função para pegar dados do imóvel no backend
+import { useLoading } from "../../context/LoadingContext"; // Contexto de loading
 import ShareIcon from "./shareIcon";
 
 const ImobiDetails = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Pega o id do imóvel da URL
   const [property, setProperty] = useState(null);
   const { setIsLoading, isLoading } = useLoading();
 
+  // Carrega os dados do imóvel a partir do backend usando o ID
   useEffect(() => {
     const fetchProperty = async () => {
       setIsLoading(true);
       try {
-        const propertyData = await getImovelById(id);
+        const propertyData = await getImovelById(id); // Chama a função para buscar os dados do imóvel no backend
         if (propertyData) {
           setProperty({
             ...propertyData,
@@ -57,6 +58,7 @@ const ImobiDetails = () => {
     fetchProperty();
   }, [id, setIsLoading]);
 
+  // Mostra o carregamento enquanto os dados são recuperados
   if (isLoading) {
     return (
       <Wrapper>
@@ -70,6 +72,7 @@ const ImobiDetails = () => {
     );
   }
 
+  // Exibe mensagem caso o imóvel não seja encontrado
   if (!property) {
     return (
       <Wrapper>
@@ -80,6 +83,7 @@ const ImobiDetails = () => {
     );
   }
 
+  // Processa as imagens, caso existam
   const images = property.imagens?.length
     ? property.imagens.map((img) => {
         const imageUrl = img.startsWith("http")
@@ -97,6 +101,7 @@ const ImobiDetails = () => {
         },
       ];
 
+  // Adiciona vídeos ao array de imagens, se existirem
   if (property.videos?.length > 0) {
     property.videos.forEach((videoURL) => {
       let embedURL = "";
@@ -118,7 +123,7 @@ const ImobiDetails = () => {
     });
   }
 
-  // Open Graph Meta Tags
+  // Open Graph Meta Tags - configurando as informações para o link preview
   const metaTitle =
     property.titulo || "Imóvel disponível | MW Consultoria Imobiliária";
   const metaDescription =
@@ -126,14 +131,12 @@ const ImobiDetails = () => {
     "Confira este imóvel disponível na MW Consultoria Imobiliária.";
   const metaImage =
     images[0]?.src || "https://via.placeholder.com/300x200?text=Sem+Imagem";
-
-    const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
-
-
+  const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
 
   return (
     <Wrapper>
       <Helmet>
+        {/* Meta tags para Link Preview */}
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
         <meta property="og:title" content={metaTitle} />
@@ -143,6 +146,7 @@ const ImobiDetails = () => {
         <meta property="og:type" content="website" />
       </Helmet>
       <CarouselWrapper>
+        {/* Carousel de Imagens e Vídeos */}
         <Carousel images={images} />
       </CarouselWrapper>
       <ContentContainer>
@@ -156,11 +160,9 @@ const ImobiDetails = () => {
           <p>
             <FaBed /> {property.quartos || 0} quartos
           </p>
-
           <p>
             <FaDoorClosed /> {property.suites || 0} suítes
           </p>
-
           <p>
             <FaBath /> {property.banheiros || 0} banheiros
           </p>

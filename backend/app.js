@@ -3,10 +3,14 @@ require('dotenv').config();  // Carrega as variáveis de ambiente do arquivo .en
 const express = require("express");
 const admin = require("firebase-admin");
 const cors = require('cors');
+const prerender = require('prerender-node');
 const path = require('path');
 
 const app = express();
 app.use(cors());
+
+// Inicializar o Prerender
+app.use(prerender);
 
 // Obtendo a chave do Firebase a partir da variável de ambiente
 const firebaseCredentials = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
@@ -59,15 +63,30 @@ app.get("/imoveis/:id", async (req, res) => {
     const metaImage = property.imagens[0] || "https://via.placeholder.com/300x200?text=Sem+Imagem";
     const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
 
-    res.json({
-      property,
-      meta: {
-        title: metaTitle,
-        description: metaDescription,
-        image: metaImage,
-        url: metaUrl,
-      },
-    });
+    // Renderizar as meta tags no HTML
+    const html = `
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="${metaDescription}">
+        <meta property="og:title" content="${metaTitle}">
+        <meta property="og:description" content="${metaDescription}">
+        <meta property="og:image" content="${metaImage}">
+        <meta property="og:url" content="${metaUrl}">
+        <title>${metaTitle}</title>
+      </head>
+      <body>
+        <h1>${property.titulo}</h1>
+        <p>${property.descricao}</p>
+        <img src="${metaImage}" alt="${metaTitle}">
+        <!-- Outras informações do imóvel aqui -->
+      </body>
+      </html>
+    `;
+
+    res.send(html);
 
   } catch (error) {
     console.error("Erro ao buscar imóvel:", error.message);
