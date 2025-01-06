@@ -122,29 +122,42 @@ const ImobiDetails = () => {
       }
     });
   }
+// Open Graph Meta Tags - configurando as informações para o link preview
+const metaTitle =
+  property.titulo || property.tipo || "Imóvel disponível | MW Consultoria Imobiliária";
+const metaDescription =
+  (property.descricao && property.descricao.substring(0, 150)) ||
+  "Confira este imóvel disponível na MW Consultoria Imobiliária.";
+const metaImage =
+  (property.imagens && property.imagens.length > 0)
+    ? property.imagens[0] // Pega a primeira imagem da lista de imagens do imóvel
+    : "https://via.placeholder.com/300x200?text=Sem+Imagem"; // Imagem padrão
 
-  // Open Graph Meta Tags - configurando as informações para o link preview
-  const metaTitle =
-    property.titulo || "Imóvel disponível | MW Consultoria Imobiliária";
-  const metaDescription =
-    property.descricao?.substring(0, 150) ||
-    "Confira este imóvel disponível na MW Consultoria Imobiliária.";
-  const metaImage =
-    images[0]?.src || "https://via.placeholder.com/300x200?text=Sem+Imagem";
-  const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
+// Agora, configurando a URL do link preview
+const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
 
-  return (
-    <Wrapper>
-      <Helmet>
-        {/* Meta tags para Link Preview */}
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDescription} />
-        <meta property="og:title" content={metaTitle} />
-        <meta property="og:description" content={metaDescription} />
-        <meta property="og:image" content={metaImage} />
-        <meta property="og:url" content={metaUrl} />
-        <meta property="og:type" content="website" />
-      </Helmet>
+// Criando a descrição personalizada para as metatags Open Graph
+const metaDetailedDescription = `
+  ${property.titulo ? property.titulo + " | " : ""}
+  ${property.endereco || "Endereço não informado"} - 
+  ${property.quartos || 0} quartos, 
+  ${property.banheiros || 0} banheiros, 
+  ${property.metrosQuadrados || 0} m²
+`;
+
+// Atualizando o retorno com Helmet e as metatags dinâmicas
+return (
+  <Wrapper>
+    <Helmet>
+      {/* Meta tags para Link Preview */}
+      <title>{metaTitle}</title>
+      <meta name="description" content={metaDescription} />
+      <meta property="og:title" content={metaTitle} />
+      <meta property="og:description" content={metaDetailedDescription} />
+      <meta property="og:image" content={metaImage} />
+      <meta property="og:url" content={metaUrl} />
+      <meta property="og:type" content="website" />
+    </Helmet>
       <CarouselWrapper>
         {/* Carousel de Imagens e Vídeos */}
         <Carousel images={images} />

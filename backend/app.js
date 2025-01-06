@@ -1,15 +1,18 @@
-require('dotenv').config();  // Carrega as variáveis de ambiente do arquivo .env
+// Carrega variáveis de ambiente do .env
+require('dotenv').config();
 
 const express = require("express");
 const admin = require("firebase-admin");
 const cors = require('cors');
 const prerender = require('prerender-node');
-const path = require('path');
 
+// Inicializa o app Express
 const app = express();
 app.use(cors());
 
-// Inicializar o Prerender
+// Configura o serviço Prerender
+prerender.set('prerenderServiceUrl', process.env.PRERENDER_SERVICE_URL || 'https://service.prerender.io');
+prerender.set('prerenderToken', process.env.PRERENDER_TOKEN); // Token do Prerender configurado
 app.use(prerender);
 
 // Obtendo a chave do Firebase a partir da variável de ambiente
@@ -18,7 +21,7 @@ const firebaseCredentials = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 // Inicializando o Firebase Admin com as credenciais do ambiente
 admin.initializeApp({
   credential: admin.credential.cert(firebaseCredentials),
-  databaseURL: "https://mwconsultoria-e14e4.firebaseio.com",
+  databaseURL: process.env.FIREBASE_DATABASE_URL || "https://mwconsultoria-e14e4.firebaseio.com",
 });
 
 const db = admin.firestore();
@@ -63,6 +66,7 @@ app.get("/imoveis/:id", async (req, res) => {
     const metaImage = property.imagens[0] || "https://via.placeholder.com/300x200?text=Sem+Imagem";
     const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
 
+
     // Renderizar as meta tags no HTML
     const html = `
       <!DOCTYPE html>
@@ -92,6 +96,11 @@ app.get("/imoveis/:id", async (req, res) => {
     console.error("Erro ao buscar imóvel:", error.message);
     res.status(500).send({ message: "Erro ao buscar imóvel.", error: error.message });
   }
+});
+
+// Configuração da rota de fallback (404)
+app.use((req, res) => {
+  res.status(404).send({ message: "Rota não encontrada" });
 });
 
 // Porta de execução
