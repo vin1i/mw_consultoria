@@ -7,6 +7,12 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 
+// Adiciona o middleware de log
+app.use((req, res, next) => {
+  console.log("Prerender Middleware acionado para:", req.originalUrl);
+  next(); // Passa para o próximo middleware (no caso, o Prerender)
+});
+
 // Configura o middleware do Prerender.io
 app.use(prerender.set('prerenderToken', process.env.PRERENDER_TOKEN));
 
@@ -71,6 +77,12 @@ app.get("/imoveis/:id", async (req, res) => {
     console.error("Erro ao buscar imóvel:", error.message);
     res.status(500).send({ message: "Erro ao buscar imóvel.", error: error.message });
   }
+});
+
+// Redireciona para o frontend para renderização
+app.get("/imoveis/:id", (req, res) => {
+  const { id } = req.params;
+  res.redirect(301, `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`);
 });
 
 // Configuração da rota de fallback (404)
