@@ -30,17 +30,30 @@ const ImobiDetails = () => {
       setError(null);  // Resetando o erro a cada nova tentativa de carregamento
       try {
         const response = await fetch(`https://mw-consultoria.onrender.com/properties/${id}`);
+        
+        // Verificando o código de status HTTP
         if (!response.ok) {
-          throw new Error("Imóvel não encontrado");  // Personalizando mensagem de erro
+          throw new Error(`Erro na resposta da API: ${response.status} ${response.statusText}`);
         }
-        const propertyData = await response.json();
-        setProperty({
-          ...propertyData,
-          valorVenda: propertyData.valorVenda || 0,
-          valorLocacao: propertyData.valorLocacao || 0,
-          vlCondominio: propertyData.vlCondominio || 0,
-          vlIptu: propertyData.vlIptu || 0,
-        });
+  
+        // Obtendo a resposta como texto para depuração
+        const text = await response.text();
+        console.log('Resposta da API:', text); // Log para inspecionar a resposta
+        
+        // Tentando converter a resposta para JSON
+        try {
+          const propertyData = JSON.parse(text); // Tentando fazer parse do JSON
+          setProperty({
+            ...propertyData,
+            valorVenda: propertyData.valorVenda || 0,
+            valorLocacao: propertyData.valorLocacao || 0,
+            vlCondominio: propertyData.vlCondominio || 0,
+            vlIptu: propertyData.vlIptu || 0,
+          });
+        } catch (jsonError) {
+          throw new Error("Erro ao processar dados JSON");
+        }
+        
       } catch (error) {
         console.error("Erro ao buscar imóvel:", error);
         setError(error.message);  // Definindo mensagem de erro personalizada
@@ -49,9 +62,9 @@ const ImobiDetails = () => {
         setIsLoading(false);
       }
     };
-
+  
     fetchProperty();
-  }, [id, setIsLoading]);
+  }, [id]);
 
   if (isLoading) {
     return (
