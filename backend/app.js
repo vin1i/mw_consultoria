@@ -7,7 +7,9 @@ require('dotenv').config();
 
 // Carregando variáveis de ambiente do arquivo .env
 dotenv.config();
-
+app.use(cors({
+  origin: 'https://d368-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app'
+}));
 // Inicializando o Firebase Admin SDK com variáveis de ambiente
 const serviceAccount = {
   "type": "service_account",
