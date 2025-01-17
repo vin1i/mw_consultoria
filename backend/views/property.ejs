@@ -6,10 +6,16 @@
   <title><%= title || 'Título padrão do imóvel' %></title>
 
   <!-- Open Graph meta tags para redes sociais -->
-  <meta property="og:title" content="<%= title || 'Título padrão do imóvel' %>">
-  <meta property="og:description" content="<%= description || 'Descrição padrão do imóvel.' %>">
-  <meta property="og:image" content="<%= images.length > 0 ? images[0] : 'default-image-url.jpg' %>">
-  <meta property="og:url" content="<%= url || 'https://mwconsultoriaimobiliaria.com.br' %>">
+  <meta property="og:title" content="<%= title %>" />
+  <meta property="og:description" content="<%= description %>" />
+  <meta property="og:url" content="<%= url %>" />
+  
+  <% if (images && images.length > 0 && images[0]) { %>
+    <meta property="og:image" content="<%= images[0] %>" /> <!-- Considerando que a primeira imagem será a principal -->
+  <% } else { %>
+    <meta property="og:image" content="https://example.com/default-image.jpg" /> <!-- Imagem padrão caso não tenha imagens -->
+  <% } %>
+
   <meta property="og:type" content="website">
 </head>
 <body>
@@ -18,10 +24,10 @@
   
   <h2>Imagem principal do imóvel:</h2>
   <div>
-    <% if (images.length > 0) { %>
+    <% if (images && images.length > 0 && images[0]) { %>
       <img src="<%= images[0] %>" alt="Imagem do imóvel" style="max-width: 100%; height: auto;">
     <% } else { %>
-      <p>Não há imagens disponíveis para este imóvel.</p>
+      <p>Não há imagens disponíveis para este imóvel. <img src="https://example.com/default-image.jpg" alt="Imagem padrão" style="max-width: 100%; height: auto;"></p> <!-- Exibe imagem padrão se não houver imagens -->
     <% } %>
   </div>
 

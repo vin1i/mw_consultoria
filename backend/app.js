@@ -38,7 +38,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Usando o CORS para permitir requisições de outras origens
 const corsOptions = {
-  origin: ['https://mwconsultoriaimobiliaria.com.br', 'http://localhost:3000'], // Permitindo múltiplos domínios
+  origin: ['https://mwconsultoriaimobiliaria.com.br', 'http://localhost:3000', ' https://7de2-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app/'], // Permitindo múltiplos domínios
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'], // Pode adicionar mais cabeçalhos aqui, caso necessário
   credentials: false, // Se você estiver usando cookies ou cabeçalhos de autenticação
@@ -60,50 +60,50 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Rota para redirecionar crawlers para as meta tags dinâmicas
 app.get('/imoveis/:id', async (req, res) => {
-   res.setHeader('Access-Control-Allow-Origin', 'https://mwconsultoriaimobiliaria.com.br'); // Verifique se o cabeçalho CORS está aqui também
+  res.setHeader('Access-Control-Allow-Origin', 'https://mwconsultoriaimobiliaria.com.br'); // Corrigindo a origem para evitar problemas CORS
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
-  const { id } = req.params;
-  const userAgent = req.headers['user-agent'] || ''; // Obtém o User-Agent
-  const isCrawler = /bot|crawl|spider|slurp|facebook|twitter|whatsapp|google/i.test(userAgent);
+ const { id } = req.params;
+ const userAgent = req.headers['user-agent'] || ''; // Obtém o User-Agent
+ const isCrawler = /bot|crawl|spider|slurp|facebook|twitter|whatsapp|google/i.test(userAgent); // Detectando crawlers
 
+ try {
+   const docRef = db.collection('properties').doc(id);
+   const docSnap = await docRef.get();
 
-  try {
-    const docRef = db.collection('properties').doc(id);
-    const docSnap = await docRef.get();
+   if (docSnap.exists) {
+     const property = docSnap.data();
+     const images = property.imagens || []; // Certificando-se de que as imagens estão sendo extraídas corretamente
 
-    if (docSnap.exists) {
-      const property = docSnap.data();
-      const images = property.imagens || [];
-
-      // Se for um crawler, renderiza a página com as meta tags dinâmicas
-      if (isCrawler) {
-        res.render('property', {
+     // Se for um crawler, renderiza a página com as meta tags dinâmicas
+     if (isCrawler) {
+       res.render('property', {
+         title: property.titulo,                // Passando o título do imóvel
+         description: property.descricao,       // Passando a descrição
+         images: images,                        // Passando as imagens (importante que a URL da imagem seja completa)
+         url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`, // URL completa do imóvel
+       });
+     } else {
+        // Para o frontend React, envia uma resposta JSON ou redireciona
+        res.json({
           title: property.titulo,
           description: property.descricao,
-          images: images,
+          images: images, // Certificando-se de que as imagens estão sendo passadas corretamente
           url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
         });
-      } else {
-         // Para o frontend React, apenas envia uma resposta JSON ou redireciona
-         res.setHeader('Access-Control-Allow-Origin', '*'); // Certificando-se de que o cabeçalho CORS está sendo configurado
-         res.json({
-           title: property.titulo,
-           description: property.descricao,
-           images: property.images || [],
-           url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
-         });
-       }
-     } else {
-       res.status(404).send('Imóvel não encontrado!');
-     }
-   } catch (error) {
-     console.error('Erro ao acessar o Firestore: ', error);
-     res.status(500).send('Erro ao acessar o Firestore');
-   }
- });
+      }
+    } else {
+      res.status(404).send('Imóvel não encontrado!');
+    }
+  } catch (error) {
+    console.error('Erro ao acessar o Firestore: ', error);
+    res.status(500).send('Erro ao acessar o Firestore');
+  }
+});
+
 // Rota para pré-visualização das meta tags dinâmicas para crawlers
-app.get('/og-preview/:id',  async (req, res) => {
+// Rota para pré-visualização das meta tags dinâmicas para crawlers
+app.get('/og-preview/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
