@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Helmet } from "react-helmet"; // Importa React Helmet
+import { Helmet } from "react-helmet";
 import {
   Wrapper,
   ContentContainer,
@@ -13,16 +13,8 @@ import {
   CarouselWrapper,
   StatusBadge,
 } from "./styles";
-import {
-  FaBath,
-  FaBed,
-  FaCar,
-  FaDoorClosed,
-  FaRulerCombined,
-  FaWhatsapp,
-} from "react-icons/fa";
+import { FaBath, FaBed, FaCar, FaDoorClosed, FaRulerCombined, FaWhatsapp } from "react-icons/fa";
 import Carousel from "../Carousel";
-import { getImovelById } from "../../services/firebase/firestoreService";
 import { useLoading } from "../../context/LoadingContext";
 import ShareIcon from "./shareIcon";
 
@@ -35,8 +27,9 @@ const ImobiDetails = () => {
     const fetchProperty = async () => {
       setIsLoading(true);
       try {
-        const propertyData = await getImovelById(id);
-        if (propertyData) {
+        const response = await fetch(`https://mw-consultoria.onrender.com/properties/${id}`);
+        if (response.ok) {
+          const propertyData = await response.json();
           setProperty({
             ...propertyData,
             valorVenda: propertyData.valorVenda || 0,
@@ -45,10 +38,11 @@ const ImobiDetails = () => {
             vlIptu: propertyData.vlIptu || 0,
           });
         } else {
-          console.error("Imóvel não encontrado.");
+          throw new Error("Imóvel não encontrado");
         }
       } catch (error) {
         console.error("Erro ao buscar imóvel:", error);
+        setProperty(null); // Garantir que property seja null em caso de erro
       } finally {
         setIsLoading(false);
       }
@@ -97,39 +91,11 @@ const ImobiDetails = () => {
         },
       ];
 
-  if (property.videos?.length > 0) {
-    property.videos.forEach((videoURL) => {
-      let embedURL = "";
-
-      if (videoURL.includes("youtube.com/shorts")) {
-        embedURL = videoURL.replace("youtube.com/shorts", "youtube.com/embed");
-      } else if (videoURL.includes("youtube.com/watch")) {
-        embedURL = videoURL.replace("watch?v=", "embed/");
-      } else {
-        console.warn(`URL de vídeo inválida:`, videoURL);
-      }
-
-      if (embedURL) {
-        images.push({
-          src: embedURL,
-          type: "video",
-        });
-      }
-    });
-  }
-
-  // Open Graph Meta Tags
-  const metaTitle =
-    property.titulo || "Imóvel disponível | MW Consultoria Imobiliária";
+  const metaTitle = property.titulo || "Imóvel disponível | MW Consultoria Imobiliária";
   const metaDescription =
-    property.descricao?.substring(0, 150) ||
-    "Confira este imóvel disponível na MW Consultoria Imobiliária.";
-  const metaImage =
-    images[0]?.src || "https://via.placeholder.com/300x200?text=Sem+Imagem";
-
-    const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
-
-
+    property.descricao?.substring(0, 150) || "Confira este imóvel disponível na MW Consultoria Imobiliária.";
+  const metaImage = images[0]?.src || "https://via.placeholder.com/300x200?text=Sem+Imagem";
+  const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
 
   return (
     <Wrapper>
@@ -156,11 +122,9 @@ const ImobiDetails = () => {
           <p>
             <FaBed /> {property.quartos || 0} quartos
           </p>
-
           <p>
             <FaDoorClosed /> {property.suites || 0} suítes
           </p>
-
           <p>
             <FaBath /> {property.banheiros || 0} banheiros
           </p>
@@ -245,10 +209,12 @@ const ImobiDetails = () => {
             <FaWhatsapp />
           </WhatsAppButton>
 
-          <ShareIcon link={metaUrl}
+          <ShareIcon
+            link={metaUrl}
             title={metaTitle}
             description={metaDescription}
-            image={images[0].src}  />
+            image={images[0].src}
+          />
         </div>
       </ContentContainer>
     </Wrapper>
