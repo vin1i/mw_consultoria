@@ -38,7 +38,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Usando o CORS para permitir requisições de outras origens
 const corsOptions = {
-  origin: 'https://mwconsultoriaimobiliaria.com.br/', // Substitua com a URL do seu frontend
+  origin: 'https://d368-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app//', // Substitua com a URL do seu frontend
   methods: ['GET', 'POST'],
 };
 app.use(cors(corsOptions)); // Habilita o CORS para o servidor
@@ -66,7 +66,7 @@ app.get('/imoveis/:id', async (req, res) => {
           title: property.titulo,
           description: property.descricao,
           images: images,
-          url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
+          url: `https://d368-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app//imoveis/${id}`,
         });
       } else {
         // Para o frontend React, apenas envia uma resposta JSON ou redireciona
@@ -74,7 +74,7 @@ app.get('/imoveis/:id', async (req, res) => {
           title: property.titulo,
           description: property.descricao,
           images: images,
-          url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
+          url: `https://d368-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app//imoveis/${id}`,
         });
       }
     } else {
@@ -103,7 +103,7 @@ app.get('/og-preview/:id', async (req, res) => {
         title: property.titulo,
         description: property.descricao,
         images: images,
-        url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
+        url: `https://d368-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app//imoveis/${id}`,
       });
     } else {
       res.status(404).send('Imóvel não encontrado!');
@@ -131,7 +131,7 @@ app.get('/properties/:id', async (req, res) => {
         title: property.titulo,
         description: property.descricao,
         images: images,
-        url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
+        url: `https://d368-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app//imoveis/${id}`,
       });
     } else {
       res.status(404).send('Imóvel não encontrado!');
