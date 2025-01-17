@@ -38,17 +38,17 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Usando o CORS para permitir requisições de outras origens
 const corsOptions = {
-  origin: 'https://mwconsultoriaimobiliaria.com.br/', // Substitua com a URL do seu frontend
+  origin: ['https://mwconsultoriaimobiliaria.com.br', 'https://d368-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app'], // Permitindo múltiplos domínios
   methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'], // Pode adicionar mais cabeçalhos aqui, caso necessário
 };
+app.use(cors(corsOptions)); // Configuração do CORS
 app.use(cors(corsOptions)); // Habilita o CORS para o servidor
 
 // Serve arquivos estáticos (para imagens, CSS, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(cors({
-  origin: 'https://d368-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app'
-}));
+
 // Rota para redirecionar crawlers para as meta tags dinâmicas
 app.get('/imoveis/:id', async (req, res) => {
   const { id } = req.params;
