@@ -10,7 +10,6 @@
         "node": "16.x"
     },
     "proxy": "https://mw-consultoria.onrender.com",
-
     "keywords": [],
     "author": "",
     "license": "ISC",

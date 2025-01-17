@@ -44,6 +44,11 @@ const corsOptions = {
 };
 app.use(cors(corsOptions)); // Configuração do CORS
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 
 // Serve arquivos estáticos (para imagens, CSS, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
