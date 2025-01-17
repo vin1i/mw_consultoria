@@ -7,9 +7,7 @@ require('dotenv').config();
 
 // Carregando variáveis de ambiente do arquivo .env
 dotenv.config();
-app.use(cors({
-  origin: 'https://d368-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app'
-}));
+
 // Inicializando o Firebase Admin SDK com variáveis de ambiente
 const serviceAccount = {
   "type": "service_account",
@@ -48,6 +46,9 @@ app.use(cors(corsOptions)); // Habilita o CORS para o servidor
 // Serve arquivos estáticos (para imagens, CSS, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cors({
+  origin: 'https://d368-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app'
+}));
 // Rota para redirecionar crawlers para as meta tags dinâmicas
 app.get('/imoveis/:id', async (req, res) => {
   const { id } = req.params;
