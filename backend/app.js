@@ -38,7 +38,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Usando o CORS para permitir requisições de outras origens
 const corsOptions = {
-  origin: 'https://c5af-2804-5180-2305-21dc-514-51f4-2dbe-51a2.ngrok-free.app', // Substitua com a URL do seu frontend
+  origin: 'mwconsultoriaimobiliaria.com.br', // Substitua com a URL do seu frontend
   methods: ['GET', 'POST'],
 };
 app.use(cors(corsOptions)); // Habilita o CORS para o servidor
@@ -46,12 +46,12 @@ app.use(cors(corsOptions)); // Habilita o CORS para o servidor
 // Serve arquivos estáticos (para imagens, CSS, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
 // Rota para redirecionar crawlers para as meta tags dinâmicas
 app.get('/imoveis/:id', async (req, res) => {
   const { id } = req.params;
- 
+  const userAgent = req.headers['user-agent'] || ''; // Obtém o User-Agent
+  const isCrawler = /bot|crawl|spider|slurp|facebook|twitter|whatsapp/i.test(userAgent); // Verifica se é um crawler
+
   try {
     const docRef = db.collection('properties').doc(id);
     const docSnap = await docRef.get();
@@ -59,9 +59,46 @@ app.get('/imoveis/:id', async (req, res) => {
     if (docSnap.exists) {
       const property = docSnap.data();
       const images = property.imagens || [];
-     
-      // Renderiza o EJS com as meta tags dinâmicas
-      console.log("Id do imóvel", id);
+
+      // Se for um crawler, renderiza a página com as meta tags dinâmicas
+      if (isCrawler) {
+        res.render('property', {
+          title: property.titulo,
+          description: property.descricao,
+          images: images,
+          url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
+        });
+      } else {
+        // Para o frontend React, apenas envia uma resposta JSON ou redireciona
+        res.json({
+          title: property.titulo,
+          description: property.descricao,
+          images: images,
+          url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
+        });
+      }
+    } else {
+      res.status(404).send('Imóvel não encontrado!');
+    }
+  } catch (error) {
+    console.error("Erro ao acessar o Firestore: ", error);
+    res.status(500).send('Erro ao acessar o Firestore');
+  }
+});
+
+// Rota para pré-visualização das meta tags dinâmicas para crawlers
+app.get('/og-preview/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const docRef = db.collection('properties').doc(id);
+    const docSnap = await docRef.get();
+
+    if (docSnap.exists) {
+      const property = docSnap.data();
+      const images = property.imagens || [];
+
+      // Renderiza a página com EJS para crawlers
       res.render('property', {
         title: property.titulo,
         description: property.descricao,
@@ -74,31 +111,27 @@ app.get('/imoveis/:id', async (req, res) => {
   } catch (error) {
     console.error('Erro ao acessar o Firestore:', error);
     res.status(500).send('Erro interno do servidor');
-  } 
+  }
 });
 
-
-// Rota para obter e renderizar o imóvel
+// Rota para obter e renderizar o imóvel (página normal)
 app.get('/properties/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Buscando o imóvel na coleção 'properties' do Firestore
     const docRef = db.collection('properties').doc(id);
     const docSnap = await docRef.get();
 
     if (docSnap.exists) {
       const property = docSnap.data();
-
-      // Verifique se 'imagens' está presente nos dados e se é um array
       const images = property.imagens || [];
-      
-      // Renderizando a página com EJS
+
+      // Renderizando a página normal para usuários (não crawlers)
       res.render('property', {
-        title: property.titulo,          // Certifique-se que o nome do campo é correto
-        description: property.descricao, // Certifique-se que o nome do campo é correto
-        images: images,                  // Imagens armazenadas no Firestore
-        url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`  // URL personalizada para o imóvel
+        title: property.titulo,
+        description: property.descricao,
+        images: images,
+        url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
       });
     } else {
       res.status(404).send('Imóvel não encontrado!');
