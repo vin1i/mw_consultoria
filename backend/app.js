@@ -43,7 +43,7 @@ const corsOptions = {
   allowedHeaders: ['Content-Type'], // Pode adicionar mais cabeçalhos aqui, caso necessário
 };
 app.use(cors(corsOptions)); // Configuração do CORS
-app.use(cors(corsOptions)); // Habilita o CORS para o servidor
+
 
 // Serve arquivos estáticos (para imagens, CSS, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
