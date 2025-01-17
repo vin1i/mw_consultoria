@@ -21,28 +21,30 @@ import ShareIcon from "./shareIcon";
 const ImobiDetails = () => {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
+  const [error, setError] = useState(null);  // Adicionado para lidar com erros específicos
   const { setIsLoading, isLoading } = useLoading();
 
   useEffect(() => {
     const fetchProperty = async () => {
       setIsLoading(true);
+      setError(null);  // Resetando o erro a cada nova tentativa de carregamento
       try {
         const response = await fetch(`https://mw-consultoria.onrender.com/properties/${id}`);
-        if (response.ok) {
-          const propertyData = await response.json();
-          setProperty({
-            ...propertyData,
-            valorVenda: propertyData.valorVenda || 0,
-            valorLocacao: propertyData.valorLocacao || 0,
-            vlCondominio: propertyData.vlCondominio || 0,
-            vlIptu: propertyData.vlIptu || 0,
-          });
-        } else {
-          throw new Error("Imóvel não encontrado");
+        if (!response.ok) {
+          throw new Error("Imóvel não encontrado");  // Personalizando mensagem de erro
         }
+        const propertyData = await response.json();
+        setProperty({
+          ...propertyData,
+          valorVenda: propertyData.valorVenda || 0,
+          valorLocacao: propertyData.valorLocacao || 0,
+          vlCondominio: propertyData.vlCondominio || 0,
+          vlIptu: propertyData.vlIptu || 0,
+        });
       } catch (error) {
         console.error("Erro ao buscar imóvel:", error);
-        setProperty(null); // Garantir que property seja null em caso de erro
+        setError(error.message);  // Definindo mensagem de erro personalizada
+        setProperty(null);
       } finally {
         setIsLoading(false);
       }
@@ -59,6 +61,16 @@ const ImobiDetails = () => {
             ⏳
           </span>{" "}
           Carregando detalhes do imóvel...
+        </p>
+      </Wrapper>
+    );
+  }
+
+  if (error) {
+    return (
+      <Wrapper>
+        <p style={{ textAlign: "center", fontSize: "18px", color: "#555" }}>
+          {error}  {/* Exibindo mensagem de erro personalizada */}
         </p>
       </Wrapper>
     );

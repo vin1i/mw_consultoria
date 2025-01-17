@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const admin = require('firebase-admin');
 const dotenv = require('dotenv');
+const cors = require('cors'); // Importando o pacote CORS
 require('dotenv').config();
 
 // Carregando variáveis de ambiente do arquivo .env
@@ -17,10 +18,9 @@ const serviceAccount = {
   "client_id": process.env.FIREBASE_CLIENT_ID,
   "auth_uri":  process.env.FIREBASE_AUTH_URI,
   "token_uri":  process.env.FIREBASE_TOKEN_URI,
-  "auth_provider_x509_cert_url": process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL  ,
+  "auth_provider_x509_cert_url": process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
   "client_x509_cert_url": process.env.FIREBASE_CLIENT_X509_CERT_URL
 };
-
 
 // Inicializando o Firebase Admin com a chave do serviço
 admin.initializeApp({
@@ -35,6 +35,13 @@ const app = express();
 // Configuração do motor de template EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+// Usando o CORS para permitir requisições de outras origens
+const corsOptions = {
+  origin: 'https://c5af-2804-5180-2305-21dc-514-51f4-2dbe-51a2.ngrok-free.app', // Substitua com a URL do seu frontend
+  methods: ['GET', 'POST'],
+};
+app.use(cors(corsOptions)); // Habilita o CORS para o servidor
 
 // Serve arquivos estáticos (para imagens, CSS, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
