@@ -51,19 +51,22 @@ app.get('/properties/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
+    // Buscando o imóvel na coleção 'properties' do Firestore
     const docRef = db.collection('properties').doc(id);
     const docSnap = await docRef.get();
 
     if (docSnap.exists) {
       const property = docSnap.data();
-      const images = property.imagens || [];
 
-      // Retornar os dados como JSON
-      res.json({
-        title: property.titulo,
-        description: property.descricao,
-        images: images,
-        url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
+      // Verifique se 'imagens' está presente nos dados e se é um array
+      const images = property.imagens || [];
+      
+      // Renderizando a página com EJS
+      res.render('property', {
+        title: property.titulo,          // Certifique-se que o nome do campo é correto
+        description: property.descricao, // Certifique-se que o nome do campo é correto
+        images: images,                  // Imagens armazenadas no Firestore
+        url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`  // URL personalizada para o imóvel
       });
     } else {
       res.status(404).send('Imóvel não encontrado!');
@@ -73,7 +76,6 @@ app.get('/properties/:id', async (req, res) => {
     res.status(500).send('Erro ao acessar o Firestore');
   }
 });
-
 
 // Iniciando o servidor
 const PORT = process.env.PORT || 5000;
