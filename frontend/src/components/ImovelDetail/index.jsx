@@ -27,7 +27,7 @@ const ImobiDetails = () => {
   useEffect(() => {
     const fetchProperty = async () => {
       setIsLoading(true);
-      setError(null);  // Resetando o erro a cada nova tentativa de carregamento
+      setError(null);  
       try {
         const response = await fetch(`https://mw-consultoria.onrender.com/properties/${id}`);
         
@@ -36,27 +36,21 @@ const ImobiDetails = () => {
           throw new Error(`Erro na resposta da API: ${response.status} ${response.statusText}`);
         }
   
-        // Obtendo a resposta como texto para depuração
-        const text = await response.text();
-        console.log('Resposta da API:', text); // Log para inspecionar a resposta
-        
-        // Tentando converter a resposta para JSON
-        try {
-          const propertyData = JSON.parse(text); // Tentando fazer parse do JSON
-          setProperty({
-            ...propertyData,
-            valorVenda: propertyData.valorVenda || 0,
-            valorLocacao: propertyData.valorLocacao || 0,
-            vlCondominio: propertyData.vlCondominio || 0,
-            vlIptu: propertyData.vlIptu || 0,
-          });
-        } catch (jsonError) {
-          throw new Error("Erro ao processar dados JSON");
-        }
-        
+        const propertyData = await response.json();
+        setProperty({
+          ...propertyData,
+          valorVenda: propertyData.valorVenda || 0,
+          valorLocacao: propertyData.valorLocacao || 0,
+          vlCondominio: propertyData.vlCondominio || 0,
+          vlIptu: propertyData.vlIptu || 0,
+          endereco: propertyData.endereco || "Endereço não informado",
+          descricao: propertyData.descricao || "Descrição não disponível",
+          imagens: propertyData.imagens || ["https://via.placeholder.com/300x200?text=Sem+Imagem"], // Imagem padrão
+        });
+  
       } catch (error) {
         console.error("Erro ao buscar imóvel:", error);
-        setError(error.message);  // Definindo mensagem de erro personalizada
+        setError("Erro ao carregar dados do imóvel.");
         setProperty(null);
       } finally {
         setIsLoading(false);
@@ -65,6 +59,7 @@ const ImobiDetails = () => {
   
     fetchProperty();
   }, [id]);
+  
 
   if (isLoading) {
     return (
