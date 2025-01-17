@@ -59,10 +59,7 @@ app.get('/imoveis/:id', async (req, res) => {
     if (docSnap.exists) {
       const property = docSnap.data();
       const images = property.imagens || [];
-      const { id} = req.params;
-      if( !/^\d+$/.test(id) ) {
-        return res.status(400).send( 'ID inválido!')
-      }
+     
       // Renderiza o EJS com as meta tags dinâmicas
       console.log("Id do imóvel", id);
       res.render('property', {
