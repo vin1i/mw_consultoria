@@ -77,23 +77,23 @@ app.get('/imoveis/:id', async (req, res) => {
           url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
         });
       } else {
-        // Para o frontend React, apenas envia uma resposta JSON ou redireciona
-        res.json({
-          title: property.titulo,
-          description: property.descricao,
-          images: images,
-          url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
-        });
-      }
-    } else {
-      res.status(404).send('Imóvel não encontrado!');
-    }
-  } catch (error) {
-    console.error("Erro ao acessar o Firestore: ", error);
-    res.status(500).send('Erro ao acessar o Firestore');
-  }
-});
-
+         // Para o frontend React, apenas envia uma resposta JSON ou redireciona
+         res.setHeader('Access-Control-Allow-Origin', '*'); // Certificando-se de que o cabeçalho CORS está sendo configurado
+         res.json({
+           title: property.titulo,
+           description: property.descricao,
+           images: images,
+           url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
+         });
+       }
+     } else {
+       res.status(404).send('Imóvel não encontrado!');
+     }
+   } catch (error) {
+     console.error('Erro ao acessar o Firestore: ', error);
+     res.status(500).send('Erro ao acessar o Firestore');
+   }
+ });
 // Rota para pré-visualização das meta tags dinâmicas para crawlers
 app.get('/og-preview/:id',  async (req, res) => {
   const { id } = req.params;
