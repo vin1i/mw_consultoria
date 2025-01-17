@@ -46,6 +46,41 @@ app.use(cors(corsOptions)); // Habilita o CORS para o servidor
 // Serve arquivos estáticos (para imagens, CSS, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
+// Rota para redirecionar crawlers para as meta tags dinâmicas
+app.get('/imoveis/:id', async (req, res) => {
+  const { id } = req.params;
+ 
+  try {
+    const docRef = db.collection('properties').doc(id);
+    const docSnap = await docRef.get();
+
+    if (docSnap.exists) {
+      const property = docSnap.data();
+      const images = property.imagens || [];
+      const { id} = req.params;
+      if( !/^\d+$/.test(id) ) {
+        return res.status(400).send( 'ID inválido!')
+      }
+      // Renderiza o EJS com as meta tags dinâmicas
+      console.log("Id do imóvel", id);
+      res.render('property', {
+        title: property.titulo,
+        description: property.descricao,
+        images: images,
+        url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
+      });
+    } else {
+      res.status(404).send('Imóvel não encontrado!');
+    }
+  } catch (error) {
+    console.error('Erro ao acessar o Firestore:', error);
+    res.status(500).send('Erro interno do servidor');
+  } 
+});
+
+
 // Rota para obter e renderizar o imóvel
 app.get('/properties/:id', async (req, res) => {
   const { id } = req.params;
