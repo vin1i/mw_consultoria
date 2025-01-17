@@ -40,12 +40,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Rota para obter e renderizar o imóvel
-app.get('/imoveis/:id', async (req, res) => {
+app.get('/properties/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Buscando o imóvel na coleção 'imoveis' do Firestore
-    const docRef = db.collection('imoveis').doc(id);
+    // Buscando o imóvel na coleção 'properties' do Firestore
+    const docRef = db.collection('properties').doc(id);
     const docSnap = await docRef.get();
 
     if (docSnap.exists) {
@@ -59,7 +59,7 @@ app.get('/imoveis/:id', async (req, res) => {
         title: property.titulo,          // Certifique-se que o nome do campo é correto
         description: property.descricao, // Certifique-se que o nome do campo é correto
         images: images,                  // Imagens armazenadas no Firestore
-        url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`  // URL personalizada para o imóvel
+        url: `https://mwconsultoriaimobiliaria.com.br/properties/${id}`  // URL personalizada para o imóvel
       });
     } else {
       res.status(404).send('Imóvel não encontrado!');
