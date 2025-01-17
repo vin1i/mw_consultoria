@@ -20,7 +20,7 @@
 
 # Ignorar arquivo .env com variáveis sensíveis (ex: Cloudinary)
 .env
-
+mwconsultoria-e14e4-firebase-adminsdk-mjjla-9b56ceff64.json
 # Logs
 npm-debug.log*
 yarn-debug.log*

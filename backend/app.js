@@ -1,97 +1,77 @@
+const express = require('express');
+const path = require('path');
+const admin = require('firebase-admin');
+const dotenv = require('dotenv');
 require('dotenv').config();
-const express = require("express");
-const admin = require("firebase-admin");
-const prerender = require('prerender-node'); // Importa o middleware
-const cors = require('cors');
 
-const app = express();
-app.use(cors());
+// Carregando variáveis de ambiente do arquivo .env
+dotenv.config();
 
-// Adiciona o middleware de log
-app.use((req, res, next) => {
-  console.log("Prerender Middleware acionado para:", req.originalUrl);
-  next(); // Passa para o próximo middleware (no caso, o Prerender)
-});
+// Inicializando o Firebase Admin SDK com variáveis de ambiente
+const serviceAccount = {
+  "type": "service_account",
+  "project_id": process.env.FIREBASE_PROJECT_ID,
+  "private_key_id": process.env.FIREBASE_PRIVATE_KEY_ID,
+  "private_key": process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  "client_email": process.env.FIREBASE_CLIENT_EMAIL,
+  "client_id": process.env.FIREBASE_CLIENT_ID,
+  "auth_uri":  process.env.FIREBASE_AUTH_URI,
+  "token_uri":  process.env.FIREBASE_TOKEN_URI,
+  "auth_provider_x509_cert_url": process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL  ,
+  "client_x509_cert_url": process.env.FIREBASE_CLIENT_X509_CERT_URL
+};
 
-// Configura o middleware do Prerender.io
-app.use(prerender.set('prerenderToken', process.env.PRERENDER_TOKEN));
 
-// Inicializando o Firebase Admin
-const firebaseCredentials = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-
+// Inicializando o Firebase Admin com a chave do serviço
 admin.initializeApp({
-  credential: admin.credential.cert(firebaseCredentials),
-  databaseURL: process.env.FIREBASE_DATABASE_URL || "https://mwconsultoria-e14e4.firebaseio.com",
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: `https://${process.env.FIREBASE_PROJECT_ID}.firebaseio.com`, // Usando a variável para o URL
 });
 
 const db = admin.firestore();
-const propertyCollection = db.collection("properties");
 
-// Endpoint para informações de imóveis
-app.get("/imoveis/:id", async (req, res) => {
+const app = express();
+
+// Configuração do motor de template EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Serve arquivos estáticos (para imagens, CSS, etc.)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Rota para obter e renderizar o imóvel
+app.get('/properties/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const docRef = propertyCollection.doc(id);
+    // Buscando o imóvel na coleção 'properties' do Firestore
+    const docRef = db.collection('properties').doc(id);
     const docSnap = await docRef.get();
 
-    if (!docSnap.exists) {
-      return res.status(404).send({ message: "Imóvel não encontrado" });
+    if (docSnap.exists) {
+      const property = docSnap.data();
+
+      // Verifique se 'imagens' está presente nos dados e se é um array
+      const images = property.imagens || [];
+      
+      // Renderizando a página com EJS
+      res.render('property', {
+        title: property.titulo,          // Certifique-se que o nome do campo é correto
+        description: property.descricao, // Certifique-se que o nome do campo é correto
+        images: images,                  // Imagens armazenadas no Firestore
+        url: `https://mwconsultoriaimobiliaria.com.br/properties/${id}`  // URL personalizada para o imóvel
+      });
+    } else {
+      res.status(404).send('Imóvel não encontrado!');
     }
-
-    const propertyData = docSnap.data();
-    const property = {
-      titulo: propertyData.nm_titulo || "Imóvel disponível",
-      descricao: propertyData.ds_descricao || "Descrição não disponível",
-      imagens: propertyData.imagens || [],
-      endereco: propertyData.ds_localizacao || "Endereço não informado",
-    };
-
-    const metaTitle = property.titulo;
-    const metaDescription = property.descricao.substring(0, 150);
-    const metaImage = property.imagens[0] || "https://via.placeholder.com/300x200?text=Sem+Imagem";
-    const metaUrl = `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`;
-
-    const html = `<!DOCTYPE html>
-      <html lang="pt-BR">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="${metaDescription}">
-        <meta property="og:title" content="${metaTitle}">
-        <meta property="og:description" content="${metaDescription}">
-        <meta property="og:image" content="${metaImage}">
-        <meta property="og:url" content="${metaUrl}">
-        <meta property="og:type" content="website">
-        <title>${metaTitle}</title>
-      </head>
-      <body>
-        <h1>${property.titulo}</h1>
-        <p>${property.descricao}</p>
-        <img src="${metaImage}" alt="${metaTitle}">
-      </body>
-      </html>`;
-
-    res.send(html);
   } catch (error) {
-    console.error("Erro ao buscar imóvel:", error.message);
-    res.status(500).send({ message: "Erro ao buscar imóvel.", error: error.message });
+    console.error("Erro ao acessar o Firestore: ", error);
+    res.status(500).send('Erro ao acessar o Firestore');
   }
 });
 
-// Redireciona para o frontend para renderização
-app.get("/imoveis/:id", (req, res) => {
-  const { id } = req.params;
-  res.redirect(301, `https://www.mwconsultoriaimobiliaria.com.br/imoveis/${id}`);
-});
-
-// Configuração da rota de fallback (404)
-app.use((req, res) => {
-  res.status(404).send({ message: "Rota não encontrada" });
-});
-
-// Porta de execução
-const port = process.env.PORT || 5000;
-app.listen(port, () => {
-  console.log(`Backend rodando na porta ${port}`);
+// Iniciando o servidor
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
