@@ -49,7 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Rota para redirecionar crawlers para as meta tags dinâmicas
-app.get('/imoveis/:id', async (req, res) => {
+app.get('/imoveiss/:id', async (req, res) => {
   const { id } = req.params;
  
   try {
