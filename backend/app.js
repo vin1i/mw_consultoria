@@ -38,7 +38,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Usando o CORS para permitir requisições de outras origens
 const corsOptions = {
-  origin: 'mwconsultoriaimobiliaria.com.br', // Substitua com a URL do seu frontend
+  origin: 'https://mwconsultoriaimobiliaria.com.br/', // Substitua com a URL do seu frontend
   methods: ['GET', 'POST'],
 };
 app.use(cors(corsOptions)); // Habilita o CORS para o servidor
