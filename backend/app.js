@@ -38,7 +38,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Usando o CORS para permitir requisições de outras origens
 const corsOptions = {
-  origin: ['https://mwconsultoriaimobiliaria.com.br', 'https://d368-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app'], // Permitindo múltiplos domínios
+  origin: ['https://mwconsultoriaimobiliaria.com.br', 'https://d368-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app','http://localhost:3000'], // Permitindo múltiplos domínios
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'], // Pode adicionar mais cabeçalhos aqui, caso necessário
 };
@@ -55,7 +55,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Rota para redirecionar crawlers para as meta tags dinâmicas
-app.get('/imoveis/:id', cors(corsOptions), async (req, res) => {
+app.get('/imoveis/:id', async (req, res) => {
   const { id } = req.params;
   const userAgent = req.headers['user-agent'] || ''; // Obtém o User-Agent
   const isCrawler = /bot|crawl|spider|slurp|facebook|twitter|whatsapp/i.test(userAgent); // Verifica se é um crawler
@@ -95,7 +95,7 @@ app.get('/imoveis/:id', cors(corsOptions), async (req, res) => {
 });
 
 // Rota para pré-visualização das meta tags dinâmicas para crawlers
-app.get('/og-preview/:id', cors(corsOptions),  async (req, res) => {
+app.get('/og-preview/:id',  async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -123,7 +123,7 @@ app.get('/og-preview/:id', cors(corsOptions),  async (req, res) => {
 });
 
 // Rota para obter e renderizar o imóvel (página normal)
-app.get('/properties/:id', cors(corsOptions),  async (req, res) => {
+app.get('/properties/:id',  async (req, res) => {
   const { id } = req.params;
 
   try {
