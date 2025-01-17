@@ -1,4 +1,4 @@
-require('dotenv').config();
+
 const express = require("express");
 const admin = require("firebase-admin");
 const prerender = require('prerender-node'); // Importa o middleware
