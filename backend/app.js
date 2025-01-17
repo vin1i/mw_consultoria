@@ -66,7 +66,7 @@ app.get('/properties/:id', async (req, res) => {
         title: property.titulo,          // Certifique-se que o nome do campo é correto
         description: property.descricao, // Certifique-se que o nome do campo é correto
         images: images,                  // Imagens armazenadas no Firestore
-        url: `https://mwconsultoriaimobiliaria.com.br/properties/${id}`  // URL personalizada para o imóvel
+        url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`  // URL personalizada para o imóvel
       });
     } else {
       res.status(404).send('Imóvel não encontrado!');
