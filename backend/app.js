@@ -38,10 +38,12 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Usando o CORS para permitir requisições de outras origens
 const corsOptions = {
-  origin: ['https://mwconsultoriaimobiliaria.com.br', 'https://d368-2804-5180-2305-21dc-b143-6a6a-4c9f-6572.ngrok-free.app','http://localhost:3000'], // Permitindo múltiplos domínios
+  origin: ['https://mwconsultoriaimobiliaria.com.br', 'http://localhost:3000'], // Permitindo múltiplos domínios
   methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'], // Pode adicionar mais cabeçalhos aqui, caso necessário
+  allowedHeaders: ['Content-Type', 'Authorization'], // Pode adicionar mais cabeçalhos aqui, caso necessário
+  credentials: false, // Se você estiver usando cookies ou cabeçalhos de autenticação
 };
+
 app.use(cors(corsOptions)); // Configuração do CORS
 
 app.use((req, res, next) => {
@@ -53,12 +55,21 @@ app.use((req, res, next) => {
 // Serve arquivos estáticos (para imagens, CSS, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Função para obter o domínio correto com base no ambiente
+const getBaseUrl = () => {
+  return process.env.NODE_ENV === 'production'
+    ? 'https://www.mwconsultoriaimobiliaria.com.br'
+    : 'http://localhost:3000';
+}
 
 // Rota para redirecionar crawlers para as meta tags dinâmicas
 app.get('/imoveis/:id', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); // Verifique se o cabeçalho CORS está aqui também
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+
   const { id } = req.params;
   const userAgent = req.headers['user-agent'] || ''; // Obtém o User-Agent
-  const isCrawler = /bot|crawl|spider|slurp|facebook|twitter|whatsapp/i.test(userAgent); // Verifica se é um crawler
+  const isCrawler = /bot|crawl|spider|slurp|facebook|twitter|whatsapp|google/i.test(userAgent);
 
   try {
     const docRef = db.collection('properties').doc(id);
@@ -70,32 +81,35 @@ app.get('/imoveis/:id', async (req, res) => {
 
       // Se for um crawler, renderiza a página com as meta tags dinâmicas
       if (isCrawler) {
+        const baseUrl = getBaseUrl();
         res.render('property', {
           title: property.titulo,
           description: property.descricao,
           images: images,
-          url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
+          url: `${baseUrl}/imoveis/${id}`,
         });
       } else {
-         // Para o frontend React, apenas envia uma resposta JSON ou redireciona
-         res.setHeader('Access-Control-Allow-Origin', '*'); // Certificando-se de que o cabeçalho CORS está sendo configurado
-         res.json({
-           title: property.titulo,
-           description: property.descricao,
-           images: images,
-           url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
-         });
-       }
-     } else {
-       res.status(404).send('Imóvel não encontrado!');
-     }
-   } catch (error) {
-     console.error('Erro ao acessar o Firestore: ', error);
-     res.status(500).send('Erro ao acessar o Firestore');
-   }
- });
+        // Para o frontend React, apenas envia uma resposta JSON ou redireciona
+        res.setHeader('Access-Control-Allow-Origin', '*'); // Certificando-se de que o cabeçalho CORS está sendo configurado
+        const baseUrl = getBaseUrl();
+        res.json({
+          title: property.titulo,
+          description: property.descricao,
+          images: property.images || [],
+          url: `${baseUrl}/imoveis/${id}`,
+        });
+      }
+    } else {
+      res.status(404).send('Imóvel não encontrado!');
+    }
+  } catch (error) {
+    console.error('Erro ao acessar o Firestore: ', error);
+    res.status(500).send('Erro ao acessar o Firestore');
+  }
+});
+
 // Rota para pré-visualização das meta tags dinâmicas para crawlers
-app.get('/og-preview/:id',  async (req, res) => {
+app.get('/og-preview/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -107,11 +121,12 @@ app.get('/og-preview/:id',  async (req, res) => {
       const images = property.imagens || [];
 
       // Renderiza a página com EJS para crawlers
+      const baseUrl = getBaseUrl();
       res.render('property', {
         title: property.titulo,
         description: property.descricao,
         images: images,
-        url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
+        url: `${baseUrl}/imoveis/${id}`,
       });
     } else {
       res.status(404).send('Imóvel não encontrado!');
@@ -123,7 +138,7 @@ app.get('/og-preview/:id',  async (req, res) => {
 });
 
 // Rota para obter e renderizar o imóvel (página normal)
-app.get('/properties/:id',  async (req, res) => {
+app.get('/properties/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -135,11 +150,12 @@ app.get('/properties/:id',  async (req, res) => {
       const images = property.imagens || [];
 
       // Renderizando a página normal para usuários (não crawlers)
+      const baseUrl = getBaseUrl();
       res.render('property', {
         title: property.titulo,
         description: property.descricao,
         images: images,
-        url: `https://mwconsultoriaimobiliaria.com.br/imoveis/${id}`,
+        url: `${baseUrl}/imoveis/${id}`,
       });
     } else {
       res.status(404).send('Imóvel não encontrado!');
